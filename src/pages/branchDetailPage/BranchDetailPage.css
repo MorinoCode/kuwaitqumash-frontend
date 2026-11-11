@@ -1,0 +1,270 @@
+.branch-detail {
+  padding: 1.5rem 2rem;
+  min-height: 100vh;
+  font-family: inherit;
+}
+
+.branch-detail--dark { background: var(--bg-dark, #09090b); color: var(--text-dark, #f4f4f5); }
+.branch-detail--light { background: var(--bg-light, #f8fafc); color: var(--text-light, #0f172a); }
+
+.branch-detail--loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.branch-detail__loader {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid rgba(212, 175, 55, 0.3);
+  border-top-color: #d4af37;
+  border-radius: 50%;
+  animation: branch-detail-spin 0.8s linear infinite;
+}
+
+@keyframes branch-detail-spin { to { transform: rotate(360deg); } }
+
+.branch-detail .spin { animation: branch-detail-spin 0.8s linear infinite; }
+
+.branch-detail__header {
+  margin-bottom: 1.5rem;
+}
+
+.branch-detail__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.8;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0;
+}
+
+.branch-detail__back:hover { opacity: 1; }
+
+.branch-detail__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.branch-detail__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: #d4af37;
+}
+
+.branch-detail__badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.branch-detail__badge--hq {
+  background: rgba(212, 175, 55, 0.2);
+  color: #d4af37;
+}
+
+.branch-detail__tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-dark, #333);
+  padding-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.branch-detail--light .branch-detail__tabs {
+  border-color: var(--border-light, #e2e8f0);
+}
+
+.branch-detail__tab {
+  background: transparent;
+  border: none;
+  color: inherit;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  opacity: 0.7;
+  border-radius: 0.5rem;
+}
+
+.branch-detail__tab:hover {
+  opacity: 0.9;
+}
+
+.branch-detail__tab--active {
+  opacity: 1;
+  background: rgba(212, 175, 55, 0.15);
+  color: #d4af37;
+}
+
+.branch-detail__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 720px;
+}
+
+.branch-detail__store-toggle {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(128,128,128,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.branch-detail__store-toggle-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+.branch-detail__hint--sm { font-size: 0.8rem; margin-top: 0; margin-bottom: 0.5rem; }
+
+.branch-detail__card {
+  background: var(--surface-dark, #18181b);
+  border: 1px solid var(--border-dark, #27272a);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.branch-detail--light .branch-detail__card {
+  background: var(--surface-light, #fff);
+  border-color: var(--border-light, #e2e8f0);
+}
+
+.branch-detail__card--wide { max-width: 560px; }
+
+.branch-detail__card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.branch-detail__info p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  opacity: 0.9;
+}
+
+.branch-detail__form { display: flex; flex-direction: column; gap: 0.75rem; }
+.branch-detail__input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-dark, #333);
+  background: var(--bg-dark, #0a0a0b);
+  color: inherit;
+  font-size: 0.95rem;
+}
+
+.branch-detail--light .branch-detail__input {
+  border-color: var(--border-light, #e2e8f0);
+  background: #fff;
+}
+
+.branch-detail__textarea { resize: vertical; min-height: 80px; }
+
+.branch-detail__form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.branch-detail__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.branch-detail__btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.branch-detail__btn--primary {
+  background: #d4af37;
+  color: #0f172a;
+}
+
+.branch-detail__btn--primary:hover:not(:disabled) { background: #b5952f; }
+
+.branch-detail__btn--secondary {
+  background: rgba(128,128,128,0.2);
+  color: inherit;
+}
+
+.branch-detail__btn--edit { background: rgba(212, 175, 55, 0.2); color: #d4af37; }
+.branch-detail__btn--edit:hover { background: rgba(212, 175, 55, 0.3); }
+
+.branch-detail__btn--danger { background: rgba(220, 60, 60, 0.2); color: #e86a6a; }
+.branch-detail__btn--danger:hover { background: rgba(220, 60, 60, 0.35); }
+
+.branch-detail__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.branch-detail__toggle input { width: 1.1rem; height: 1.1rem; }
+
+.branch-detail__hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.branch-detail__hint--warn { color: #e4a853; }
+
+.branch-detail__wa-connect,
+.branch-detail__bulk { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.branch-detail__wa-connect .branch-detail__btn { align-self: flex-start; }
+
+.branch-detail__status--ok { color: #22c55e; }
+.branch-detail__status--off { color: #a1a1aa; }
+
+.branch-detail__qr-wrap {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 0.5rem;
+  display: inline-block;
+}
+
+.branch-detail__qr-wrap p { margin: 0 0 0.75rem 0; color: #333; font-size: 0.9rem; }
+
+.branch-detail__qr { display: block; width: 200px; height: 200px; }
+
+.branch-detail__bulk { display: flex; flex-direction: column; gap: 1rem; }
+.branch-detail__bulk label { font-size: 0.9rem; font-weight: 500; display: block; margin-bottom: 0.25rem; }
+.branch-detail__bulk-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.branch-detail__bulk-field { display: flex; flex-direction: column; }
+.branch-detail__bulk-actions { display: flex; align-items: flex-end; }
+.branch-detail__card--bulk { max-width: 640px; }
+@media (max-width: 640px) {
+  .branch-detail__bulk-row { grid-template-columns: 1fr; }
+  .branch-detail__bulk-actions { align-items: stretch; }
+}

@@ -1,0 +1,684 @@
+.old-invoices-tab {
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.old-invoices-tab--dark { 
+    color: #e0e0e0; 
+    background: #0f0f0f;
+}
+
+.old-invoices-tab--light { 
+    color: #1a1a1a; 
+    background: #f8f9fa;
+}
+
+.old-invoices-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    gap: 24px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid;
+}
+
+.old-invoices-tab--dark .old-invoices-header {
+    border-bottom-color: rgba(212, 175, 55, 0.3);
+}
+
+.old-invoices-tab--light .old-invoices-header {
+    border-bottom-color: rgba(212, 175, 55, 0.4);
+}
+
+.old-invoices-header__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.old-invoices-header__info h3 {
+    margin: 0 0 12px 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.old-invoices-tab--dark .old-invoices-header__info h3 {
+    color: #d4af37;
+}
+
+.old-invoices-tab--light .old-invoices-header__info h3 {
+    color: #b8941f;
+}
+
+.old-invoices-subtitle {
+    margin: 0;
+    opacity: 0.75;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.old-invoices-upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+}
+
+.old-invoices-upload-btn--dark {
+    background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+    color: #000;
+}
+
+.old-invoices-upload-btn--light {
+    background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+    color: #000;
+}
+
+.old-invoices-upload-btn:hover {
+    background: linear-gradient(135deg, #b8941f 0%, #9a7a17 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+.old-invoices-upload-btn:active {
+    transform: translateY(0);
+}
+
+.old-invoices-export-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.old-invoices-export-btn--dark {
+    background: rgba(128, 128, 128, 0.15);
+    color: #e0e0e0;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.old-invoices-export-btn--light {
+    background: rgba(128, 128, 128, 0.08);
+    color: #1a1a1a;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.old-invoices-export-btn:hover {
+    background: rgba(128, 128, 128, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.old-invoices-export-btn:active {
+    transform: translateY(0);
+}
+
+.old-invoices-controls {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.old-invoices-search,
+.old-invoices-filter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 250px;
+}
+
+.old-invoices-search__icon,
+.old-invoices-filter__icon {
+    position: absolute;
+    left: 14px;
+    z-index: 1;
+}
+
+.old-invoices-tab--dark .old-invoices-search__icon,
+.old-invoices-tab--dark .old-invoices-filter__icon {
+    color: #ffffff;
+}
+
+.old-invoices-tab--light .old-invoices-search__icon,
+.old-invoices-tab--light .old-invoices-filter__icon {
+    color: #666;
+}
+
+.old-invoices-search__input,
+.old-invoices-filter__input {
+    width: 100%;
+    padding: 12px 14px 12px 44px;
+    border: 2px solid;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.old-invoices-tab--dark .old-invoices-search__input,
+.old-invoices-tab--dark .old-invoices-filter__input {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(128, 128, 128, 0.3);
+    color: #e0e0e0;
+}
+
+.old-invoices-tab--light .old-invoices-search__input,
+.old-invoices-tab--light .old-invoices-filter__input {
+    background: #fff;
+    border-color: rgba(128, 128, 128, 0.2);
+    color: #1a1a1a;
+}
+
+.old-invoices-search__input:focus,
+.old-invoices-filter__input:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.old-invoices-filter__input {
+    padding-right: 44px;
+}
+
+.old-invoices-tab--dark .old-invoices-filter__input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.old-invoices-filter__clear {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    transition: all 0.2s;
+    opacity: 0.6;
+}
+
+.old-invoices-filter__clear:hover {
+    opacity: 1;
+    background: rgba(128, 128, 128, 0.15);
+}
+
+.old-invoices-table-container {
+    overflow-x: auto;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.old-invoices-tab--dark .old-invoices-table-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.old-invoices-tab--light .old-invoices-table-container {
+    background: #fff;
+    border: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.old-invoices-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    gap: 20px;
+}
+
+.old-invoices-loading .spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.old-invoices-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
+}
+
+.old-invoices-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.old-invoices-tab--dark .old-invoices-table thead {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(184, 148, 31, 0.15) 100%);
+}
+
+.old-invoices-tab--light .old-invoices-table thead {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(184, 148, 31, 0.1) 100%);
+}
+
+.old-invoices-table th {
+    padding: 16px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid;
+}
+
+.old-invoices-tab--dark .old-invoices-table th {
+    color: #d4af37;
+    border-bottom-color: rgba(212, 175, 55, 0.3);
+}
+
+.old-invoices-tab--light .old-invoices-table th {
+    color: #b8941f;
+    border-bottom-color: rgba(212, 175, 55, 0.4);
+}
+
+.old-invoices-table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid;
+}
+
+.old-invoices-tab--dark .old-invoices-table td {
+    border-bottom-color: rgba(128, 128, 128, 0.1);
+}
+
+.old-invoices-tab--light .old-invoices-table td {
+    border-bottom-color: rgba(128, 128, 128, 0.15);
+}
+
+.old-invoices-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.old-invoices-tab--dark .old-invoices-table tbody tr:hover {
+    background: rgba(212, 175, 55, 0.08);
+}
+
+.old-invoices-tab--light .old-invoices-table tbody tr:hover {
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.old-invoices-empty {
+    text-align: center;
+    padding: 60px !important;
+    opacity: 0.7;
+    font-style: italic;
+}
+
+.old-invoices-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.old-invoices-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(128, 128, 128, 0.1);
+    color: inherit;
+}
+
+.old-invoices-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.old-invoices-btn--pdf {
+    background: rgba(212, 175, 55, 0.15);
+}
+
+.old-invoices-btn--pdf:hover {
+    background: rgba(212, 175, 55, 0.25);
+    color: #d4af37;
+}
+
+.old-invoices-btn--delete {
+    background: rgba(220, 53, 69, 0.15);
+}
+
+.old-invoices-btn--delete:hover {
+    background: rgba(220, 53, 69, 0.25);
+    color: #dc3545;
+}
+
+/* Modal */
+.old-invoices-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.old-invoices-modal {
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.old-invoices-modal--dark {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.old-invoices-modal--light {
+    background: #fff;
+    color: #1a1a1a;
+    border: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.old-invoices-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 28px;
+    border-bottom: 2px solid;
+}
+
+.old-invoices-tab--dark .old-invoices-modal__header {
+    border-bottom-color: rgba(212, 175, 55, 0.3);
+}
+
+.old-invoices-tab--light .old-invoices-modal__header {
+    border-bottom-color: rgba(212, 175, 55, 0.4);
+}
+
+.old-invoices-modal__header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.old-invoices-tab--dark .old-invoices-modal__header h3 {
+    color: #d4af37;
+}
+
+.old-invoices-tab--light .old-invoices-modal__header h3 {
+    color: #b8941f;
+}
+
+.old-invoices-modal__close {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    opacity: 0.7;
+    transition: all 0.2s;
+}
+
+.old-invoices-modal__close:hover {
+    opacity: 1;
+    background: rgba(128, 128, 128, 0.15);
+}
+
+.old-invoices-modal__body {
+    padding: 28px;
+}
+
+.old-invoices-modal__info {
+    margin: 0 0 24px 0;
+    opacity: 0.8;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.old-invoices-modal__file-input {
+    margin-bottom: 20px;
+}
+
+.old-invoices-modal__file-input input[type="file"] {
+    width: 100%;
+    padding: 14px;
+    border: 2px dashed;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.old-invoices-tab--dark .old-invoices-modal__file-input input[type="file"] {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(128, 128, 128, 0.3);
+    color: #e0e0e0;
+}
+
+.old-invoices-tab--light .old-invoices-modal__file-input input[type="file"] {
+    background: rgba(128, 128, 128, 0.05);
+    border-color: rgba(128, 128, 128, 0.3);
+    color: #1a1a1a;
+}
+
+.old-invoices-modal__file-input input[type="file"]:hover {
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.old-invoices-modal__file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 10px;
+}
+
+.old-invoices-tab--dark .old-invoices-modal__file-info {
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.old-invoices-tab--light .old-invoices-modal__file-info {
+    background: rgba(212, 175, 55, 0.08);
+}
+
+.old-invoices-modal__file-size {
+    opacity: 0.6;
+    font-size: 0.85rem;
+}
+
+.old-invoices-modal__branch-note {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 10px;
+    opacity: 0.85;
+    font-size: 0.9rem;
+}
+
+.old-invoices-tab--dark .old-invoices-modal__branch-note {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.old-invoices-tab--light .old-invoices-modal__branch-note {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.old-invoices-modal__form-group {
+    margin-bottom: 24px;
+}
+
+.old-invoices-modal__form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.old-invoices-modal__form-group input[type="date"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.old-invoices-tab--dark .old-invoices-modal__form-group input[type="date"] {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(128, 128, 128, 0.3);
+    color: #e0e0e0;
+}
+
+.old-invoices-tab--light .old-invoices-modal__form-group input[type="date"] {
+    background: #fff;
+    border-color: rgba(128, 128, 128, 0.2);
+    color: #1a1a1a;
+}
+
+.old-invoices-modal__form-group input[type="date"]:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.old-invoices-modal__form-group input[type="date"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.old-invoices-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 24px 28px;
+    border-top: 2px solid;
+}
+
+.old-invoices-tab--dark .old-invoices-modal__footer {
+    border-top-color: rgba(128, 128, 128, 0.2);
+}
+
+.old-invoices-tab--light .old-invoices-modal__footer {
+    border-top-color: rgba(128, 128, 128, 0.15);
+}
+
+.old-invoices-modal__cancel,
+.old-invoices-modal__upload {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.old-invoices-modal__cancel {
+    background: rgba(128, 128, 128, 0.1);
+    color: inherit;
+}
+
+.old-invoices-modal__cancel:hover {
+    background: rgba(128, 128, 128, 0.2);
+}
+
+.old-invoices-modal__upload {
+    background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+    color: #000;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.old-invoices-modal__upload:hover:not(:disabled) {
+    background: linear-gradient(135deg, #b8941f 0%, #9a7a17 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+.old-invoices-modal__upload:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 768px) {
+    .old-invoices-tab {
+        padding: 16px;
+    }
+
+    .old-invoices-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .old-invoices-header__actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .old-invoices-controls {
+        flex-direction: column;
+    }
+
+    .old-invoices-table {
+        font-size: 0.85rem;
+    }
+
+    .old-invoices-table th,
+    .old-invoices-table td {
+        padding: 10px 8px;
+    }
+
+    .old-invoices-modal {
+        max-width: 95%;
+        margin: 10px;
+    }
+}

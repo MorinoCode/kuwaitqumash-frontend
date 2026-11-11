@@ -1,0 +1,144 @@
+.error-fallback {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.error-fallback--dark {
+  background: #09090b;
+  color: #f4f4f5;
+}
+
+.error-fallback--light {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.error-fallback__card {
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid transparent;
+}
+
+.error-fallback--dark .error-fallback__card {
+  background: #18181b;
+  border-color: #27272a;
+}
+
+.error-fallback--light .error-fallback__card {
+  background: #fff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.error-fallback__icon {
+  color: #f59e0b;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.error-fallback__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.error-fallback__message {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  line-height: 1.5;
+  margin: 0 0 1.5rem;
+}
+
+.error-fallback__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.error-fallback__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.error-fallback__btn--primary {
+  background: #d4af37;
+  color: #000;
+}
+
+.error-fallback__btn--primary:hover {
+  background: #b5952f;
+  transform: translateY(-1px);
+}
+
+.error-fallback__btn--secondary {
+  background: rgba(128, 128, 128, 0.15);
+  color: inherit;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.error-fallback--dark .error-fallback__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.error-fallback--light .error-fallback__btn--secondary:hover {
+  background: #f1f5f9;
+}
+
+.error-fallback__details {
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.error-fallback__details-toggle {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.error-fallback__details-toggle:hover {
+  opacity: 1;
+}
+
+.error-fallback__pre {
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  font-size: 0.7rem;
+  overflow: auto;
+  max-height: 160px;
+  border-radius: 0.5rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-fallback--dark .error-fallback__pre {
+  background: #0a0a0a;
+  border: 1px solid #27272a;
+  color: #a1a1aa;
+}
+
+.error-fallback--light .error-fallback__pre {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}

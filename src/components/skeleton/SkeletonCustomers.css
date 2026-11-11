@@ -1,0 +1,8 @@
+.skeleton-customers-row {
+  cursor: default;
+  pointer-events: none;
+}
+
+.skeleton-customers-row:hover {
+  background-color: transparent !important;
+}

@@ -1,0 +1,223 @@
+.logo-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.logo-upload__preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  border: 2px dashed var(--border-color, #ddd);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: var(--bg-secondary, #f9f9f9);
+}
+
+.logo-upload--dark .logo-upload__preview {
+  border-color: var(--border-color, #444);
+  background: var(--bg-secondary, #1a1a1a);
+}
+
+.logo-upload__preview-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-upload__preview-img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo-upload__delete-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--danger, #dc2626);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+}
+
+.logo-upload__delete-btn:hover {
+  background: var(--danger-dark, #b91c1c);
+  transform: scale(1.1);
+}
+
+.logo-upload__delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logo-upload__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary, #666);
+}
+
+.logo-upload--dark .logo-upload__placeholder {
+  color: var(--text-secondary, #999);
+}
+
+.logo-upload__actions {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-upload__file-input {
+  display: none;
+}
+
+.logo-upload__upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary, #2563eb);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.logo-upload__upload-btn:hover {
+  background: var(--primary-dark, #1d4ed8);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Crop Modal */
+.logo-upload__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.logo-upload__modal-content {
+  background: var(--bg-primary, white);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.logo-upload--dark .logo-upload__modal-content {
+  background: var(--bg-primary, #1a1a1a);
+}
+
+.logo-upload__modal-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+}
+
+.logo-upload--dark .logo-upload__modal-title {
+  color: var(--text-primary, #fff);
+}
+
+.logo-upload__modal-hint {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-secondary, #666);
+  font-size: 0.9rem;
+}
+
+.logo-upload--dark .logo-upload__modal-hint {
+  color: var(--text-secondary, #999);
+}
+
+.logo-upload__crop-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  min-height: 300px;
+}
+
+.logo-upload__modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.logo-upload__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.logo-upload__btn--primary {
+  background: var(--primary, #2563eb);
+  color: white;
+}
+
+.logo-upload__btn--primary:hover:not(:disabled) {
+  background: var(--primary-dark, #1d4ed8);
+}
+
+.logo-upload__btn--secondary {
+  background: var(--bg-secondary, #f3f4f6);
+  color: var(--text-primary, #333);
+}
+
+.logo-upload--dark .logo-upload__btn--secondary {
+  background: var(--bg-secondary, #2a2a2a);
+  color: var(--text-primary, #fff);
+}
+
+.logo-upload__btn--secondary:hover {
+  background: var(--bg-tertiary, #e5e7eb);
+}
+
+.logo-upload--dark .logo-upload__btn--secondary:hover {
+  background: var(--bg-tertiary, #3a3a3a);
+}
+
+.logo-upload__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,14 @@
+.skeleton-inventory-row {
+  cursor: default;
+  pointer-events: none;
+}
+
+.skeleton-inventory-row:hover {
+  background-color: transparent !important;
+}
+
+.skeleton-inventory-card .inventory-mobile-card__detail-label,
+.skeleton-inventory-card .inventory-mobile-card__detail-value {
+  display: inline-flex;
+  align-items: center;
+}

@@ -1,0 +1,207 @@
+.barcode-label-container {
+    width: 55mm;
+    height: 18mm;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    overflow: hidden;
+    margin: 0 auto; 
+    border: 1px dashed #ddd; 
+    box-sizing: border-box;
+    padding: 1mm;
+}
+
+.barcode-label__top {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1mm;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5mm;
+}
+
+.barcode-label__item-name-full {
+    font-size: 6pt;
+    font-weight: 700;
+    color: #000;
+    text-transform: uppercase;
+    line-height: 1.2;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.barcode-label__main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex: 1;
+    gap: 2mm;
+}
+
+.barcode-label__left-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-width: 0;
+}
+
+.barcode-label__right-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
+
+.barcode-label__shop-name {
+    font-size: 4.5pt;
+    font-weight: 700;
+    color: #000;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 0.5mm;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.barcode-label__price {
+    font-size: 7.5pt;
+    font-weight: 800;
+    color: #000;
+    line-height: 1.2;
+    margin-bottom: 0.5mm;
+}
+
+.barcode-label__details {
+    display: flex;
+    gap: 1.5mm;
+    font-size: 5pt;
+    font-weight: 600;
+    margin-bottom: 0.5mm;
+    flex-wrap: wrap;
+}
+
+.barcode-label__detail-item {
+    white-space: nowrap;
+}
+
+.barcode-label__country {
+    font-size: 4.5pt;
+    opacity: 0.7;
+}
+
+.barcode-label__barcode-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5mm;
+}
+
+.barcode-label__barcode-wrapper svg {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100%;
+}
+
+.barcode-label__code {
+    font-size: 5.5pt;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #000;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.barcode-label__name {
+    font-size: 5pt;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 20mm;
+    text-transform: uppercase;
+}
+
+.barcode-label__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3mm;
+    margin-top: 0.5mm;
+}
+
+.barcode-label__type {
+    font-size: 4.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.barcode-label__category {
+    font-size: 4pt;
+    opacity: 0.7;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+@media print {
+    @page {
+        size: 55mm 18mm; 
+        margin: 0;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .inventory-modal, .inventory-modal-overlay {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+        visibility: visible;
+        display: block !important;
+    }
+
+    .print-preview-area, .print-preview-area * {
+        visibility: visible;
+    }
+
+    .barcode-label-container {
+        border: none; 
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .inventory-modal__header, 
+    .inventory-modal__close, 
+    .print-instruction, 
+    .inventory-btn {
+        display: none !important;
+    }
+}
