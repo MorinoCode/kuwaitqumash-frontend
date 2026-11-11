@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 
@@ -41,7 +41,6 @@ const InventoryPage = () => {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [pagination, setPagination] = useState({
@@ -54,7 +53,6 @@ const InventoryPage = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterKarat, setFilterKarat] = useState("All");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterMetal, setFilterMetal] = useState("All");
   const [filterCountry, setFilterCountry] = useState("All");
@@ -782,60 +780,7 @@ const InventoryPage = () => {
         </div>
       )}
 
-      {/* Delete Old Gold Confirmation Modal */}
-      {isDeleteOldGoldModalOpen && (
-        <div className="inventory-modal-overlay">
-          <div className={`inventory-modal inventory-modal--${theme}`}>
-            <div className="inventory-modal__header">
-              <h3 className="inventory-modal__title">
-                {t("confirm") || "Confirm"}
-              </h3>
-              <button
-                className="inventory-modal__close"
-                onClick={() => {
-                  setIsDeleteOldGoldModalOpen(false);
-                  setOldGoldToDelete(null);
-                }}
-              >
-                <X size={24} />
-              </button>
-            </div>
-            <div className="inventory-modal__body">
-              <p>
-                {t("confirm_delete_purchase") ||
-                  t("confirm_delete_item") ||
-                  "Are you sure you want to delete this purchase?"}
-              </p>
-              <div
-                style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}
-              >
-                <button
-                  className="inventory-btn inventory-btn--secondary"
-                  onClick={() => {
-                    setIsDeleteOldGoldModalOpen(false);
-                    setOldGoldToDelete(null);
-                  }}
-                  style={{ flex: 1 }}
-                >
-                  {t("cancel") || "Cancel"}
-                </button>
-                <button
-                  className="inventory-btn inventory-btn--danger"
-                  onClick={confirmDeleteOldGold}
-                  disabled={deleteOldGoldMutation.isPending}
-                  style={{ flex: 1 }}
-                >
-                  {deleteOldGoldMutation.isPending
-                    ? t("processing") || "Processing..."
-                    : t("delete") || "Delete"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal (Items) */}
+            {/* Delete Confirmation Modal (Items) */}
       {isDeleteModalOpen && (
         <div className="inventory-modal-overlay">
           <div className={`inventory-modal inventory-modal--${theme}`}>
