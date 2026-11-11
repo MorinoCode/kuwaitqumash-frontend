@@ -30,3 +30,6 @@ dist-ssr
 graphify-out/
 .git.pre-kuwaitqumash/
 .env
+
+# keep the example file in git
+!.env.example
