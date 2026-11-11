@@ -966,7 +966,12 @@
     "swatch_3": "کرپ",
     "swatch_4": "کتان",
     "swatch_5": "لینن",
-    "swatch_6": "جین"
+    "swatch_6": "جین",
+    "nav_features": "امکانات",
+    "nav_how": "نحوه کار",
+    "nav_pricing": "تعرفه",
+    "nav_faq": "سوالات",
+    "scroll_hint": "اسکرول کن"
   },
   "sales_by_fabric": "فروش بر اساس نوع پارچه",
   "sales_by_category_fabric": "فروش بر اساس دسته پارچه",

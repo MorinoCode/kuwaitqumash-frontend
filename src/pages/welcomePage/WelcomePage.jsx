@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logoImage from "../../assets/logo-kuwaitqumash.svg";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,27 +8,18 @@ import {
   ChevronDown,
   Languages,
   Layers,
-  Package,
   Receipt,
   Ruler,
   Scissors,
   Sparkles,
   Store,
-  Users,
 } from "lucide-react";
+import logoImage from "../../assets/logo-kuwaitqumash.svg";
 import Footer from "../../components/footer/Footer";
+import ParticleSphere from "../../components/particleSphere/ParticleSphere";
 import "./WelcomePage.css";
 
 const LANGUAGES = ["fa", "ar", "en"];
-
-const SWATCHES = [
-  { key: "swatch_1", color: "#8b5cf6" },
-  { key: "swatch_2", color: "#0ea5e9" },
-  { key: "swatch_3", color: "#f43f5e" },
-  { key: "swatch_4", color: "#14b8a6" },
-  { key: "swatch_5", color: "#f59e0b" },
-  { key: "swatch_6", color: "#64748b" },
-];
 
 const WelcomePage = () => {
   const navigate = useNavigate();
@@ -58,48 +47,9 @@ const WelcomePage = () => {
     i18n.changeLanguage(LANGUAGES[(index + 1) % LANGUAGES.length]);
   };
 
-  const fadeUpVariant = {
-    hidden: { y: 40, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 60, damping: 15 },
-    },
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 },
-    },
-  };
-
-  const scaleInVariant = {
-    hidden: { scale: 0.95, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
-  const slideInLeft = {
-    hidden: { x: -60, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 50, damping: 15 },
-    },
-  };
-
-  const slideInRight = {
-    hidden: { x: 60, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 50, damping: 15 },
-    },
+  const scrollTo = (id) => {
+    const node = document.getElementById(id);
+    if (node) node.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const stats = [
@@ -107,6 +57,30 @@ const WelcomePage = () => {
     { value: t("landing.stat2_value"), label: t("landing.stat2_label") },
     { value: t("landing.stat3_value"), label: t("landing.stat3_label") },
     { value: t("landing.stat4_value"), label: t("landing.stat4_label") },
+  ];
+
+  const features = [
+    {
+      tag: t("landing.feature1_tag"),
+      icon: Ruler,
+      title: t("landing.feature1_title_1"),
+      accent: t("landing.feature1_title_2"),
+      desc: t("landing.feature1_desc"),
+    },
+    {
+      tag: t("landing.feature2_tag"),
+      icon: Layers,
+      title: t("landing.feature2_title_1"),
+      accent: t("landing.feature2_title_2"),
+      desc: t("landing.feature2_desc"),
+    },
+    {
+      tag: t("landing.feature3_tag"),
+      icon: Store,
+      title: t("landing.feature3_title_1"),
+      accent: t("landing.feature3_title_2"),
+      desc: t("landing.feature3_desc"),
+    },
   ];
 
   const steps = [
@@ -183,403 +157,290 @@ const WelcomePage = () => {
     { q: t("landing.q4"), a: t("landing.a4") },
   ];
 
-  const toggleFaq = (index) => {
-    setActiveFaq(activeFaq === index ? null : index);
-  };
-
   return (
-    <div className="welcome-wrapper" dir={isRtl ? "rtl" : "ltr"}>
-      <div className="global-page-bg">
-        <div className="bg-glow bg-glow-1"></div>
-        <div className="bg-glow bg-glow-2"></div>
-        <div className="bg-glow bg-glow-3"></div>
-        <div className="global-page-overlay"></div>
-      </div>
+    <div className="landing" dir={isRtl ? "rtl" : "ltr"}>
+      <nav className="landing-nav">
+        <button
+          type="button"
+          className="landing-nav__brand"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <img src={logoImage} alt={t("app_title")} />
+        </button>
 
-      <nav className="welcome-nav">
-        <div className="welcome-nav-logo">
-          <img src={logoImage} alt="KuwaitQumash" className="welcome-logo-img" />
+        <div className="landing-nav__links">
+          <button type="button" onClick={() => scrollTo("features")}>
+            {t("landing.nav_features")}
+          </button>
+          <button type="button" onClick={() => scrollTo("how")}>
+            {t("landing.nav_how")}
+          </button>
+          <button type="button" onClick={() => scrollTo("pricing")}>
+            {t("landing.nav_pricing")}
+          </button>
+          <button type="button" onClick={() => scrollTo("faq")}>
+            {t("landing.nav_faq")}
+          </button>
         </div>
-        <div className="welcome-nav-links">
+
+        <div className="landing-nav__actions">
           <button
-            className="nav-btn-lang"
+            type="button"
+            className="landing-nav__lang"
             onClick={cycleLanguage}
             title={t("landing.lang_title")}
+            aria-label={t("landing.lang_title")}
           >
-            <Languages size={20} />
+            <Languages size={17} />
             <span>{(i18n.language || "fa").toUpperCase()}</span>
           </button>
-          <button className="nav-btn-text" onClick={() => navigate("/login")}>
+
+          <button
+            type="button"
+            className="landing-nav__login"
+            onClick={() => navigate("/login")}
+          >
             {t("landing.nav_login")}
           </button>
-          <button className="nav-btn-brand" onClick={() => navigate("/signup")}>
+
+          <button
+            type="button"
+            className="landing-nav__cta"
+            onClick={() => navigate("/signup")}
+          >
             {t("landing.nav_signup")}
+            <ArrowRight size={16} className={isRtl ? "flip-x" : ""} />
           </button>
         </div>
       </nav>
 
-      <section className="hero-section">
-        <div className="hero-container">
-          <motion.div
-            className="hero-content"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div variants={fadeUpVariant} className="hero-badge">
-              <span className="badge-dot"></span>
-              {t("landing.badge")}
-            </motion.div>
-
-            <motion.h1 variants={fadeUpVariant} className="hero-title">
-              {t("landing.hero_title_1")}{" "}
-              <span className="text-gradient-brand">
-                {t("landing.hero_title_2")}
-              </span>
-            </motion.h1>
-
-            <motion.p variants={fadeUpVariant} className="hero-subtitle">
-              {t("landing.hero_desc")}
-            </motion.p>
-
-            <motion.div variants={fadeUpVariant} className="hero-actions">
-              <button className="btn-brand-large" onClick={() => navigate("/signup")}>
-                {t("landing.cta_start")}
-                <ArrowRight size={20} className={isRtl ? "rotate-180" : ""} />
-              </button>
-              <button className="btn-outline hero-ghost-btn" onClick={() => navigate("/login")}>
-                {t("landing.cta_login")}
-              </button>
-            </motion.div>
-
-            <motion.div variants={fadeUpVariant} className="hero-note">
-              <Sparkles size={16} />
-              <span>{t("landing.note_free")}</span>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="hero-image-container"
-            variants={scaleInVariant}
-            initial="hidden"
-            animate="visible"
-          >
-            <div className="hero-image-glow"></div>
-            <div className="hero-swatches">
-              {SWATCHES.map((swatch, index) => (
-                <motion.div
-                  key={swatch.key}
-                  className="hero-swatch"
-                  style={{
-                    "--swatch-color": swatch.color,
-                    "--swatch-delay": `${index * 0.6}s`,
-                  }}
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{
-                    duration: 5 + index * 0.4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.25,
-                  }}
-                >
-                  <span className="hero-swatch__weave"></span>
-                  <span className="hero-swatch__label">
-                    {t(`landing.${swatch.key}`)}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+      <header className="hero">
+        <div className="hero__sphere">
+          <ParticleSphere />
         </div>
-      </section>
+        <div className="hero__vignette" aria-hidden="true" />
 
-      <motion.section
-        className="stats-section"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-      >
-        <div className="stats-grid">
-          {stats.map((stat, idx) => (
-            <motion.div key={idx} className="stat-card" variants={fadeUpVariant}>
-              <div className="stat-value">{stat.value}</div>
-              <div className="stat-label">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+        <div className="hero__content">
+          <span className="hero__badge">
+            <i className="hero__badge-dot" />
+            {t("landing.badge")}
+          </span>
 
-      <section className="showcase-section" id="features">
-        <div className="showcase-header">
-          <h2 className="section-title">
-            {t("landing.features_title_1")}{" "}
-            <span className="text-gradient-brand">
-              {t("landing.features_title_2")}
-            </span>
-          </h2>
-          <p className="section-subtitle">{t("landing.features_desc")}</p>
-        </div>
+          <h1 className="hero__wordmark" dir="ltr">
+            <span>Kuwait</span>
+            <span className="hero__wordmark-accent">Qumash</span>
+          </h1>
 
-        <div className="showcase-list">
-          <motion.div
-            className="showcase-item-bg-video full-screen-bg-video"
-            variants={slideInLeft}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-          >
-            <div className="showcase-video-container showcase-ai-bg">
-              <div className="showcase-video-overlay"></div>
-            </div>
-            <div className="showcase-content">
-              <span className="showcase-tag">
-                <Ruler size={16} />
-                {t("landing.feature1_tag")}
-              </span>
-              <h3 className="showcase-title">
-                {t("landing.feature1_title_1")}{" "}
-                <span className="text-gradient-brand">
-                  {t("landing.feature1_title_2")}
-                </span>
-              </h3>
-              <p className="showcase-desc">{t("landing.feature1_desc")}</p>
-            </div>
-          </motion.div>
+          <p className="hero__tagline">{t("landing.hero_desc")}</p>
 
-          <motion.div
-            className="fit-explainer-section"
-            variants={fadeUpVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-          >
-            <div className="fit-explainer-container">
-              <span className="fit-tag">{t("landing.fit_tag")}</span>
-              <h2 className="fit-title">
-                {t("landing.fit_title_1")}{" "}
-                <span className="text-gradient-brand">
-                  {t("landing.fit_title_2")}
-                </span>
-              </h2>
-              <p className="fit-text">{t("landing.fit_desc")}</p>
-              <div className="fit-features-row">
-                <div className="fit-feat-item">
-                  <span className="fit-feat-num">{t("landing.fit1_value")}</span>
-                  <span className="fit-feat-lbl">{t("landing.fit1_label")}</span>
-                </div>
-                <div className="fit-feat-item">
-                  <span className="fit-feat-num">{t("landing.fit2_value")}</span>
-                  <span className="fit-feat-lbl">{t("landing.fit2_label")}</span>
-                </div>
-                <div className="fit-feat-item">
-                  <span className="fit-feat-num">{t("landing.fit3_value")}</span>
-                  <span className="fit-feat-lbl">{t("landing.fit3_label")}</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="showcase-item-bg-video full-screen-bg-video"
-            variants={slideInRight}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-          >
-            <div className="showcase-video-container showcase-dashboard-bg">
-              <div className="showcase-video-overlay"></div>
-            </div>
-            <div className="showcase-content">
-              <span className="showcase-tag">
-                <Package size={16} />
-                {t("landing.feature2_tag")}
-              </span>
-              <h3 className="showcase-title">
-                {t("landing.feature2_title_1")}{" "}
-                <span className="text-gradient-brand">
-                  {t("landing.feature2_title_2")}
-                </span>
-              </h3>
-              <p className="showcase-desc">{t("landing.feature2_desc")}</p>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="showcase-item-bg-video full-screen-bg-video"
-            variants={slideInLeft}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-          >
-            <div className="showcase-video-container showcase-textile-bg">
-              <div className="showcase-video-overlay"></div>
-            </div>
-            <div className="showcase-content">
-              <span className="showcase-tag">
-                <Store size={16} />
-                {t("landing.feature3_tag")}
-              </span>
-              <h3 className="showcase-title">
-                {t("landing.feature3_title_1")}{" "}
-                <span className="text-gradient-brand">
-                  {t("landing.feature3_title_2")}
-                </span>
-              </h3>
-              <p className="showcase-desc">{t("landing.feature3_desc")}</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="landing-steps" id="how">
-        <div className="showcase-header">
-          <h2 className="section-title">
-            {t("landing.how_title_1")}{" "}
-            <span className="text-gradient-brand">
-              {t("landing.how_title_2")}
-            </span>
-          </h2>
-          <p className="section-subtitle">{t("landing.how_desc")}</p>
-        </div>
-        <motion.div
-          className="landing-steps__grid"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          {steps.map((step, index) => (
-            <motion.article
-              key={step.title}
-              className="landing-step"
-              variants={fadeUpVariant}
+          <div className="hero__actions">
+            <button
+              type="button"
+              className="btn-pill btn-pill--solid"
+              onClick={() => navigate("/signup")}
             >
-              <div className="landing-step__top">
-                <span className="landing-step__index">{index + 1}</span>
-                <step.icon size={22} strokeWidth={1.6} />
-              </div>
-              <h3 className="landing-step__title">{step.title}</h3>
-              <p className="landing-step__desc">{step.desc}</p>
-            </motion.article>
-          ))}
-        </motion.div>
-      </section>
+              {t("landing.cta_start")}
+              <ArrowRight size={18} className={isRtl ? "flip-x" : ""} />
+            </button>
+            <button
+              type="button"
+              className="btn-pill btn-pill--ghost"
+              onClick={() => navigate("/login")}
+            >
+              {t("landing.cta_login")}
+            </button>
+          </div>
 
-      <section className="pricing-section" id="pricing">
-        <div className="pricing-header">
-          <h2 className="section-title">
-            {t("landing.pricing_title_1")}{" "}
-            <span className="text-gradient-brand">
-              {t("landing.pricing_title_2")}
-            </span>
-          </h2>
-          <p className="section-subtitle">{t("landing.pricing_desc")}</p>
+          <p className="hero__note">
+            <Sparkles size={15} />
+            {t("landing.note_free")}
+          </p>
         </div>
 
-        <motion.div
-          className="pricing-grid"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
+        <button
+          type="button"
+          className="hero__scroll"
+          onClick={() => scrollTo("features")}
         >
-          {pricingPlans.map((plan, idx) => (
-            <motion.div
-              key={idx}
-              className={`pricing-card ${plan.popular ? "pricing-card-popular" : ""}`}
-              variants={fadeUpVariant}
+          <span>{t("landing.scroll_hint")}</span>
+          <ChevronDown size={16} />
+        </button>
+      </header>
+
+      <section className="stat-band">
+        {stats.map((stat, index) => (
+          <div className="stat-band__item" key={index}>
+            <span className="stat-band__value">{stat.value}</span>
+            <span className="stat-band__label">{stat.label}</span>
+          </div>
+        ))}
+      </section>
+
+      <section className="section" id="features">
+        <header className="section__head">
+          <h2>
+            {t("landing.features_title_1")}{" "}
+            <span className="accent-text">{t("landing.features_title_2")}</span>
+          </h2>
+          <p>{t("landing.features_desc")}</p>
+        </header>
+
+        <div className="feature-grid">
+          {features.map((feature, index) => (
+            <article className="feature-card" key={index}>
+              <div className="feature-card__icon">
+                <feature.icon size={22} strokeWidth={1.6} />
+              </div>
+              <span className="feature-card__tag">{feature.tag}</span>
+              <h3>
+                {feature.title} <span className="accent-text">{feature.accent}</span>
+              </h3>
+              <p>{feature.desc}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="fit-band">
+        <span className="fit-band__tag">{t("landing.fit_tag")}</span>
+        <h2>
+          {t("landing.fit_title_1")}{" "}
+          <span className="accent-text">{t("landing.fit_title_2")}</span>
+        </h2>
+        <p className="fit-band__desc">{t("landing.fit_desc")}</p>
+
+        <div className="fit-band__metrics">
+          <div>
+            <strong>{t("landing.fit1_value")}</strong>
+            <span>{t("landing.fit1_label")}</span>
+          </div>
+          <div>
+            <strong>{t("landing.fit2_value")}</strong>
+            <span>{t("landing.fit2_label")}</span>
+          </div>
+          <div>
+            <strong>{t("landing.fit3_value")}</strong>
+            <span>{t("landing.fit3_label")}</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="how">
+        <header className="section__head">
+          <h2>
+            {t("landing.how_title_1")}{" "}
+            <span className="accent-text">{t("landing.how_title_2")}</span>
+          </h2>
+          <p>{t("landing.how_desc")}</p>
+        </header>
+
+        <div className="step-grid">
+          {steps.map((step, index) => (
+            <article className="step-card" key={index}>
+              <div className="step-card__top">
+                <span className="step-card__index">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <step.icon size={20} strokeWidth={1.6} />
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section" id="pricing">
+        <header className="section__head">
+          <h2>
+            {t("landing.pricing_title_1")}{" "}
+            <span className="accent-text">{t("landing.pricing_title_2")}</span>
+          </h2>
+          <p>{t("landing.pricing_desc")}</p>
+        </header>
+
+        <div className="plan-grid">
+          {pricingPlans.map((plan, index) => (
+            <article
+              className={`plan-card ${plan.popular ? "plan-card--popular" : ""}`}
+              key={index}
             >
               {plan.popular && (
-                <div className="popular-badge">{t("landing.popular")}</div>
+                <span className="plan-card__badge">{t("landing.popular")}</span>
               )}
-              <h3 className="plan-name">{plan.name}</h3>
-              <div className="plan-price-wrapper">
-                <span className="plan-price">{plan.price}</span>
-                <span className="plan-period">{plan.period}</span>
-              </div>
-              <p className="plan-desc">{plan.desc}</p>
-              <div className="plan-divider"></div>
-              <ul className="plan-features">
-                {plan.features.map((feat, fIdx) => (
-                  <li key={fIdx}>
-                    <Check size={18} className="check-icon" />
-                    <span>{feat}</span>
+              <h3>{plan.name}</h3>
+              <p className="plan-card__price">
+                {plan.price}
+                <small>{plan.period}</small>
+              </p>
+              <p className="plan-card__desc">{plan.desc}</p>
+              <ul>
+                {plan.features.map((feature, fIndex) => (
+                  <li key={fIndex}>
+                    <Check size={15} />
+                    <span>{feature}</span>
                   </li>
                 ))}
               </ul>
               <button
-                className={`plan-cta-btn ${plan.popular ? "btn-brand-solid" : "btn-outline"}`}
+                type="button"
+                className={`btn-pill ${plan.popular ? "btn-pill--solid" : "btn-pill--ghost"} btn-pill--block`}
                 onClick={() => navigate("/signup")}
               >
                 {plan.cta}
               </button>
-            </motion.div>
+            </article>
           ))}
-        </motion.div>
-      </section>
-
-      <section className="faq-section" id="faq">
-        <div className="faq-header">
-          <h2 className="section-title">
-            {t("landing.faq_title_1")}{" "}
-            <span className="text-gradient-brand">
-              {t("landing.faq_title_2")}
-            </span>
-          </h2>
-          <p className="section-subtitle">{t("landing.faq_desc")}</p>
         </div>
-
-        <motion.div
-          className="faq-list"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          {faqs.map((faq, idx) => (
-            <motion.div
-              key={idx}
-              className={`faq-item ${activeFaq === idx ? "faq-item-active" : ""}`}
-              onClick={() => toggleFaq(idx)}
-              variants={fadeUpVariant}
-            >
-              <div className="faq-question-row">
-                <span className="faq-question">{faq.q}</span>
-                <ChevronDown
-                  size={20}
-                  className={`faq-icon ${activeFaq === idx ? "faq-icon-open" : ""}`}
-                />
-              </div>
-              <div className="faq-answer-wrapper">
-                <p className="faq-answer">{faq.a}</p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
       </section>
 
-      <section className="cta-section">
-        <motion.div
-          className="cta-box"
-          variants={scaleInVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
+      <section className="section section--faq" id="faq">
+        <header className="section__head">
           <h2>
-            {t("landing.cta_title_1")}{" "}
-            <span className="text-gradient-brand">{t("landing.cta_title_2")}</span>
+            {t("landing.faq_title_1")}{" "}
+            <span className="accent-text">{t("landing.faq_title_2")}</span>
           </h2>
-          <p>{t("landing.cta_desc")}</p>
-          <button className="btn-brand-solid" onClick={() => navigate("/signup")}>
-            {t("landing.cta_btn")}
-          </button>
-          <p className="cta-note">
-            <Users size={16} />
-            <span>{t("landing.cta_note")}</span>
-          </p>
-        </motion.div>
+          <p>{t("landing.faq_desc")}</p>
+        </header>
+
+        <div className="faq-list">
+          {faqs.map((faq, index) => {
+            const open = activeFaq === index;
+            return (
+              <div className={`faq-row ${open ? "faq-row--open" : ""}`} key={index}>
+                <button
+                  type="button"
+                  className="faq-row__question"
+                  onClick={() => setActiveFaq(open ? null : index)}
+                  aria-expanded={open}
+                >
+                  <span>{faq.q}</span>
+                  <ChevronDown size={18} />
+                </button>
+                <div className="faq-row__answer">
+                  <p>{faq.a}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="final-cta">
+        <h2>
+          {t("landing.cta_title_1")}{" "}
+          <span className="accent-text">{t("landing.cta_title_2")}</span>
+        </h2>
+        <p>{t("landing.cta_desc")}</p>
+        <button
+          type="button"
+          className="btn-pill btn-pill--solid"
+          onClick={() => navigate("/signup")}
+        >
+          {t("landing.cta_btn")}
+          <ArrowRight size={18} className={isRtl ? "flip-x" : ""} />
+        </button>
+        <p className="final-cta__note">{t("landing.cta_note")}</p>
       </section>
 
       <Footer />

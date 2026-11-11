@@ -913,7 +913,12 @@
     "swatch_3": "Crepe",
     "swatch_4": "Cotton",
     "swatch_5": "Linen",
-    "swatch_6": "Denim"
+    "swatch_6": "Denim",
+    "nav_features": "Features",
+    "nav_how": "How it works",
+    "nav_pricing": "Pricing",
+    "nav_faq": "FAQ",
+    "scroll_hint": "Scroll"
   },
   "footer": {
     "tagline": "Fabric store management for metered sales, rolls and customer accounts.",
