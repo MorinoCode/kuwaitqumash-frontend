@@ -82,7 +82,8 @@ const PERSIAN_WORDS =
   /(^|\s)(چطور|چگونه|چطوری|چرا|کجا|میخوام|می‌خوام|کنم|شود|فروش|فاکتور|پارچه|مشتری|مرجوعی|انبار|قیمت|واتساپ|شعبه|حساب|ورود)(\s|$)/;
 const ARABIC_ONLY = /[ةىئؤ]/;
 const ARABIC_WORDS =
-  /(^|\s)(كيف|لماذا|هل|أريد|اريد|أربط|أسجل|أضيف|أعمل|فاتورة|عميل|قماش|مرتجع|واتساب|مخزون|فرع|دخول|سعر)(\s|$)/;
+  /(^|\s)(كيف|لماذا|هل|أريد|اريد|أربط|أسجل|أضيف|أعمل|فاتورة|عميل|قماش|مرتجع|واتساب|مخزون|فرع|دخول|سعر|متى|كم|اين|أين|ليش|ايش|وش|اليوم|غدا|الطقس|هذا|هذه|هناك)(\s|$)/;
+const ARABIC_ARTICLE = /(^|\s)ال[^\s]{2,}/;
 
 export const detectLanguage = (text, fallback = "fa") => {
   const raw = String(text || "").trim().toLowerCase();
@@ -97,7 +98,7 @@ export const detectLanguage = (text, fallback = "fa") => {
   const arabicHits =
     (raw.match(new RegExp(ARABIC_ONLY.source, "g")) || []).length +
     (ARABIC_WORDS.test(raw) ? 2 : 0) +
-    (raw.includes("ال") ? 0 : 0);
+    (ARABIC_ARTICLE.test(raw) ? 1 : 0);
   const persianHits =
     (raw.match(new RegExp(PERSIAN_ONLY.source, "g")) || []).length +
     (PERSIAN_WORDS.test(raw) ? 2 : 0);
