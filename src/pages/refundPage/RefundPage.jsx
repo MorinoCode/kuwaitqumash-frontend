@@ -266,7 +266,7 @@ const RefundPage = () => {
                     <div className="refund-page__item-info">
                       <span className="refund-page__item-name">{item.item_name}</span>
                       <span className="refund-page__item-meta">
-                        {item.weight}g {item.karat ? `• ${item.karat}` : ""} • {item.quantity_available} {t("available")}
+                        {item.meters ? `${item.meters} m` : ""} {item.fabric_type ? `• ${item.fabric_type}` : ""} • {item.quantity_available} {t("available")}
                       </span>
                     </div>
                     <div className="refund-page__item-actions">

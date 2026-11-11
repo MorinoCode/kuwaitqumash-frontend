@@ -6,16 +6,6 @@ import { normalizeToLatinDigits } from "../../utils/normalizeNumbers.js";
 const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
   const { t, i18n } = useTranslation();
 
-  const stoneWeightToGrams = (stone) => {
-    const w =
-      parseFloat(normalizeToLatinDigits(String(stone?.meters ?? ""))) || 0;
-    return stone?.unit === "ct" ? w * 0.2 : w;
-  };
-  const getStonesWeightG = (stones) => {
-    if (!stones || !Array.isArray(stones)) return 0;
-    return stones.reduce((sum, s) => sum + stoneWeightToGrams(s), 0);
-  };
-
   const handleInputChange = (itemId, field, value) => {
     if (field === "cartQty") {
       const norm = normalizeToLatinDigits(value);
@@ -25,14 +15,23 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
       }
       return;
     }
-    if (field === "stones_value") {
-      onUpdateItem(itemId, field, value);
-      return;
-    }
     const norm = normalizeToLatinDigits(value);
     if (value === "" || (!isNaN(parseFloat(norm)) && parseFloat(norm) >= 0)) {
       onUpdateItem(itemId, field, value);
     }
+  };
+
+  const unitLabel = (item) =>
+    item.unit === "roll"
+      ? t("roll") || "roll"
+      : item.unit === "piece"
+        ? t("piece") || "pc"
+        : t("meter") || "m";
+
+  const lineMeters = (item) => {
+    const meters = parseFloat(item.meters) || 0;
+    const qty = Math.max(1, parseInt(item.cartQty, 10) || 1);
+    return meters * qty;
   };
 
   return (
@@ -48,10 +47,9 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
             <tr>
               <th>{t("item")}</th>
               <th>{t("quantity")}</th>
-              <th>{t("meters")}</th>
-              <th>{t("stones")}</th>
-              <th>{t("rate")}</th>
-              <th>{t("making_charge")}</th>
+              <th>{t("length_m") || "Length (m)"}</th>
+              <th>{t("price_per_meter") || "Price/m"}</th>
+              <th>{t("discount") || "Discount"}</th>
               <th>{t("total")}</th>
               <th></th>
             </tr>
@@ -62,14 +60,13 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                 1,
                 parseInt(
                   normalizeToLatinDigits(String(item.cartQty ?? "")),
-                  10
-                ) || 1
+                  10,
+                ) || 1,
               );
-              const stockQty =
-                parseInt(
-                  normalizeToLatinDigits(String(item.quantity ?? "")),
-                  10
-                ) ?? 1;
+              const stockQty = parseInt(
+                normalizeToLatinDigits(String(item.quantity ?? "")),
+                10,
+              );
               const exceedsStock = stockQty > 0 && qty > stockQty;
               return (
                 <tr
@@ -111,44 +108,20 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                       step="0.001"
                       min="0"
                       className="sales-cart__input"
-                      value={item.length_m || 0}
+                      value={item.meters ?? 0}
                       onChange={(e) =>
                         handleInputChange(item.id, "meters", e.target.value)
                       }
-                      aria-label={`${t("meters")} for ${item.item_name}`}
+                      aria-label={`${t("length_m")} for ${item.item_name}`}
                     />
-                    <span style={{ marginLeft: "0.5rem", fontSize: "0.85rem" }}>
-                      {t("g")} {item.fabric_type ? `(${item.fabric_type}K)` : ""}
+                    <span
+                      style={{ marginLeft: "0.5rem", fontSize: "0.85rem" }}
+                    >
+                      {unitLabel(item)}
                     </span>
-                  </td>
-                  <td className="sales-cart__stone-cell">
-                    {item.stones && item.stones.length > 0 ? (
-                      <>
-                        <span className="sales-cart__stone-meters">
-                          {getStonesWeightG(item.stones).toFixed(3)} {t("g")}
-                        </span>
-                        <input
-                          type="number"
-                          step="0.001"
-                          min="0"
-                          className="sales-cart__input sales-cart__input--stone-value"
-                          value={item.stones_value ?? ""}
-                          onChange={(e) =>
-                            handleInputChange(
-                              item.id,
-                              "stones_value",
-                              e.target.value
-                            )
-                          }
-                          placeholder={t("stone_price")}
-                          aria-label={`${t("stone_price")} for ${
-                            item.item_name
-                          }`}
-                        />
-                      </>
-                    ) : (
-                      <span className="sales-cart__stone-none">—</span>
-                    )}
+                    <div style={{ fontSize: "0.75rem", opacity: 0.7 }}>
+                      {lineMeters(item).toFixed(3)} {unitLabel(item)}
+                    </div>
                   </td>
                   <td>
                     <input
@@ -156,15 +129,15 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                       step="0.001"
                       min="0"
                       className="sales-cart__input"
-                      value={item.price_per_gram || 0}
+                      value={item.price_per_meter ?? 0}
                       onChange={(e) =>
                         handleInputChange(
                           item.id,
-                          "price_per_gram",
-                          e.target.value
+                          "price_per_meter",
+                          e.target.value,
                         )
                       }
-                      aria-label={`${t("rate")} for ${item.item_name}`}
+                      aria-label={`${t("price_per_meter")} for ${item.item_name}`}
                     />
                   </td>
                   <td>
@@ -173,25 +146,13 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                       step="0.001"
                       min="0"
                       className="sales-cart__input"
-                      value={item.discount || 0}
+                      value={item.discount ?? 0}
                       onChange={(e) =>
                         handleInputChange(item.id, "discount", e.target.value)
                       }
-                      title={
-                        t("making_charge_per_gram") ||
-                        "Making charge per gram (automatically calculated but editable)"
-                      }
-                      aria-label={`${t("making_charge")} for ${item.item_name}`}
+                      title={t("line_discount_hint") || "Line discount in KD"}
+                      aria-label={`${t("discount")} for ${item.item_name}`}
                     />
-                    <span
-                      style={{
-                        marginLeft: "0.25rem",
-                        fontSize: "0.75rem",
-                        opacity: 0.7,
-                      }}
-                    >
-                      /{t("g")}
-                    </span>
                   </td>
                   <td>
                     <input
@@ -199,13 +160,9 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                       step="0.001"
                       min="0"
                       className="sales-cart__input"
-                      value={item.total_price || 0}
+                      value={item.total_price ?? 0}
                       onChange={(e) =>
-                        handleInputChange(
-                          item.id,
-                          "total_price",
-                          e.target.value
-                        )
+                        handleInputChange(item.id, "total_price", e.target.value)
                       }
                       aria-label={`${t("total")} for ${item.item_name}`}
                     />
@@ -225,7 +182,7 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
             })}
             {cart.length === 0 && (
               <tr>
-                <td colSpan="8" className="sales-cart__empty">
+                <td colSpan="7" className="sales-cart__empty">
                   {t("cart_is_empty")}
                 </td>
               </tr>
@@ -249,7 +206,8 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                       : item.item_name}
                   </div>
                   <div className="sales-cart__mobile-sub">
-                    {item.barcode} {item.fabric_type ? `| ${item.fabric_type}K` : ""}
+                    {item.barcode}
+                    {item.fabric_type ? ` | ${item.fabric_type}` : ""}
                   </div>
                 </div>
                 <button
@@ -279,66 +237,54 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                 </div>
                 <div className="sales-cart__mobile-input-group">
                   <label>
-                    {t("meters")} ({t("g")})
+                    {t("length_m") || "Length"} ({unitLabel(item)})
                   </label>
                   <input
                     type="number"
                     step="0.001"
                     min="0"
                     className="sales-cart__input"
-                    value={item.length_m || 0}
+                    value={item.meters ?? 0}
                     onChange={(e) =>
                       handleInputChange(item.id, "meters", e.target.value)
                     }
-                    placeholder={t("meters")}
-                    aria-label={`${t("meters")} for ${item.item_name}`}
+                    aria-label={`${t("length_m")} for ${item.item_name}`}
                   />
                 </div>
-                {item.stones && item.stones.length > 0 && (
-                  <div className="sales-cart__mobile-input-group">
-                    <label>
-                      {t("stones")} ({t("g")}) / {t("stone_price")}
-                    </label>
-                    <span style={{ marginRight: "0.5rem" }}>
-                      {getStonesWeightG(item.stones).toFixed(3)} {t("g")}
-                    </span>
-                    <input
-                      type="number"
-                      step="0.001"
-                      min="0"
-                      className="sales-cart__input"
-                      value={item.stones_value ?? ""}
-                      onChange={(e) =>
-                        handleInputChange(
-                          item.id,
-                          "stones_value",
-                          e.target.value
-                        )
-                      }
-                      placeholder={t("stone_price")}
-                      aria-label={`${t("stone_price")} for ${item.item_name}`}
-                    />
-                  </div>
-                )}
                 <div className="sales-cart__mobile-input-group">
                   <label>
-                    {t("rate")} ({t("per_gram")})
+                    {t("price_per_meter") || "Price/m"} ({t("kwd")})
                   </label>
                   <input
                     type="number"
                     step="0.001"
                     min="0"
                     className="sales-cart__input"
-                    value={item.price_per_gram || 0}
+                    value={item.price_per_meter ?? 0}
                     onChange={(e) =>
                       handleInputChange(
                         item.id,
-                        "price_per_gram",
-                        e.target.value
+                        "price_per_meter",
+                        e.target.value,
                       )
                     }
-                    placeholder={t("rate")}
-                    aria-label={`${t("rate")} for ${item.item_name}`}
+                    aria-label={`${t("price_per_meter")} for ${item.item_name}`}
+                  />
+                </div>
+                <div className="sales-cart__mobile-input-group">
+                  <label>
+                    {t("discount") || "Discount"} ({t("kwd")})
+                  </label>
+                  <input
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    className="sales-cart__input"
+                    value={item.discount ?? 0}
+                    onChange={(e) =>
+                      handleInputChange(item.id, "discount", e.target.value)
+                    }
+                    aria-label={`${t("discount")} for ${item.item_name}`}
                   />
                 </div>
                 <div className="sales-cart__mobile-input-group">
@@ -350,32 +296,11 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                     step="0.001"
                     min="0"
                     className="sales-cart__input"
-                    value={item.total_price || 0}
+                    value={item.total_price ?? 0}
                     onChange={(e) =>
                       handleInputChange(item.id, "total_price", e.target.value)
                     }
-                    placeholder={t("total")}
                     aria-label={`${t("total")} for ${item.item_name}`}
-                  />
-                </div>
-                <div className="sales-cart__mobile-input-group">
-                  <label>
-                    {t("making_charge")} ({t("per_gram")})
-                  </label>
-                  <input
-                    type="number"
-                    step="0.001"
-                    min="0"
-                    className="sales-cart__input"
-                    value={item.discount || 0}
-                    onChange={(e) =>
-                      handleInputChange(item.id, "discount", e.target.value)
-                    }
-                    title={
-                      t("making_charge_per_gram") ||
-                      "Making charge per gram (automatically calculated but editable)"
-                    }
-                    aria-label={`${t("making_charge")} for ${item.item_name}`}
                   />
                 </div>
               </div>

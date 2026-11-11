@@ -6,7 +6,10 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
 
   const { invoice_number, createdAt, customer, items, total_amount, payments, user } = data;
   
-  const totalGoldWeight = items.reduce((sum, item) => sum + parseFloat(item.length_m), 0);
+  const totalMeters = items.reduce(
+    (sum, item) => sum + (parseFloat(item.meters) || 0) * (parseInt(item.quantity, 10) || 1),
+    0,
+  );
   
   // ⭐ FIX: Ensure Image URLs are absolute for the browser to load them correctly
   const API_URL = 'http://localhost:5000'; 
@@ -57,10 +60,10 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
             <tr>
               <th>Item</th>
               <th>Qty</th>
-              <th>Carat</th>
-              <th>Price/g</th>
-              <th>Labor</th>
-              <th>Weight</th>
+              <th>Fabric</th>
+              <th>Price/m</th>
+              <th>Discount</th>
+              <th>Meters</th>
               <th>Total</th>
             </tr>
           </thead>
@@ -69,10 +72,10 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
               <tr key={index}>
                 <td>{item.item_name}</td>
                 <td>1</td>
-                <td>{item.fabric_type}</td>
+                <td>{item.fabric_type || "-"}</td>
                 <td>{parseFloat(item.price_per_meter).toFixed(3)}</td>
-                <td>{parseFloat(item.discount).toFixed(3)}</td>
-                <td>{parseFloat(item.length_m).toFixed(3)}</td>
+                <td>{parseFloat(item.discount || 0).toFixed(3)}</td>
+                <td>{parseFloat(item.meters || 0).toFixed(3)}</td>
                 <td>{parseFloat(item.total_price).toFixed(3)}</td>
               </tr>
             ))}
@@ -80,7 +83,7 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
         </table>
 
         <div className="invoice-totals">
-          <div className="total-box"><span>Total Wt.</span><strong>{totalGoldWeight.toFixed(3)} g</strong></div>
+          <div className="total-box"><span>Total meters</span><strong>{totalMeters.toFixed(3)} m</strong></div>
           <div className="total-box main-total"><span>NET TOTAL</span><strong>{parseFloat(total_amount).toFixed(3)} KD</strong></div>
         </div>
 

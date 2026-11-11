@@ -31,20 +31,13 @@ import "../inventoryPage/InventoryPage.css";
 import { ShoppingCart, CheckCircle, Loader } from "lucide-react";
 import AddItemModal from "../../components/addItemModal/AddItemModal";
 
-// Stone helpers: 1 ct = 0.2 g
-const stoneWeightToGrams = (stone) => {
-  const w = parseFloat(stone?.weight) || 0;
-  return stone?.unit === "ct" ? w * 0.2 : w;
-};
-const getStonesWeightG = (stones) => {
-  if (!stones || !Array.isArray(stones)) return 0;
-  return stones.reduce((sum, s) => sum + stoneWeightToGrams(s), 0);
-};
-const getStonesValue = (stones) => {
-  if (!stones || !Array.isArray(stones)) return 0;
-  return stones
-    .filter((s) => s.has_value && s.value != null)
-    .reduce((sum, s) => sum + (parseFloat(s.value) || 0), 0);
+// Fabric line total: meters x price per meter x units, minus the line discount.
+const computeLineTotal = (item) => {
+  const meters = Math.max(0, parseFloat(item.meters) || 0);
+  const price = Math.max(0, parseFloat(item.price_per_meter) || 0);
+  const qty = Math.max(1, parseInt(item.cartQty ?? item.quantity, 10) || 1);
+  const discount = Math.max(0, parseFloat(item.discount) || 0);
+  return Math.max(0, +(meters * price * qty - discount).toFixed(3));
 };
 
 const SalesPage = () => {
@@ -104,10 +97,7 @@ const SalesPage = () => {
   const itemInputRef = useRef(null);
   const paymentAmountInitialized = useRef(false);
   const lastGrandTotal = useRef(0);
-  // Gold market feed removed: prices come from each inventory item (price_per_meter).
-  const socketPrices = null;
-  const apiRates = null;
-  const liveRates = null;
+  // Fabric prices come from each inventory item (price_per_meter).
 
   // Use mutation for creating sale
   const createSaleMutation = useCreateSale();
@@ -227,98 +217,88 @@ const SalesPage = () => {
 
   // Dropdown visibility: opened on focus, closed on blur (or when item selected in addToCart)
 
-  // Memoize gold rates calculation
-  const goldRates = useMemo(
-    () => socketPrices?.gold || liveRates?.Gold || {},
-    [socketPrices?.gold, liveRates?.Gold],
-  );
-  const silverRate = useMemo(
-    () =>
-      socketPrices?.silver?.raw || liveRates?.Silver?.raw || liveRates?.Silver,
-    [socketPrices?.silver, liveRates?.Silver],
-  );
-  const platinumRate = useMemo(
-    () =>
-      socketPrices?.platinum?.raw ||
-      liveRates?.Platinum?.raw ||
-      liveRates?.Platinum?.pure_950,
-    [socketPrices?.platinum, liveRates?.Platinum],
-  );
-
   const addToCart = useCallback(
     (item) => {
-      // Check if item already exists in cart using functional update to get latest state
       setCart((prev) => {
-        // Check if item already exists in the current cart state
         if (prev.find((c) => c.id === item.id)) {
           toast.warning(t("item_already_in_cart"));
           setItemSearch("");
-          return prev; // Return previous state unchanged
+          return prev;
         }
 
-        let pricePerGram = 0;
-        // Use memoized rates for better performance (already computed)
+        const pricePerMeter = parseFloat(item.price_per_meter) || 0;
+        const meters = parseFloat(item.length_m ?? item.meters) || 0;
 
-        if (item.metal_type === "Gold" && item.karat) {
-          const karatKey = `karat${item.karat}`;
-          pricePerGram =
-            goldRates[karatKey] ||
-            goldRates[`${item.karat}K`] ||
-            goldRates.karat21 ||
-            goldRates["21K"] ||
-            0;
-        } else if (item.metal_type === "Silver") {
-          pricePerGram = silverRate || 0;
-        } else if (item.metal_type === "Platinum") {
-          pricePerGram = platinumRate || 0;
-        } else if (item.metal_type === "Diamond") {
-          // Diamond uses buy_price_per_gram as default
-          pricePerGram = parseFloat(item.buy_price_per_gram) || 0;
+        if (!meters || meters <= 0) {
+          toast.error(
+            t("invalid_item_length") || "This fabric has no length recorded",
+          );
+          return prev;
         }
-
-        const totalWeight = parseFloat(item.weight) || 0;
-        const stones = item.stones || [];
-        const stonesWeightG = getStonesWeightG(stones);
-        const netGoldWeight = Math.max(0, totalWeight - stonesWeightG);
-        const stonesValue = getStonesValue(stones);
-        const initialTotal = netGoldWeight * pricePerGram + stonesValue;
-
-        // Validate item before adding to cart
-        if (!totalWeight || totalWeight <= 0) {
-          toast.error(t("invalid_item_weight") || "Item weight is invalid");
-          return prev; // Return previous state unchanged
+        if (!pricePerMeter || pricePerMeter <= 0) {
+          toast.error(
+            t("invalid_item_price") ||
+              "Set a price per meter for this fabric first",
+          );
+          return prev;
         }
 
         const newItem = {
           ...item,
           cartQty: 1,
-          weight: totalWeight,
-          labor_cost: 0,
-          price_per_gram: pricePerGram,
-          stones,
-          stones_value: stonesValue,
-          total_price: initialTotal > 0 ? initialTotal : 0,
+          meters,
+          price_per_meter: pricePerMeter,
+          discount: 0,
+          total_price: +(meters * pricePerMeter).toFixed(3),
         };
 
         setItemSearch("");
         setShowItemDropdown(false);
 
         if (itemInputRef.current) {
-          // Use requestAnimationFrame for better performance
-          requestAnimationFrame(() => {
-            if (itemInputRef.current) {
-              itemInputRef.current.focus();
-            }
-          });
+          requestAnimationFrame(() => itemInputRef.current?.focus());
         }
 
-        return [...prev, newItem]; // Return new state with item added
+        return [...prev, newItem];
       });
     },
-    [goldRates, silverRate, platinumRate, t],
+    [t],
   );
 
-  // Handle camera barcode scan
+  const updateCartItem = useCallback((id, field, value) => {
+    setCart((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+
+        if (field === "cartQty") {
+          const qty = value === "" ? 1 : Math.max(1, parseInt(value, 10) || 1);
+          const updated = { ...item, cartQty: qty };
+          updated.total_price = computeLineTotal(updated);
+          return updated;
+        }
+
+        if (field === "total_price") {
+          const meters = Math.max(0, parseFloat(item.meters) || 0);
+          const price = Math.max(0, parseFloat(item.price_per_meter) || 0);
+          const qty = Math.max(1, parseInt(item.cartQty, 10) || 1);
+          const gross = +(meters * price * qty).toFixed(3);
+          const target = Math.min(Math.max(0, parseFloat(value) || 0), gross);
+          return {
+            ...item,
+            discount: +(gross - target).toFixed(3),
+            total_price: target,
+          };
+        }
+
+        const numeric = parseFloat(value);
+        const val = isNaN(numeric) || numeric < 0 ? 0 : numeric;
+        const updated = { ...item, [field]: val };
+        updated.total_price = computeLineTotal(updated);
+        return updated;
+      }),
+    );
+  }, []);
+
   const handleCameraScan = useCallback(() => {
     setIsScannerOpen(true);
   }, []);
@@ -328,15 +308,11 @@ const SalesPage = () => {
       setItemSearch(barcode);
       setIsScannerOpen(false);
 
-      // Focus input after scan
       if (itemInputRef.current) {
         itemInputRef.current.focus();
       }
 
-      // Inventory search will be handled by useInventory hook automatically
-      // Use requestAnimationFrame + setTimeout for better performance
       requestAnimationFrame(() => {
-        // Small delay to allow hook to fetch (reduced from 500ms to 300ms)
         setTimeout(() => {
           const foundItems = inventoryList.filter(
             (i) => i.barcode === barcode || i.barcode?.includes(barcode),
@@ -358,128 +334,11 @@ const SalesPage = () => {
             toast.error(t("item_not_found") || "Item not found");
             setItemSearch("");
           }
-        }, 300); // Reduced delay for better UX
+        }, 300);
       });
     },
     [addToCart, inventoryList, t],
   );
-
-  // handleScan was unused and removed.
-
-  const updateCartItem = useCallback((id, field, value) => {
-    setCart((prev) =>
-      prev.map((item) => {
-        if (item.id !== id) return item;
-
-        const qty = Math.max(1, parseInt(item.cartQty, 10) || 1);
-
-        if (field === "cartQty") {
-          const newQty =
-            value === "" ? 1 : Math.max(1, parseInt(value, 10) || 1);
-          const updated = { ...item, cartQty: newQty };
-          const totalWeight = parseFloat(updated.weight) || 0;
-          const stonesWeightG = getStonesWeightG(updated.stones);
-          const netGoldWeight = Math.max(0, totalWeight - stonesWeightG);
-          const stonesVal =
-            updated.stones_value ?? getStonesValue(updated.stones);
-          const pricePerGram = Math.max(
-            0,
-            parseFloat(updated.price_per_gram) || 0,
-          );
-          const laborCostPerGram = Math.max(
-            0,
-            parseFloat(updated.labor_cost) || 0,
-          );
-          const unitTotal =
-            netGoldWeight * pricePerGram +
-            netGoldWeight * laborCostPerGram +
-            stonesVal;
-          updated.total_price = unitTotal * newQty;
-          return updated;
-        }
-
-        if (field === "stones_value") {
-          const numValue = parseFloat(value);
-          const stonesVal = isNaN(numValue) || numValue < 0 ? 0 : numValue;
-          const updated = { ...item, stones_value: stonesVal };
-          const totalWeight = parseFloat(updated.weight) || 0;
-          const stonesWeightG = getStonesWeightG(updated.stones);
-          const netGoldWeight = Math.max(0, totalWeight - stonesWeightG);
-          const pricePerGram = Math.max(
-            0,
-            parseFloat(updated.price_per_gram) || 0,
-          );
-          const laborCostPerGram = Math.max(
-            0,
-            parseFloat(updated.labor_cost) || 0,
-          );
-          const unitTotal =
-            netGoldWeight * pricePerGram +
-            netGoldWeight * laborCostPerGram +
-            stonesVal;
-          updated.total_price = unitTotal * qty;
-          return updated;
-        }
-
-        const numValue = parseFloat(value);
-        const val = isNaN(numValue) || numValue < 0 ? 0 : numValue;
-        const updated = { ...item, [field]: val };
-        const totalWeight = parseFloat(updated.weight) || 0;
-        const stonesWeightG = getStonesWeightG(updated.stones);
-        const netGoldWeight = Math.max(0, totalWeight - stonesWeightG);
-        const stonesVal =
-          updated.stones_value ?? getStonesValue(updated.stones);
-        const pricePerGram = Math.max(
-          0,
-          parseFloat(updated.price_per_gram) || 0,
-        );
-        const totalPrice = Math.max(0, parseFloat(updated.total_price) || 0);
-        const laborCostPerGram = Math.max(
-          0,
-          parseFloat(updated.labor_cost) || 0,
-        );
-        const cartQty = Math.max(1, parseInt(updated.cartQty, 10) || 1);
-
-        if (field === "weight") {
-          if (totalWeight > 0) {
-            const unitTotal =
-              netGoldWeight * pricePerGram +
-              netGoldWeight * laborCostPerGram +
-              stonesVal;
-            updated.total_price = unitTotal * cartQty;
-          } else {
-            updated.labor_cost = 0;
-            updated.total_price = 0;
-          }
-        } else if (field === "total_price") {
-          if (netGoldWeight > 0 && cartQty > 0) {
-            const unitTotal = totalPrice / cartQty;
-            const metalPart = netGoldWeight * pricePerGram;
-            const stonePart = stonesVal;
-            updated.labor_cost = Math.max(
-              0,
-              (unitTotal - metalPart - stonePart) / netGoldWeight,
-            );
-            updated.total_price = totalPrice;
-          } else {
-            updated.labor_cost = 0;
-          }
-        } else if (field === "price_per_gram" || field === "labor_cost") {
-          if (netGoldWeight > 0 || stonesVal > 0) {
-            const unitTotal =
-              netGoldWeight * pricePerGram +
-              netGoldWeight * laborCostPerGram +
-              stonesVal;
-            updated.total_price = unitTotal * cartQty;
-          } else {
-            updated.total_price = 0;
-          }
-        }
-
-        return updated;
-      }),
-    );
-  }, []);
 
   const removeFromCart = useCallback((id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
@@ -757,24 +616,14 @@ const SalesPage = () => {
     const payload = {
       customer_id: selectedCustomer.id,
       branch_id: activeBranchId, // Send active branch ID to backend
-      items: cart.map((i) => {
-        const weight = parseFloat(i.weight) || 0;
-        const pricePerGram = parseFloat(i.price_per_gram) || 0;
-        const laborCostPerGram = parseFloat(i.labor_cost) || 0;
-        const qty = Math.max(1, parseInt(i.cartQty, 10) || 1);
-        const totalPrice = parseFloat(i.total_price) || 0;
-
-        return {
-          id: i.id,
-          weight,
-          labor_cost: laborCostPerGram,
-          price_per_gram: pricePerGram,
-          total_price: totalPrice,
-          quantity: qty,
-          stones: i.stones || [],
-          stones_value: i.stones_value ?? getStonesValue(i.stones),
-        };
-      }),
+      items: cart.map((i) => ({
+        id: i.id,
+        meters: Math.max(0, parseFloat(i.meters) || 0),
+        price_per_meter: Math.max(0, parseFloat(i.price_per_meter) || 0),
+        discount: Math.max(0, parseFloat(i.discount) || 0),
+        total_price: computeLineTotal(i),
+        quantity: Math.max(1, parseInt(i.cartQty, 10) || 1),
+      })),
       payments: payments
         .filter((p) => parseFloat(p.amount) > 0)
         .map((p) => ({
