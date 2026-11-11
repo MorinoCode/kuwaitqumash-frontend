@@ -13,14 +13,18 @@ export const useInventory = (filters = {}) => {
   if (filters.branch_ids) queryParams.append("branch_ids", filters.branch_ids);
   if (filters.branch_id) queryParams.append("branch_id", filters.branch_id);
   if (filters.search) queryParams.append("search", filters.search);
-  if (filters.metal_type && filters.metal_type !== "All")
-    queryParams.append("metal_type", filters.metal_type);
+  if (filters.fabric_type && filters.fabric_type !== "All")
+    queryParams.append("fabric_type", filters.fabric_type);
+  if (filters.pattern && filters.pattern !== "All")
+    queryParams.append("pattern", filters.pattern);
+  if (filters.color && filters.color !== "All")
+    queryParams.append("color", filters.color);
   if (filters.category && filters.category !== "All")
     queryParams.append("category", filters.category);
   if (filters.country_of_origin && filters.country_of_origin !== "All")
     queryParams.append("country_of_origin", filters.country_of_origin);
-  if (filters.karat && filters.karat !== "All")
-    queryParams.append("karat", filters.karat);
+  if (filters.unit && filters.unit !== "All")
+    queryParams.append("unit", filters.unit);
   if (filters.status) queryParams.append("status", filters.status);
   if (filters.page) queryParams.append("page", filters.page);
   if (filters.limit) queryParams.append("limit", filters.limit || 50);
@@ -500,8 +504,9 @@ export const useDeleteInventoryItem = () => {
 export const useCustomOptions = (filters = {}) => {
   const queryParams = new URLSearchParams();
   if (filters.type) queryParams.append("type", filters.type);
-  if (filters.metal_type) queryParams.append("metal_type", filters.metal_type);
-  if (filters.category) queryParams.append("category", filters.category);
+  if (filters.fabric_type) queryParams.append("fabric_type", filters.fabric_type);
+  if (filters.pattern) queryParams.append("pattern", filters.pattern);
+  if (filters.color) queryParams.append("color", filters.color);
 
   const queryString = queryParams.toString();
   const url = `/inventory/custom-options${queryString ? `?${queryString}` : ""}`;

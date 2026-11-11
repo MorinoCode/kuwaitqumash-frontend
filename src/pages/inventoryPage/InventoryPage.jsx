@@ -83,7 +83,6 @@ const InventoryPage = () => {
 
   // Use React Query hooks
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
-  const liveRates = null; // gold market feed removed
 
   // Fetch custom options for filters
   const { data: customMetalsData = [] } = useCustomOptions({ type: "metal" });
@@ -275,16 +274,6 @@ const InventoryPage = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDeleteOldGold = () => {
-    if (oldGoldToDelete) {
-      deleteOldGoldMutation.mutate(oldGoldToDelete, {
-        onSuccess: () => {
-          setIsDeleteOldGoldModalOpen(false);
-          setOldGoldToDelete(null);
-        },
-      });
-    }
-  };
 
   const confirmDeleteItem = () => {
     if (itemToDelete) {
@@ -294,46 +283,21 @@ const InventoryPage = () => {
     }
   };
 
-  // Memoize calculateLivePrice to avoid recreating on every render
-  const calculateLivePrice = useCallback(
-    (item) => {
-      if (!liveRates || !item.weight) return "0.000";
-      let rate = 0;
+  // Line value: billable meters x price per meter x rolls
+  const calculateLivePrice = useCallback((item) => {
+    const meters = parseFloat(item.length_m ?? item.meters) || 0;
+    const price = parseFloat(item.price_per_meter) || 0;
+    const quantity = parseInt(item.quantity) || 1;
+    return (meters * price * quantity).toFixed(3);
+  }, []);
 
-      if (item.metal_type === "Gold" && liveRates.gold && item.karat) {
-        const karatKey = `karat${item.karat}`;
-        rate = liveRates.gold[karatKey] || 0;
-      } else if (item.metal_type === "Silver" && liveRates.silver) {
-        rate = liveRates.silver.raw || liveRates.silver || 0;
-      } else if (item.metal_type === "Platinum" && liveRates.platinum) {
-        rate = liveRates.platinum.raw || liveRates.platinum.pure_950 || 0;
-      } else if (item.metal_type === "Diamond") {
-        // Diamond doesn't have live rates, return 0 or use buy_price
-        return (
-          parseFloat(item.weight || 0) *
-          parseFloat(item.buy_price_per_gram || 0)
-        ).toFixed(3);
-      }
-
-      const weight = parseFloat(item.weight) || 0;
-      const quantity = parseInt(item.quantity) || 1;
-      return (weight * rate * quantity).toFixed(3);
-    },
-    [liveRates],
-  );
-
-  // Memoize calculateProfit to avoid recreating on every render
-  const calculateProfit = useCallback(
-    (item) => {
-      const currentVal = parseFloat(calculateLivePrice(item)) || 0;
-      const weight = parseFloat(item.weight) || 0;
-      const buyPrice = parseFloat(item.buy_price_per_gram) || 0;
-      const quantity = parseInt(item.quantity) || 1;
-      const buyVal = weight * buyPrice * quantity;
-      return (currentVal - buyVal).toFixed(3);
-    },
-    [calculateLivePrice],
-  );
+  const calculateProfit = useCallback((item) => {
+    const meters = parseFloat(item.length_m ?? item.meters) || 0;
+    const quantity = parseInt(item.quantity) || 1;
+    const sell = parseFloat(item.price_per_meter) || 0;
+    const cost = parseFloat(item.cost_per_meter) || 0;
+    return ((sell - cost) * meters * quantity).toFixed(3);
+  }, []);
 
   // Memoize filtered items to avoid recalculating on every render
   // Filter items by price (frontend filtering for price is needed because it requires live rates)
@@ -348,13 +312,13 @@ const InventoryPage = () => {
     });
   }, [items, priceMin, priceMax, calculateLivePrice]);
 
-  // Memoize total weight calculation
-  const totalWeight = useMemo(() => {
+  // Memoize total meters in stock
+  const totalMeters = useMemo(() => {
     return filteredItems
       .reduce((acc, item) => {
-        const weight = parseFloat(item.weight) || 0;
+        const meters = parseFloat(item.length_m) || 0;
         const quantity = parseInt(item.quantity) || 1;
-        return acc + weight * quantity;
+        return acc + meters * quantity;
       }, 0)
       .toFixed(3);
   }, [filteredItems]);
@@ -510,19 +474,6 @@ const InventoryPage = () => {
               <div className="inventory-select-box">
                 <select
                   className="inventory-select"
-                  onChange={(e) => setFilterKarat(e.target.value)}
-                  value={filterKarat}
-                >
-                  <option value="All">{t("all_karats")}</option>
-                  <option value="24">24K</option>
-                  <option value="22">22K</option>
-                  <option value="21">21K</option>
-                  <option value="18">18K</option>
-                </select>
-              </div>
-              <div className="inventory-select-box">
-                <select
-                  className="inventory-select"
                   onChange={(e) => setFilterCategory(e.target.value)}
                   value={filterCategory}
                 >
@@ -583,9 +534,9 @@ const InventoryPage = () => {
                 <thead className="inventory-table__head">
                   <tr>
                     <th>{t("item_details")}</th>
-                    <th>{t("metal")}</th>
-                    <th>{t("karat")}</th>
-                    <th>{t("weight")}</th>
+                    <th>{t("fabric_type")}</th>
+                    <th>{t("pattern") || "Pattern"}</th>
+                    <th>{t("length_m") || "Length (m)"}</th>
                     <th>{t("qty")}</th>
                     <th>{t("buy_price")}</th>
                     <th>{t("live_value")}</th>
@@ -637,7 +588,7 @@ const InventoryPage = () => {
                           <div className="inventory-mobile-card__meta">
                             <span>{item.barcode}</span>
                             <span>•</span>
-                            <span>{item.category}</span>
+                            <span>{item.composition || item.pattern || "-"}</span>
                           </div>
                         </div>
                         <div className="inventory-mobile-card__actions">
@@ -671,32 +622,26 @@ const InventoryPage = () => {
                       <div className="inventory-mobile-card__details">
                         <div className="inventory-mobile-card__detail-item">
                           <span className="inventory-mobile-card__detail-label">
-                            {t("metal")}
+                            {t("fabric_type")}
                           </span>
                           <span className="inventory-mobile-card__detail-value">
-                            {item.metal_type}
+                            {item.fabric_type} {item.composition ? `- ${item.composition}` : ""}
                           </span>
                         </div>
                         <div className="inventory-mobile-card__detail-item">
                           <span className="inventory-mobile-card__detail-label">
-                            {t("karat")}
+                            {t("pattern") || "Pattern"}
                           </span>
                           <span className="inventory-mobile-card__detail-value">
-                            {item.karat ? (
-                              <span className="inventory-mobile-card__badge">
-                                {item.karat}K
-                              </span>
-                            ) : (
-                              "-"
-                            )}
+                            {[item.pattern, item.color].filter(Boolean).join(" / ") || "-"}
                           </span>
                         </div>
                         <div className="inventory-mobile-card__detail-item">
                           <span className="inventory-mobile-card__detail-label">
-                            {t("weight")}
+                            {t("length_m") || "Length"}
                           </span>
                           <span className="inventory-mobile-card__detail-value">
-                            {item.weight}g
+                            {item.length_m ?? 0} m
                           </span>
                         </div>
                         <div className="inventory-mobile-card__detail-item">
@@ -712,7 +657,7 @@ const InventoryPage = () => {
                             {t("buy_price")}
                           </span>
                           <span className="inventory-mobile-card__detail-value">
-                            {(parseFloat(item.buy_price_per_gram) || 0).toFixed(
+                            {(parseFloat(item.cost_per_meter) || 0).toFixed(
                               3,
                             )}
                           </span>
