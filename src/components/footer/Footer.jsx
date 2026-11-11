@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="footer-top">
           <div className="footer-brand">
             <img src={logoImage} alt="KuwaitQumash" className="welcome-logo-img-footer" />
-            <p className="footer-tagline">{t('footer.tagline', 'AI-powered jewelry management system for modern retailers.')}</p>
+            <p className="footer-tagline">{t('footer.tagline', 'Fabric store management for metered sales, rolls and customer accounts.')}</p>
           </div>
           <div className="footer-links-grid">
             <div className="footer-links-col">
