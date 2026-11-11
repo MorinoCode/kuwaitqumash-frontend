@@ -984,5 +984,6 @@
   "supplier_name": "اسم المورد",
   "total_meters": "إجمالي الأمتار",
   "unit": "الوحدة",
-  "width_cm": "العرض (سم)"
+  "width_cm": "العرض (سم)",
+  "language": "اللغة"
 }

@@ -4,13 +4,21 @@ import { useTheme } from "../../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/AuthContext";
 import Sidebar from "../../sidebar/Sidebar";
-import { Menu, Sun, Moon, Languages, LogOut } from "lucide-react";
+import { Menu, Sun, Moon, Languages, LogOut, Check } from "lucide-react";
 import logoImage from "../../../assets/logo-kuwaitqumash.svg";
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import "./MainLayout.css";
 
+const LANGUAGES = [
+  { code: "fa", label: "فارسی" },
+  { code: "en", label: "English" },
+  { code: "ar", label: "العربية" },
+];
+
 const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isLangOpen, setIsLangOpen] = React.useState(false);
+  const langMenuRef = React.useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
@@ -22,9 +30,27 @@ const MainLayout = () => {
 
   const handleLogout = logout;
 
-  const toggleLanguage = () => {
-    const order = ["fa", "ar", "en"];
-    const next = order[(order.indexOf(i18n.language) + 1) % order.length];
+  React.useEffect(() => {
+    if (!isLangOpen) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
+        setIsLangOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setIsLangOpen(false);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isLangOpen]);
+
+  const changeLanguage = (next) => {
     i18n.changeLanguage(next);
     const isRtl = next === "ar" || next === "fa";
     document.dir = isRtl ? "rtl" : "ltr";
@@ -33,6 +59,7 @@ const MainLayout = () => {
     document.body.classList.add(
       next === "fa" ? "font-persian" : next === "ar" ? "font-arabic" : "font-english",
     );
+    setIsLangOpen(false);
   };
 
   return (
@@ -74,14 +101,45 @@ const MainLayout = () => {
           </div>
 
           <div className={`main-header__right main-header__right--${theme}`}>
-            <button
-              className={`header-btn header-btn--${theme}`}
-              onClick={toggleLanguage}
-              title={i18n.language}
-            >
-              <Languages size={20} />
-              <span>{(i18n.language || "en").toUpperCase()}</span>
-            </button>
+            <div className={`lang-menu lang-menu--${theme}`} ref={langMenuRef}>
+              <button
+                type="button"
+                className={`header-btn header-btn--${theme} ${isLangOpen ? "header-btn--active" : ""}`}
+                onClick={() => setIsLangOpen((open) => !open)}
+                aria-haspopup="menu"
+                aria-expanded={isLangOpen}
+                aria-label={t("language") || "Language"}
+                title={t("language") || "Language"}
+              >
+                <Languages size={20} />
+                <span>{(i18n.language || "en").toUpperCase()}</span>
+              </button>
+
+              {isLangOpen && (
+                <div
+                  className={`lang-menu__list lang-menu__list--${theme}`}
+                  role="menu"
+                  aria-label={t("language") || "Language"}
+                >
+                  {LANGUAGES.map((language) => {
+                    const isActive = i18n.language === language.code;
+                    return (
+                      <button
+                        key={language.code}
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={isActive}
+                        className={`lang-menu__item lang-menu__item--${theme} ${isActive ? "lang-menu__item--active" : ""}`}
+                        onClick={() => changeLanguage(language.code)}
+                      >
+                        <span>{language.label}</span>
+                        {isActive && <Check size={14} className="lang-menu__check" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
 
             <button
               className={`header-btn header-btn--${theme}`}

@@ -989,5 +989,6 @@
   "supplier_name": "Supplier name",
   "total_meters": "Total meters",
   "unit": "Unit",
-  "width_cm": "Width (cm)"
+  "width_cm": "Width (cm)",
+  "language": "Language"
 }
