@@ -2,6 +2,14 @@ import React, { memo } from "react";
 import { Printer, Edit, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {
+  FABRIC_TYPES,
+  PATTERNS,
+  COLORS,
+  localizedOption,
+  localizeWords,
+  localizeItemName,
+} from "../../utils/inventoryCategories";
 import "./InventoryItem.css";
 
 const InventoryItem = memo(
@@ -15,7 +23,7 @@ const InventoryItem = memo(
     theme,
   }) => {
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const handleRowClick = () => {
       navigate(`/inventory/item/${item.id}`);
@@ -51,23 +59,36 @@ const InventoryItem = memo(
       >
         <td className="inventory-item__cell inventory-item__cell--info">
           <div className="inventory-item__info">
-            <span className="inventory-item__name">{item.item_name}</span>
+            <span className="inventory-item__name">
+              {localizeItemName(item.item_name, i18n.language)}
+            </span>
             <div className="inventory-item__meta">
               <span className="inventory-item__barcode">{item.barcode}</span>
               <span className="inventory-item__separator">•</span>
-              <span className="inventory-item__category">{item.composition || item.pattern || "-"}</span>
+              <span className="inventory-item__category">
+                {item.composition
+                  ? localizeWords(item.composition, i18n.language)
+                  : localizedOption(PATTERNS, item.pattern, i18n.language) || "-"}
+              </span>
             </div>
           </div>
         </td>
         <td className="inventory-item__cell" data-label={t("fabric_type")}>
           {item.fabric_type ? (
-            <span className="inventory-item__badge">{item.fabric_type}</span>
+            <span className="inventory-item__badge">
+              {localizedOption(FABRIC_TYPES, item.fabric_type, i18n.language)}
+            </span>
           ) : (
             <span className="inventory-item__badge">-</span>
           )}
         </td>
         <td className="inventory-item__cell" data-label={t("pattern") || "Pattern"}>
-          {[item.pattern, item.color].filter(Boolean).join(" / ") || "-"}
+          {[
+            localizedOption(PATTERNS, item.pattern, i18n.language),
+            localizedOption(COLORS, item.color, i18n.language),
+          ]
+            .filter(Boolean)
+            .join(" / ") || "-"}
         </td>
         <td className="inventory-item__cell" data-label={t("length_m") || "Length"}>
           {item.length_m ?? 0} <small>{t("m") || "m"}</small>

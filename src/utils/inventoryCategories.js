@@ -96,6 +96,56 @@ export const optionValue = (options, input) => {
   return match ? match.value : value;
 };
 
+
+const wordLookup = new Map();
+
+[...FABRIC_TYPES, ...PATTERNS, ...COLORS].forEach((option) => {
+  [option.value, option.label].forEach((key) => {
+    if (!key) return;
+    const normalized = key.toLowerCase();
+    if (!wordLookup.has(normalized)) wordLookup.set(normalized, option);
+  });
+});
+
+export const localizedOption = (options, value, language) => {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+  if (language === "en") return raw;
+  const match = options.find(
+    (option) =>
+      option.value === raw ||
+      option.label === raw ||
+      option.labelAr === raw ||
+      option.labelFa === raw,
+  );
+  return match ? optionLabel(match, language) : raw;
+};
+
+export const localizeWords = (text, language) => {
+  const raw = String(text ?? "").trim();
+  if (!raw || language === "en") return raw;
+  return raw
+    .split(/(\s+)/)
+    .map((token) => {
+      if (!token.trim()) return token;
+      const option = wordLookup.get(token.trim().toLowerCase());
+      return option ? optionLabel(option, language) : token;
+    })
+    .join("");
+};
+
+export const localizeItemName = (text, language) => {
+  const raw = String(text ?? "").trim();
+  if (!raw || language === "en") return raw;
+  const tokens = raw.split(/\s+/).filter(Boolean);
+  const mapped = tokens.map((token) => {
+    const option = wordLookup.get(token.toLowerCase());
+    return option ? optionLabel(option, language) : null;
+  });
+  if (mapped.some((part) => part === null)) return raw;
+  return mapped.join(" ");
+};
+
 export const getSubcategories = (fabricType) => {
   if (!fabricType) return [];
   return PATTERNS;

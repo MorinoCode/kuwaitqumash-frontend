@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {
+  FABRIC_TYPES,
+  PATTERNS,
+  COLORS,
+  localizedOption,
+  localizeWords,
+  localizeItemName,
+  STONE_TYPES,
+} from "../../utils/inventoryCategories";
+
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 import { useTheme } from "../../context/ThemeContext";
@@ -12,9 +22,7 @@ import {
 import { BarcodeLabel } from "../../components/barcode/BarcodeLabel";
 import AddItemModal from "../../components/addItemModal/AddItemModal";
 import useBranchStore from "../../store/branchStore";
-import {
-  STONE_TYPES,
-} from "../../utils/inventoryCategories";
+
 import "./ItemDetailsPage.css";
 import {
   ArrowLeft,
@@ -32,7 +40,7 @@ const ItemDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const currency = "KWD";
 
@@ -421,7 +429,9 @@ const ItemDetailsPage = () => {
         </div>
 
         <div className="item-info">
-          <h1 className="item-info__title">{item.item_name}</h1>
+          <h1 className="item-info__title">
+            {localizeItemName(item.item_name, i18n.language)}
+          </h1>
 
           {item.item_name_ar && (
             <p className="item-info__title-ar" dir="rtl">
@@ -432,19 +442,27 @@ const ItemDetailsPage = () => {
           <div className="item-info__grid">
             <div className="item-info__group">
               <label>{t("fabric_type")}</label>
-              <p className="item-info__value">{item.fabric_type || "-"}</p>
+              <p className="item-info__value">
+                {item.fabric_type ? localizedOption(FABRIC_TYPES, item.fabric_type, i18n.language) : "-"}
+              </p>
             </div>
             <div className="item-info__group">
               <label>{t("pattern") || "Pattern"}</label>
-              <p className="item-info__value">{item.pattern || "-"}</p>
+              <p className="item-info__value">
+                {item.pattern ? localizedOption(PATTERNS, item.pattern, i18n.language) : "-"}
+              </p>
             </div>
             <div className="item-info__group">
               <label>{t("color") || "Color"}</label>
-              <p className="item-info__value">{item.color || "-"}</p>
+              <p className="item-info__value">
+                {item.color ? localizedOption(COLORS, item.color, i18n.language) : "-"}
+              </p>
             </div>
             <div className="item-info__group">
               <label>{t("composition") || "Composition"}</label>
-              <p className="item-info__value">{item.composition || "-"}</p>
+              <p className="item-info__value">
+                {item.composition ? localizeWords(item.composition, i18n.language) : "-"}
+              </p>
             </div>
             <div className="item-info__group">
               <label>{t("width_cm") || "Width (cm)"}</label>

@@ -8,8 +8,12 @@ import React, {
 import { useTranslation } from "react-i18next";
 import {
   optionLabel,
+  localizedOption,
+  localizeWords,
+  localizeItemName,
   FABRIC_TYPES,
   PATTERNS,
+  COLORS,
 } from "../../utils/inventoryCategories";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
@@ -524,12 +528,16 @@ const InventoryPage = () => {
                       <div className="inventory-mobile-card__header">
                         <div className="inventory-mobile-card__info">
                           <div className="inventory-mobile-card__name">
-                            {item.item_name}
+                            {localizeItemName(item.item_name, i18n.language)}
                           </div>
                           <div className="inventory-mobile-card__meta">
                             <span>{item.barcode}</span>
                             <span>•</span>
-                            <span>{item.composition || item.pattern || "-"}</span>
+                            <span>
+                              {item.composition
+                                ? localizeWords(item.composition, i18n.language)
+                                : localizedOption(PATTERNS, item.pattern, i18n.language) || "-"}
+                            </span>
                           </div>
                         </div>
                         <div className="inventory-mobile-card__actions">
@@ -566,7 +574,8 @@ const InventoryPage = () => {
                             {t("fabric_type")}
                           </span>
                           <span className="inventory-mobile-card__detail-value">
-                            {item.fabric_type} {item.composition ? `- ${item.composition}` : ""}
+                            {localizedOption(FABRIC_TYPES, item.fabric_type, i18n.language)}{" "}
+                            {item.composition ? `- ${localizeWords(item.composition, i18n.language)}` : ""}
                           </span>
                         </div>
                         <div className="inventory-mobile-card__detail-item">
@@ -574,7 +583,12 @@ const InventoryPage = () => {
                             {t("pattern") || "Pattern"}
                           </span>
                           <span className="inventory-mobile-card__detail-value">
-                            {[item.pattern, item.color].filter(Boolean).join(" / ") || "-"}
+                            {[
+                              localizedOption(PATTERNS, item.pattern, i18n.language),
+                              localizedOption(COLORS, item.color, i18n.language),
+                            ]
+                              .filter(Boolean)
+                              .join(" / ") || "-"}
                           </span>
                         </div>
                         <div className="inventory-mobile-card__detail-item">
