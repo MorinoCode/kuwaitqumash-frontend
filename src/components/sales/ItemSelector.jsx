@@ -62,7 +62,7 @@ const ItemSelector = ({
                                     {i18n.language === 'ar' && item.item_name_ar ? item.item_name_ar : item.item_name}
                                 </div>
                                 <div className="sales-dropdown__sub">
-                                    {item.barcode} | {item.weight}g {item.karat ? `| ${item.karat}K` : ''}
+                                    {item.barcode} | {item.length_m}g {item.fabric_type ? `| ${item.fabric_type}K` : ''}
                                 </div>
                             </li>
                         ))}

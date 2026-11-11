@@ -6,7 +6,7 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
 
   const { invoice_number, createdAt, customer, items, total_amount, payments, user } = data;
   
-  const totalGoldWeight = items.reduce((sum, item) => sum + parseFloat(item.weight), 0);
+  const totalGoldWeight = items.reduce((sum, item) => sum + parseFloat(item.length_m), 0);
   
   // ⭐ FIX: Ensure Image URLs are absolute for the browser to load them correctly
   const API_URL = 'http://localhost:5000'; 
@@ -69,10 +69,10 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
               <tr key={index}>
                 <td>{item.item_name}</td>
                 <td>1</td>
-                <td>{item.karat}</td>
-                <td>{parseFloat(item.sell_price_per_gram).toFixed(3)}</td>
-                <td>{parseFloat(item.labor_cost).toFixed(3)}</td>
-                <td>{parseFloat(item.weight).toFixed(3)}</td>
+                <td>{item.fabric_type}</td>
+                <td>{parseFloat(item.price_per_meter).toFixed(3)}</td>
+                <td>{parseFloat(item.discount).toFixed(3)}</td>
+                <td>{parseFloat(item.length_m).toFixed(3)}</td>
                 <td>{parseFloat(item.total_price).toFixed(3)}</td>
               </tr>
             ))}

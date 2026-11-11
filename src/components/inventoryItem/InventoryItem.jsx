@@ -59,22 +59,22 @@ const InventoryItem = memo(
             </div>
           </div>
         </td>
-        <td className="inventory-item__cell" data-label={t("metal_type")}>
-          {item.metal_type}
+        <td className="inventory-item__cell" data-label={t("fabric_type")}>
+          {item.fabric_type}
         </td>
-        <td className="inventory-item__cell" data-label={t("karat")}>
-          {item.karat ? (
+        <td className="inventory-item__cell" data-label={t("fabric_type")}>
+          {item.fabric_type ? (
             <span
-              className={`inventory-item__badge inventory-item__badge--${item.karat}k`}
+              className={`inventory-item__badge inventory-item__badge--${item.fabric_type}k`}
             >
-              {item.karat}K
+              {item.fabric_type}K
             </span>
           ) : (
             <span className="inventory-item__badge">-</span>
           )}
         </td>
-        <td className="inventory-item__cell" data-label={t("weight")}>
-          {item.weight} <small>g</small>
+        <td className="inventory-item__cell" data-label={t("meters")}>
+          {item.length_m} <small>g</small>
         </td>
         <td className="inventory-item__cell" data-label={t("quantity")}>
           {item.quantity}
@@ -83,7 +83,7 @@ const InventoryItem = memo(
           className="inventory-item__cell inventory-item__cell--mono"
           data-label={t("cost_price")}
         >
-          {(parseFloat(item.buy_price_per_gram) || 0).toFixed(3)}
+          {(parseFloat(item.cost_per_meter) || 0).toFixed(3)}
         </td>
         <td
           className="inventory-item__cell inventory-item__cell--bold"

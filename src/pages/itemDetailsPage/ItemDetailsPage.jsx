@@ -449,8 +449,8 @@ const ItemDetailsPage = () => {
           <div className="item-info__grid">
             {/* Metal Type */}
             <div className="item-info__group">
-              <label>{t("metal_type")}</label>
-              <p className="item-info__value">{item.metal_type}</p>
+              <label>{t("fabric_type")}</label>
+              <p className="item-info__value">{item.fabric_type}</p>
             </div>
 
             {/* Category - Dynamic based on Metal Type */}
@@ -468,20 +468,20 @@ const ItemDetailsPage = () => {
             </div>
 
             {/* Karat - Only for Gold/Silver/Platinum */}
-            {item.metal_type !== "Diamond" && (
+            {item.fabric_type !== "Diamond" && (
               <div className="item-info__group">
-                <label>{t("karat")}</label>
+                <label>{t("fabric_type")}</label>
                 <p className="item-info__value">
-                  {item.karat ? `${item.karat}K` : "-"}
+                  {item.fabric_type ? `${item.fabric_type}K` : "-"}
                 </p>
               </div>
             )}
 
             {/* Weight */}
             <div className="item-info__group">
-              <label>{t("weight")}</label>
+              <label>{t("meters")}</label>
               <p className="item-info__value">
-                {item.weight} {t("g")}
+                {item.length_m} {t("g")}
               </p>
             </div>
 
@@ -499,9 +499,9 @@ const ItemDetailsPage = () => {
 
             {/* Buy Price */}
             <div className="item-info__group">
-              <label>{t("buy_price_per_gram")}</label>
+              <label>{t("cost_per_meter")}</label>
               <p className="item-info__value">
-                {item.buy_price_per_gram} {currency}
+                {item.cost_per_meter} {currency}
               </p>
             </div>
 
@@ -515,7 +515,7 @@ const ItemDetailsPage = () => {
           </div>
 
           {/* Diamond Specifications */}
-          {item.metal_type === "Diamond" && (
+          {item.fabric_type === "Diamond" && (
             <div className="item-info__section">
               <h3 className="item-info__section-title">
                 {t("diamond_specifications")}
@@ -560,7 +560,7 @@ const ItemDetailsPage = () => {
           )}
 
           {/* Stones Section - For Gold, Silver, Platinum */}
-          {["Gold", "Silver", "Platinum"].includes(item.metal_type) && (
+          {["Gold", "Silver", "Platinum"].includes(item.fabric_type) && (
             <div className="item-info__section">
               <h3 className="item-info__section-title">{t("stones")}</h3>
               {item.stones &&
@@ -571,7 +571,7 @@ const ItemDetailsPage = () => {
                     <div key={index} className="item-info__stone-item">
                       <Gem size={16} />
                       <span>
-                        <strong>{stone.type}</strong> - {stone.weight}
+                        <strong>{stone.type}</strong> - {stone.meters}
                         {stone.unit === "ct" ? "ct" : "g"}
                       </span>
                       {stone.has_value && (
