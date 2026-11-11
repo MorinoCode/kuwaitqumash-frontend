@@ -43,7 +43,7 @@ const ItemDetailsPage = () => {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation();
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-  const currency = "KWD";
+  const currency = t("kwd") || "KWD";
 
   const {
     data: item,
