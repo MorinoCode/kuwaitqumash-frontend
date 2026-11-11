@@ -21,7 +21,7 @@ import KPIStats from "../../components/analytics/KPIStats";
 import RevenueChart from "../../components/analytics/RevenueChart";
 import CategoryChart from "../../components/analytics/CategoryChart";
 import BranchChart from "../../components/analytics/BranchChart";
-import KaratChart from "../../components/analytics/KaratChart";
+import FabricTypeChart from "../../components/analytics/FabricTypeChart";
 import BranchSelector from "../../components/analytics/BranchSelector";
 import TopItemsTable from "../../components/analytics/TopItemsTable";
 import "./AnalyticsPage.css";
@@ -446,7 +446,7 @@ const AnalyticsPage = () => {
           <section className="analytics-section">
             <div className="analytics-row">
               <div className="analytics-row__item">
-                <KaratChart
+                <FabricTypeChart
                   data={data.charts?.fabric_distribution}
                   comparisonData={data.comparison?.charts?.fabric_distribution}
                   theme={theme}

@@ -72,7 +72,7 @@
   color: #b8860b;
 }
 .login-card__title--dark {
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 .login-card__subtitle {
@@ -170,8 +170,8 @@
 }
 
 .login-card__password-toggle--dark:hover {
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .login-card__input--light {
@@ -189,7 +189,7 @@
   border-color: #333;
 }
 .login-card__input--dark:focus {
-  border-color: #d4af37;
+  border-color: #2dd4bf;
 }
 
 .login-card__input--error {
@@ -226,7 +226,7 @@
 }
 
 .login-card__submit-btn--dark {
-  background: #d4af37;
+  background: #2dd4bf;
   color: black;
 }
 .login-card__submit-btn--dark:hover {
@@ -258,7 +258,7 @@
   color: #b8860b;
 }
 .login-card__signup-btn--dark {
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 .login-page__controls {
@@ -307,9 +307,9 @@
 }
 
 .login-page__theme-btn--dark:hover {
-  border-color: #d4af37;
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .login-page__language-selector {
@@ -352,15 +352,15 @@
 }
 
 .login-page__lang-btn--dark:hover {
-  border-color: #d4af37;
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .login-page__lang-btn--dark.login-page__lang-btn--active {
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
-  border-color: #d4af37;
+  border-color: #2dd4bf;
 }
 
 @media (max-width: 768px) {

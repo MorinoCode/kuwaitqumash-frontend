@@ -1,7 +1,7 @@
 :root {
-  --gold-primary: #d4af37;
-  --gold-hover: #b5952f;
-  --gold-light: rgba(212, 175, 55, 0.1);
+  --brand-primary: #2dd4bf;
+  --brand-hover: #0d9488;
+  --brand-light: rgba(45, 212, 191, 0.1);
   --success: #10b981;
   --danger: #ef4444;
   --danger-bg: rgba(239, 68, 68, 0.1);
@@ -59,7 +59,7 @@
 }
 
 .customers-page__title-icon {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .customers-page__subtitle {
@@ -82,20 +82,20 @@
 }
 
 .customers-page__btn--primary {
-  background-color: var(--gold-primary);
+  background-color: var(--brand-primary);
   color: #000;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .customers-page__btn--primary:hover {
-  background-color: var(--gold-hover);
+  background-color: var(--brand-hover);
   transform: translateY(-1px);
 }
 
 .customers-page__btn--submit {
   width: 100%;
   justify-content: center;
-  background-color: var(--gold-primary);
+  background-color: var(--brand-primary);
   color: #000;
   margin-top: 1rem;
 }
@@ -177,8 +177,8 @@ html[dir="rtl"] .customers-search__input {
 }
 
 .customers-search__input:focus {
-  border-color: var(--gold-primary);
-  box-shadow: 0 0 0 2px var(--gold-light);
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 2px var(--brand-light);
 }
 
 .customers-table-container {
@@ -278,9 +278,9 @@ html[dir="rtl"] .customers-table {
 }
 
 .customers-badge--vip {
-  background-color: var(--gold-light);
-  color: var(--gold-primary);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  border: 1px solid rgba(45, 212, 191, 0.2);
 }
 
 .customers-badge--wholesaler {
@@ -395,13 +395,13 @@ html[dir="rtl"] .customers-table {
   margin-bottom: 2rem;
   padding: 1.5rem;
   border-radius: 1rem;
-  border: 1px dashed var(--gold-primary);
-  background-color: var(--gold-light);
+  border: 1px dashed var(--brand-primary);
+  background-color: var(--brand-light);
   text-align: center;
 }
 
 .customers-scan__label {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
   font-weight: 600;
   margin: 0 0 1rem 0;
   font-size: 0.95rem;
@@ -420,8 +420,8 @@ html[dir="rtl"] .customers-table {
   gap: 0.5rem;
   padding: 1rem;
   background-color: transparent;
-  border: 2px solid var(--gold-primary);
-  color: var(--gold-primary);
+  border: 2px solid var(--brand-primary);
+  color: var(--brand-primary);
   border-radius: 0.75rem;
   cursor: pointer;
   font-weight: 600;
@@ -430,7 +430,7 @@ html[dir="rtl"] .customers-table {
 }
 
 .customers-scan__btn:hover {
-  background-color: var(--gold-primary);
+  background-color: var(--brand-primary);
   color: #000;
 }
 
@@ -479,8 +479,8 @@ html[dir="rtl"] .customers-table {
 }
 
 .customers-form__input:focus {
-  border-color: var(--gold-primary);
-  box-shadow: 0 0 0 2px var(--gold-light);
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 2px var(--brand-light);
 }
 
 .customers-form__input--textarea {

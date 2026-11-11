@@ -1,8 +1,8 @@
 :root {
-    --brand-primary: #d4af37;
-    --brand-hover: #b5952f;
-    --brand-light: rgba(212, 175, 55, 0.1);
-    --brand-border: rgba(212, 175, 55, 0.2);
+    --brand-primary: #2dd4bf;
+    --brand-hover: #0d9488;
+    --brand-light: rgba(45, 212, 191, 0.1);
+    --brand-border: rgba(45, 212, 191, 0.2);
 
     --bg-dark: #09090b;
     --surface-dark: #18181b;
@@ -151,7 +151,7 @@ html[dir="rtl"] .inventory-page__subtitle {
     gap: 0.5rem;
 }
 
-.inventory-stat--gold {
+.inventory-stat--brand {
     background-color: var(--brand-light);
     border-color: var(--brand-border);
     color: var(--brand-primary);
@@ -452,7 +452,7 @@ html[dir="rtl"] .inventory-table {
 }
 
 .inventory-action-btn:hover {
-    background: rgba(212, 175, 55, 0.2);
+    background: rgba(45, 212, 191, 0.2);
     color: var(--brand-primary);
 }
 
@@ -995,7 +995,7 @@ html[dir="rtl"] .inventory-form__remove-thumb {
         font-size: 0.9rem;
     }
 
-    .inventory-mobile-card__detail-value--gold {
+    .inventory-mobile-card__detail-value--brand {
         color: var(--brand-primary);
     }
 
@@ -1168,9 +1168,5 @@ html[dir="rtl"] .inventory-form__remove-thumb {
 
     .inventory-mobile-list {
         display: flex;
-    }
-
-    .inventory-mobile-card--old-gold .inventory-mobile-card__header {
-        align-items: center;
     }
 }

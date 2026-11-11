@@ -212,7 +212,7 @@ const WelcomePage = () => {
           <button className="nav-btn-text" onClick={() => navigate("/login")}>
             {t("landing.nav_login")}
           </button>
-          <button className="nav-btn-gold" onClick={() => navigate("/signup")}>
+          <button className="nav-btn-brand" onClick={() => navigate("/signup")}>
             {t("landing.nav_signup")}
           </button>
         </div>
@@ -233,7 +233,7 @@ const WelcomePage = () => {
 
             <motion.h1 variants={fadeUpVariant} className="hero-title">
               {t("landing.hero_title_1")}{" "}
-              <span className="text-gradient-gold">
+              <span className="text-gradient-brand">
                 {t("landing.hero_title_2")}
               </span>
             </motion.h1>
@@ -243,7 +243,7 @@ const WelcomePage = () => {
             </motion.p>
 
             <motion.div variants={fadeUpVariant} className="hero-actions">
-              <button className="btn-gold-large" onClick={() => navigate("/signup")}>
+              <button className="btn-brand-large" onClick={() => navigate("/signup")}>
                 {t("landing.cta_start")}
                 <ArrowRight size={20} className={isRtl ? "rotate-180" : ""} />
               </button>
@@ -314,7 +314,7 @@ const WelcomePage = () => {
         <div className="showcase-header">
           <h2 className="section-title">
             {t("landing.features_title_1")}{" "}
-            <span className="text-gradient-gold">
+            <span className="text-gradient-brand">
               {t("landing.features_title_2")}
             </span>
           </h2>
@@ -339,7 +339,7 @@ const WelcomePage = () => {
               </span>
               <h3 className="showcase-title">
                 {t("landing.feature1_title_1")}{" "}
-                <span className="text-gradient-gold">
+                <span className="text-gradient-brand">
                   {t("landing.feature1_title_2")}
                 </span>
               </h3>
@@ -348,33 +348,33 @@ const WelcomePage = () => {
           </motion.div>
 
           <motion.div
-            className="kqirat-explainer-section"
+            className="fit-explainer-section"
             variants={fadeUpVariant}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <div className="kqirat-explainer-container">
-              <span className="kqirat-tag">{t("landing.fit_tag")}</span>
-              <h2 className="kqirat-title">
+            <div className="fit-explainer-container">
+              <span className="fit-tag">{t("landing.fit_tag")}</span>
+              <h2 className="fit-title">
                 {t("landing.fit_title_1")}{" "}
-                <span className="text-gradient-gold">
+                <span className="text-gradient-brand">
                   {t("landing.fit_title_2")}
                 </span>
               </h2>
-              <p className="kqirat-text">{t("landing.fit_desc")}</p>
-              <div className="kqirat-features-row">
-                <div className="kqirat-feat-item">
-                  <span className="kqirat-feat-num">{t("landing.fit1_value")}</span>
-                  <span className="kqirat-feat-lbl">{t("landing.fit1_label")}</span>
+              <p className="fit-text">{t("landing.fit_desc")}</p>
+              <div className="fit-features-row">
+                <div className="fit-feat-item">
+                  <span className="fit-feat-num">{t("landing.fit1_value")}</span>
+                  <span className="fit-feat-lbl">{t("landing.fit1_label")}</span>
                 </div>
-                <div className="kqirat-feat-item">
-                  <span className="kqirat-feat-num">{t("landing.fit2_value")}</span>
-                  <span className="kqirat-feat-lbl">{t("landing.fit2_label")}</span>
+                <div className="fit-feat-item">
+                  <span className="fit-feat-num">{t("landing.fit2_value")}</span>
+                  <span className="fit-feat-lbl">{t("landing.fit2_label")}</span>
                 </div>
-                <div className="kqirat-feat-item">
-                  <span className="kqirat-feat-num">{t("landing.fit3_value")}</span>
-                  <span className="kqirat-feat-lbl">{t("landing.fit3_label")}</span>
+                <div className="fit-feat-item">
+                  <span className="fit-feat-num">{t("landing.fit3_value")}</span>
+                  <span className="fit-feat-lbl">{t("landing.fit3_label")}</span>
                 </div>
               </div>
             </div>
@@ -397,7 +397,7 @@ const WelcomePage = () => {
               </span>
               <h3 className="showcase-title">
                 {t("landing.feature2_title_1")}{" "}
-                <span className="text-gradient-gold">
+                <span className="text-gradient-brand">
                   {t("landing.feature2_title_2")}
                 </span>
               </h3>
@@ -422,7 +422,7 @@ const WelcomePage = () => {
               </span>
               <h3 className="showcase-title">
                 {t("landing.feature3_title_1")}{" "}
-                <span className="text-gradient-gold">
+                <span className="text-gradient-brand">
                   {t("landing.feature3_title_2")}
                 </span>
               </h3>
@@ -436,7 +436,7 @@ const WelcomePage = () => {
         <div className="showcase-header">
           <h2 className="section-title">
             {t("landing.how_title_1")}{" "}
-            <span className="text-gradient-gold">
+            <span className="text-gradient-brand">
               {t("landing.how_title_2")}
             </span>
           </h2>
@@ -470,7 +470,7 @@ const WelcomePage = () => {
         <div className="pricing-header">
           <h2 className="section-title">
             {t("landing.pricing_title_1")}{" "}
-            <span className="text-gradient-gold">
+            <span className="text-gradient-brand">
               {t("landing.pricing_title_2")}
             </span>
           </h2>
@@ -509,7 +509,7 @@ const WelcomePage = () => {
                 ))}
               </ul>
               <button
-                className={`plan-cta-btn ${plan.popular ? "btn-gold-solid" : "btn-outline"}`}
+                className={`plan-cta-btn ${plan.popular ? "btn-brand-solid" : "btn-outline"}`}
                 onClick={() => navigate("/signup")}
               >
                 {plan.cta}
@@ -523,7 +523,7 @@ const WelcomePage = () => {
         <div className="faq-header">
           <h2 className="section-title">
             {t("landing.faq_title_1")}{" "}
-            <span className="text-gradient-gold">
+            <span className="text-gradient-brand">
               {t("landing.faq_title_2")}
             </span>
           </h2>
@@ -569,10 +569,10 @@ const WelcomePage = () => {
         >
           <h2>
             {t("landing.cta_title_1")}{" "}
-            <span className="text-gradient-gold">{t("landing.cta_title_2")}</span>
+            <span className="text-gradient-brand">{t("landing.cta_title_2")}</span>
           </h2>
           <p>{t("landing.cta_desc")}</p>
-          <button className="btn-gold-solid" onClick={() => navigate("/signup")}>
+          <button className="btn-brand-solid" onClick={() => navigate("/signup")}>
             {t("landing.cta_btn")}
           </button>
           <p className="cta-note">

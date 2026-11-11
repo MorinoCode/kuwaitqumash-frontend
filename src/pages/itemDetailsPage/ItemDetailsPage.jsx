@@ -13,12 +13,6 @@ import { BarcodeLabel } from "../../components/barcode/BarcodeLabel";
 import AddItemModal from "../../components/addItemModal/AddItemModal";
 import useBranchStore from "../../store/branchStore";
 import {
-  METAL_CATEGORIES,
-  DIAMOND_CUTS,
-  DIAMOND_COLORS,
-  DIAMOND_CLARITY,
-  DIAMOND_SHAPES,
-  DIAMOND_SETTINGS,
   STONE_TYPES,
 } from "../../utils/inventoryCategories";
 import "./ItemDetailsPage.css";

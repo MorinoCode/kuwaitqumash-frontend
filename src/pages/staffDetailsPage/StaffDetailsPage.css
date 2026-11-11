@@ -1,8 +1,8 @@
 :root {
-  --gold-primary: #d4af37;
-  --gold-hover: #b5952f;
-  --gold-light: rgba(212, 175, 55, 0.1);
-  --gold-border: rgba(212, 175, 55, 0.2);
+  --brand-primary: #2dd4bf;
+  --brand-hover: #0d9488;
+  --brand-light: rgba(45, 212, 191, 0.1);
+  --brand-border: rgba(45, 212, 191, 0.2);
 
   --bg-dark: #09090b;
   --surface-dark: #18181b;
@@ -54,8 +54,8 @@
 .staff-page__loader {
   width: 2.5rem;
   height: 2.5rem;
-  border: 3px solid var(--gold-border);
-  border-top-color: var(--gold-primary);
+  border: 3px solid var(--brand-border);
+  border-top-color: var(--brand-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -121,9 +121,9 @@ html[dir="rtl"] .staff-page__back-btn svg {
 }
 
 .staff-page__badge--store_owner {
-  background-color: var(--gold-light);
-  color: var(--gold-primary);
-  border: 1px solid var(--gold-border);
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  border: 1px solid var(--brand-border);
 }
 
 .staff-grid {
@@ -163,7 +163,7 @@ html[dir="rtl"] .staff-page__back-btn svg {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid transparent;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .staff-page--dark .staff-card__header {
@@ -200,12 +200,12 @@ html[dir="rtl"] .staff-page__back-btn svg {
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-color: var(--gold-light);
-  color: var(--gold-primary);
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--gold-border);
+  border: 1px solid var(--brand-border);
 }
 
 .staff-info__username {
@@ -263,8 +263,8 @@ html[dir="rtl"] .staff-page__back-btn svg {
 .staff-ai__value {
   font-weight: 600;
 }
-.staff-ai__value--gold {
-  color: var(--gold-primary);
+.staff-ai__value--brand {
+  color: var(--brand-primary);
   font-weight: 700;
 }
 .staff-ai__value small {
@@ -299,12 +299,12 @@ html[dir="rtl"] .staff-page__back-btn svg {
 }
 
 .staff-ai__icon {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
   animation: sparkle 2s infinite;
 }
 
 .staff-ai__insight-icon {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
   animation: sparkle 2s infinite;
 }
 
@@ -339,14 +339,14 @@ html[dir="rtl"] .staff-page__back-btn svg {
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 500;
-  background-color: rgba(212, 175, 55, 0.15);
-  color: var(--gold-primary);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background-color: rgba(45, 212, 191, 0.15);
+  color: var(--brand-primary);
+  border: 1px solid rgba(45, 212, 191, 0.3);
 }
 
 .staff-page--dark .staff-ai__insight-tag {
-  background-color: rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.4);
+  background-color: rgba(45, 212, 191, 0.2);
+  border-color: rgba(45, 212, 191, 0.4);
 }
 
 .staff-ai__preference {
@@ -373,7 +373,7 @@ html[dir="rtl"] .staff-page__back-btn svg {
 
 .staff-ai__preference-value {
   font-weight: 600;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .staff-ai__value--green {
@@ -437,7 +437,7 @@ html[dir="rtl"] .staff-table {
 
 .staff-table__amount {
   font-weight: 600;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .staff-table__empty {

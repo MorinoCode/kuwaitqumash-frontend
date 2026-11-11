@@ -1,8 +1,8 @@
 :root {
-  --gold-primary: #d4af37;
-  --gold-hover: #b5952f;
-  --gold-light: rgba(212, 175, 55, 0.1);
-  --gold-border: rgba(212, 175, 55, 0.2);
+  --brand-primary: #2dd4bf;
+  --brand-hover: #0d9488;
+  --brand-light: rgba(45, 212, 191, 0.1);
+  --brand-border: rgba(45, 212, 191, 0.2);
 
   --bg-dark: #09090b;
   --surface-dark: #18181b;
@@ -55,8 +55,8 @@
 .customer-details__loader {
   width: 2.5rem;
   height: 2.5rem;
-  border: 3px solid var(--gold-border);
-  border-top-color: var(--gold-primary);
+  border: 3px solid var(--brand-border);
+  border-top-color: var(--brand-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -90,13 +90,13 @@
 }
 
 .customer-details__action-btn--edit {
-  background-color: rgba(212, 175, 55, 0.1);
-  color: var(--gold-primary);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background-color: rgba(45, 212, 191, 0.1);
+  color: var(--brand-primary);
+  border: 1px solid rgba(45, 212, 191, 0.3);
 }
 
 .customer-details__action-btn--edit:hover {
-  background-color: var(--gold-primary);
+  background-color: var(--brand-primary);
   color: #000;
 }
 
@@ -162,10 +162,10 @@ html[dir="rtl"] .customer-details__back-btn svg {
 }
 
 .customer-details__badge--vip {
-  background-color: var(--gold-light);
-  color: var(--gold-primary);
-  border: 1px solid var(--gold-border);
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  border: 1px solid var(--brand-border);
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.1);
 }
 
 .customer-details__badge--wholesaler {
@@ -205,7 +205,7 @@ html[dir="rtl"] .customer-details__back-btn svg {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid transparent;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .customer-details--dark .customer-card__header {
@@ -242,12 +242,12 @@ html[dir="rtl"] .customer-details__back-btn svg {
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
-  background-color: var(--gold-light);
-  color: var(--gold-primary);
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--gold-border);
+  border: 1px solid var(--brand-border);
 }
 
 .customer-profile__civil-id {
@@ -323,7 +323,7 @@ html[dir="rtl"] .customer-profile__address {
 
 .customer-profile__address-icon {
   flex-shrink: 0;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
   margin-top: 0.1rem;
 }
 
@@ -428,7 +428,7 @@ html[dir="rtl"] .customer-profile__address {
 .customer-insights__value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .customer-insights__value small {
@@ -443,17 +443,17 @@ html[dir="rtl"] .customer-profile__address {
   gap: 1rem;
   padding: 1rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--gold-border);
-  background-color: var(--gold-light);
+  border: 1px solid var(--brand-border);
+  background-color: var(--brand-light);
 }
 
 .customer-insights__prediction-icon {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
   animation: sparkle 2s infinite;
 }
 
 .customer-insights__icon {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 @keyframes sparkle {
@@ -473,7 +473,7 @@ html[dir="rtl"] .customer-profile__address {
 }
 
 .customer-insights__prediction-text strong {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .customer-insights__analysis-details {
@@ -496,14 +496,14 @@ html[dir="rtl"] .customer-profile__address {
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 500;
-  background-color: rgba(212, 175, 55, 0.15);
-  color: var(--gold-primary);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background-color: rgba(45, 212, 191, 0.15);
+  color: var(--brand-primary);
+  border: 1px solid rgba(45, 212, 191, 0.3);
 }
 
 .customer-details--dark .customer-insights__insight-tag {
-  background-color: rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.4);
+  background-color: rgba(45, 212, 191, 0.2);
+  border-color: rgba(45, 212, 191, 0.4);
 }
 
 .customer-insights__preference {
@@ -530,7 +530,7 @@ html[dir="rtl"] .customer-profile__address {
 
 .customer-insights__preference-value {
   font-weight: 600;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .customer-history__wrapper {
@@ -595,7 +595,7 @@ html[dir="rtl"] .customer-history__table {
 
 .customer-history__amount {
   font-weight: 600;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .customer-history__download-btn {
@@ -625,8 +625,8 @@ html[dir="rtl"] .customer-history__table {
 }
 
 .customer-history__download-btn:hover {
-  background-color: var(--gold-primary);
-  border-color: var(--gold-primary);
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
   color: #000;
 }
 
@@ -853,21 +853,21 @@ html[dir="rtl"] .customer-history__table {
   margin-bottom: 2rem;
   padding: 1.5rem;
   border-radius: 1rem;
-  border: 1px dashed var(--gold-primary);
-  background-color: var(--gold-light);
+  border: 1px dashed var(--brand-primary);
+  background-color: var(--brand-light);
   text-align: center;
 }
 
 .customer-details--dark .customers-scan {
-  background-color: rgba(212, 175, 55, 0.1);
+  background-color: rgba(45, 212, 191, 0.1);
 }
 
 .customer-details--light .customers-scan {
-  background-color: rgba(212, 175, 55, 0.05);
+  background-color: rgba(45, 212, 191, 0.05);
 }
 
 .customers-scan__label {
-  color: var(--gold-primary);
+  color: var(--brand-primary);
   font-weight: 600;
   margin: 0 0 1rem 0;
   font-size: 0.95rem;
@@ -886,8 +886,8 @@ html[dir="rtl"] .customer-history__table {
   gap: 0.5rem;
   padding: 1rem;
   background-color: transparent;
-  border: 2px solid var(--gold-primary);
-  color: var(--gold-primary);
+  border: 2px solid var(--brand-primary);
+  color: var(--brand-primary);
   border-radius: 0.75rem;
   cursor: pointer;
   font-weight: 600;
@@ -896,7 +896,7 @@ html[dir="rtl"] .customer-history__table {
 }
 
 .customers-scan__btn:hover {
-  background-color: var(--gold-primary);
+  background-color: var(--brand-primary);
   color: #000;
 }
 
@@ -946,8 +946,8 @@ html[dir="rtl"] .customer-history__table {
 }
 
 .customers-form__input:focus {
-  border-color: var(--gold-primary);
-  box-shadow: 0 0 0 2px var(--gold-light);
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 2px var(--brand-light);
 }
 
 .customers-form__input--textarea {
@@ -973,7 +973,7 @@ html[dir="rtl"] .customer-history__table {
 .customers-page__btn--submit {
   width: 100%;
   justify-content: center;
-  background-color: var(--gold-primary);
+  background-color: var(--brand-primary);
   color: #000;
   margin-top: 1rem;
 }

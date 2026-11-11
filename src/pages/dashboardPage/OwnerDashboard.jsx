@@ -22,7 +22,7 @@ import DateRangePicker from "../../components/dashboard/DateRangePicker";
 import "./DashboardPage.css";
 
 const COLORS_DARK = [
-  "#D4AF37",
+  "#2dd4bf",
   "#10B981",
   "#3B82F6",
   "#F59E0B",
@@ -35,7 +35,7 @@ const COLORS_DARK = [
 ];
 
 const COLORS_LIGHT = [
-  "#D4AF37",
+  "#2dd4bf",
   "#059669",
   "#2563EB",
   "#D97706",
@@ -226,7 +226,7 @@ const OwnerDashboard = () => {
             <h3 className="kpi-card__title">{t("totalSalesToday")}</h3>
             <div className="kpi-card__subtitle">{t("totalSalesTodayDesc")}</div>
             <div className="kpi-card__value-wrapper">
-              <span className="kpi-card__value" style={{ color: 'var(--gold)' }}>
+              <span className="kpi-card__value" style={{ color: 'var(--brand)' }}>
                 {formatPrice(data?.kpi?.total_sales)}
               </span>
               <span className="kpi-card__unit">{t("kwd")}</span>
@@ -476,9 +476,9 @@ const OwnerDashboard = () => {
                   <Line
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#D4AF37"
+                    stroke="#2dd4bf"
                     strokeWidth={3}
-                    dot={{ fill: "#D4AF37", r: 4 }}
+                    dot={{ fill: "#2dd4bf", r: 4 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -512,9 +512,9 @@ const OwnerDashboard = () => {
                   <Line
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#D4AF37"
+                    stroke="#2dd4bf"
                     strokeWidth={3}
-                    dot={{ fill: "#D4AF37", r: 4 }}
+                    dot={{ fill: "#2dd4bf", r: 4 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -588,15 +588,15 @@ const OwnerDashboard = () => {
 
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
-            {t("sales_by_category_karat")}
+            {t("sales_by_category_fabric")}
           </h3>
           <div className="chart-box__container">
-            {data?.charts?.sales_by_category_karat &&
-            data.charts.sales_by_category_karat.length > 0 ? (
+            {data?.charts?.sales_by_category_fabric &&
+            data.charts.sales_by_category_fabric.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={data.charts.sales_by_category_karat}
+                    data={data.charts.sales_by_category_fabric}
                     cx="50%"
                     cy="45%"
                     innerRadius={70}
@@ -606,7 +606,7 @@ const OwnerDashboard = () => {
                     dataKey="revenue"
                     label={false}
                   >
-                    {data.charts.sales_by_category_karat.map((entry, index) => {
+                    {data.charts.sales_by_category_fabric.map((entry, index) => {
                       const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
                       return (
                         <Cell
@@ -636,7 +636,7 @@ const OwnerDashboard = () => {
                       fontSize: "12px",
                     }}
                     formatter={(value) => {
-                      const item = data.charts.sales_by_category_karat.find(d => d.name === value);
+                      const item = data.charts.sales_by_category_fabric.find(d => d.name === value);
                       return item ? `${value} (${formatPrice(item.revenue)})` : value;
                     }}
                   />
@@ -650,13 +650,13 @@ const OwnerDashboard = () => {
 
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
-            {t("sales_by_category_karat") || "Sales by Category + Karat (Bar)"}
+            {t("sales_by_category_fabric") || "Sales by fabric category"}
           </h3>
           <div className="chart-box__container">
-            {data?.charts?.sales_by_category_karat &&
-            data.charts.sales_by_category_karat.length > 0 ? (
+            {data?.charts?.sales_by_category_fabric &&
+            data.charts.sales_by_category_fabric.length > 0 ? (
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={data.charts.sales_by_category_karat}>
+                <BarChart data={data.charts.sales_by_category_fabric}>
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke={theme === "dark" ? "#444" : "#ddd"}
@@ -671,7 +671,7 @@ const OwnerDashboard = () => {
                   />
                   <YAxis style={{ fontSize: 10 }} />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#D4AF37" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -682,22 +682,22 @@ const OwnerDashboard = () => {
 
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
-            {t("sales_by_karat") || "Sales by Karat"}
+            {t("sales_by_fabric") || "Sales by fabric type"}
           </h3>
           <div className="chart-box__container">
-            {data?.charts?.sales_by_karat &&
-            data.charts.sales_by_karat.length > 0 ? (
+            {data?.charts?.sales_by_fabric &&
+            data.charts.sales_by_fabric.length > 0 ? (
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={data.charts.sales_by_karat}>
+                <BarChart data={data.charts.sales_by_fabric}>
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke={theme === "dark" ? "#444" : "#ddd"}
                     opacity={0.3}
                   />
-                  <XAxis dataKey="karat" style={{ fontSize: 10 }} />
+                  <XAxis dataKey="fabric_type" style={{ fontSize: 10 }} />
                   <YAxis style={{ fontSize: 10 }} />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#D4AF37" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -779,7 +779,7 @@ const OwnerDashboard = () => {
                   />
                   <Bar
                     dataKey={topItemsMetric}
-                    fill="#D4AF37"
+                    fill="#2dd4bf"
                     radius={[0, 5, 5, 0]}
                   />
                 </BarChart>
@@ -812,7 +812,7 @@ const OwnerDashboard = () => {
                     style={{ fontSize: 10 }}
                   />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="value" fill="#D4AF37" radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (

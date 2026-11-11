@@ -265,7 +265,7 @@ const SignupPage = () => {
           <p
             className={`signup-card__subtitle signup-card__subtitle--${theme}`}
           >
-            {t("register_store_kuwait") || "REGISTER YOUR GOLD STORE IN KUWAIT"}
+            {t("register_store_kuwait") || "REGISTER YOUR FABRIC STORE IN KUWAIT"}
           </p>
         </header>
 
@@ -282,7 +282,7 @@ const SignupPage = () => {
               name="storeName"
               className={`signup-card__input signup-card__input--${theme}`}
               type="text"
-              placeholder={t("store_name_placeholder") || "e.g. Al-Baraka Gold"}
+              placeholder={t("store_name_placeholder") || "e.g. Al-Baraka Fabrics"}
               value={formData.storeName}
               onChange={handleInputChange}
               required

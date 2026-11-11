@@ -6,7 +6,7 @@
   border-color: #333;
 }
 .signup-card__title--dark {
-  color: #d4af37;
+  color: #2dd4bf;
 }
 .signup-card__subtitle--dark {
   color: #666;
@@ -26,7 +26,7 @@
   color: #555;
 }
 .signup-card__link-btn--dark {
-  color: #d4af37;
+  color: #2dd4bf;
   background: none;
   border: none;
   font-weight: bold;
@@ -193,7 +193,7 @@
 }
 
 .signup-card__input--dark:focus {
-  border-color: #d4af37;
+  border-color: #2dd4bf;
 }
 
 .signup-card__password-toggle {
@@ -231,8 +231,8 @@
 }
 
 .signup-card__password-toggle--dark:hover {
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .signup-card__error-msg {
@@ -273,7 +273,7 @@
 }
 
 .signup-card__submit-btn--dark {
-  background: #d4af37;
+  background: #2dd4bf;
   color: black;
 }
 
@@ -340,9 +340,9 @@
 }
 
 .signup-page__theme-btn--dark:hover {
-  border-color: #d4af37;
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .signup-page__language-selector {
@@ -385,15 +385,15 @@
 }
 
 .signup-page__lang-btn--dark:hover {
-  border-color: #d4af37;
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .signup-page__lang-btn--dark.signup-page__lang-btn--active {
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
-  border-color: #d4af37;
+  border-color: #2dd4bf;
 }
 
 @media (max-width: 768px) {

@@ -164,7 +164,7 @@
   font-weight: 600;
 }
 
-.karat-badge {
+.fabric-badge {
   display: inline-block;
   background: linear-gradient(135deg, #ffd700, #b8860b);
   color: white;

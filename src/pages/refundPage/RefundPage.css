@@ -23,7 +23,7 @@
   font-size: 1.875rem;
   font-weight: 700;
   margin: 0;
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 .refund-page__load-section {
@@ -73,7 +73,7 @@
 
 .refund-page__input:focus {
   outline: none;
-  border-color: #d4af37;
+  border-color: #2dd4bf;
 }
 
 .refund-page__hint {
@@ -101,12 +101,12 @@
 }
 
 .refund-page__btn--primary {
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
 }
 
 .refund-page__btn--primary:hover:not(:disabled) {
-  background: #b5952f;
+  background: #0d9488;
 }
 
 .refund-page__btn--ghost {
@@ -167,7 +167,7 @@
   gap: 0.5rem;
   background: none;
   border: none;
-  color: #d4af37;
+  color: #2dd4bf;
   font-size: 0.875rem;
   cursor: pointer;
   padding: 0;
@@ -251,14 +251,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(45, 212, 191, 0.1);
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
 }
 
 .refund-page__total-row strong {
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 .refund-page__payments-section {
@@ -314,8 +314,8 @@
 }
 
 .refund-page__add-payment:hover {
-  border-color: #d4af37;
-  color: #d4af37;
+  border-color: #2dd4bf;
+  color: #2dd4bf;
 }
 
 .refund-page__notes {

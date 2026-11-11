@@ -77,12 +77,12 @@
 }
 
 .error-fallback__btn--primary {
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
 }
 
 .error-fallback__btn--primary:hover {
-  background: #b5952f;
+  background: #0d9488;
   transform: translateY(-1px);
 }
 

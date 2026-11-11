@@ -171,7 +171,7 @@ const LoginPage = () => {
             />
           </div>
           <p className={`login-card__subtitle login-card__subtitle--${theme}`}>
-            SECURE GOLD PORTAL | KUWAIT
+            FABRIC MANAGEMENT PORTAL | KUWAIT
           </p>
         </header>
 
@@ -188,7 +188,7 @@ const LoginPage = () => {
             <input
               className={`login-card__input login-card__input--${theme}`}
               type="text"
-              placeholder="e.g. royal-gold"
+              placeholder="e.g. royal-fabrics"
               value={credentials.storeId}
               onChange={(e) =>
                 setCredentials({ ...credentials, storeId: e.target.value.toLowerCase().replace(/\s/g, "-") })

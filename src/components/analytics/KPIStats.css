@@ -33,7 +33,7 @@
   border: 1px solid #333;
 }
 
-.kpi-card--dark .kpi-card--gold .kpi-card__icon-wrapper {
+.kpi-card--dark .kpi-card--brand .kpi-card__icon-wrapper {
   background: rgba(255, 215, 0, 0.5);
   border-color: #ffd700;
   box-shadow:
@@ -41,7 +41,7 @@
     inset 0 0 8px rgba(255, 215, 0, 0.2);
 }
 
-.kpi-card--dark .kpi-card--gold .kpi-card__icon-wrapper svg {
+.kpi-card--dark .kpi-card--brand .kpi-card__icon-wrapper svg {
   color: #ffd700 !important;
   filter: drop-shadow(0 2px 10px rgba(255, 215, 0, 1));
 }
@@ -109,14 +109,14 @@
   opacity: 1;
 }
 
-.kpi-card--gold .kpi-card__icon-wrapper {
+.kpi-card--brand .kpi-card__icon-wrapper {
   background: rgba(255, 215, 0, 0.4);
   color: #ffd700;
   border: 2px solid #ffd700;
   box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
 }
 
-.kpi-card--gold .kpi-card__icon-wrapper svg {
+.kpi-card--brand .kpi-card__icon-wrapper svg {
   color: #ffd700 !important;
   filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.8));
 }

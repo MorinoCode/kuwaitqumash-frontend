@@ -41,7 +41,7 @@
 }
 
 .sales-header__icon {
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 .sales-header__title {
@@ -70,14 +70,14 @@
 }
 
 .sales-header__live-price--dark {
-  background: rgba(212, 175, 55, 0.1);
-  border-color: rgba(212, 175, 55, 0.3);
-  color: #d4af37;
+  background: rgba(45, 212, 191, 0.1);
+  border-color: rgba(45, 212, 191, 0.3);
+  color: #2dd4bf;
 }
 
 .sales-header__live-price--light {
-  background: rgba(212, 175, 55, 0.08);
-  border-color: rgba(212, 175, 55, 0.4);
+  background: rgba(45, 212, 191, 0.08);
+  border-color: rgba(45, 212, 191, 0.4);
   color: #b8952f;
 }
 
@@ -100,83 +100,11 @@
   flex-shrink: 0;
 }
 
-.sales-header__karat-prices {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sales-header__karat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.sales-header__live-price--dark .sales-header__karat-item {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.sales-header__live-price--light .sales-header__karat-item {
-  background: rgba(0, 0, 0, 0.03);
-}
-
-.sales-header__karat-item--highlight {
-  background: rgba(212, 175, 55, 0.2) !important;
-  padding: 2px 8px;
-}
-
-.sales-header__live-price--light .sales-header__karat-item--highlight {
-  background: rgba(212, 175, 55, 0.25) !important;
-}
-
-.sales-header__karat-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  opacity: 0.8;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.sales-header__karat-value {
-  font-size: 0.75rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: inherit;
-  line-height: 1;
-}
-
-.sales-header__karat-item--highlight .sales-header__karat-value {
-  font-size: 0.8rem;
-  font-weight: 800;
-}
-
 .sales-header__live-price-unit {
   opacity: 0.8;
   font-size: 0.75rem;
   font-weight: 500;
   flex-shrink: 0;
-}
-
-@media (max-width: 1200px) {
-  .sales-header__karat-prices {
-    gap: 6px;
-  }
-
-  .sales-header__karat-item {
-    padding: 2px 4px;
-  }
-
-  .sales-header__karat-value {
-    font-size: 0.7rem;
-  }
-
-  .sales-header__karat-item--highlight .sales-header__karat-value {
-    font-size: 0.75rem;
-  }
 }
 
 @media (max-width: 900px) {
@@ -197,39 +125,8 @@
     font-size: 0.8rem;
   }
 
-  .sales-header__karat-prices {
-    gap: 4px;
-  }
-
-  .sales-header__karat-item {
-    padding: 2px 4px;
-  }
-
-  .sales-header__karat-label {
-    font-size: 0.6rem;
-  }
-
-  .sales-header__karat-value {
-    font-size: 0.65rem;
-  }
-
-  .sales-header__karat-item--highlight .sales-header__karat-value {
-    font-size: 0.7rem;
-  }
-
   .sales-header__live-price-label {
     font-size: 0.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .sales-header__karat-prices {
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  .sales-header__karat-item {
-    min-width: 50px;
   }
 }
 
@@ -317,7 +214,7 @@
   transition: all 0.2s;
 }
 .sales-search__input:focus {
-  border-color: #d4af37;
+  border-color: #2dd4bf;
   background: rgba(128, 128, 128, 0.08);
 }
 
@@ -327,8 +224,8 @@
   right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(212, 175, 55, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.3);
   border-radius: 8px;
   padding: 8px;
   cursor: pointer;
@@ -360,7 +257,7 @@ html[dir="rtl"] .sales-search__add-item-btn {
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 html[dir="rtl"] .sales-search__scan-btn {
@@ -369,13 +266,13 @@ html[dir="rtl"] .sales-search__scan-btn {
 }
 
 .sales-search__scan-btn:hover {
-  background: rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
+  background: rgba(45, 212, 191, 0.2);
+  border-color: rgba(45, 212, 191, 0.5);
   transform: translateY(-50%) scale(1.05);
 }
 
 .sales-search__scan-icon {
-  color: #d4af37;
+  color: #2dd4bf;
   transition: transform 0.2s ease;
 }
 
@@ -387,7 +284,7 @@ html[dir="rtl"] .sales-search__scan-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #d4af37;
+  background: #2dd4bf;
   border: none;
   border-radius: 12px;
   color: black;
@@ -481,7 +378,7 @@ html[dir="rtl"] .sales-search__input {
 }
 .sales-cart__total {
   font-weight: 700;
-  color: #d4af37;
+  color: #2dd4bf;
 }
 .sales-cart__empty {
   text-align: center;
@@ -553,9 +450,9 @@ html[dir="rtl"] .sales-search__input {
   gap: 6px;
   padding: 6px 12px;
   border-radius: 8px;
-  border: 1px dashed #d4af37;
-  background: rgba(212, 175, 55, 0.05);
-  color: #d4af37;
+  border: 1px dashed #2dd4bf;
+  background: rgba(45, 212, 191, 0.05);
+  color: #2dd4bf;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -564,7 +461,7 @@ html[dir="rtl"] .sales-search__input {
   transition: all 0.2s ease;
 }
 .sales-upload-btn:hover {
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .sales-upload-btn--done {
@@ -596,7 +493,7 @@ html[dir="rtl"] .sales-search__input {
 .sales-payment__amount {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #d4af37;
+  color: #2dd4bf;
   margin-top: 5px;
 }
 .sales-payment__amount small {
@@ -658,8 +555,8 @@ html[dir="rtl"] .sales-search__input {
 }
 
 .sales-payment__select:focus {
-  border-color: #d4af37;
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  border-color: #2dd4bf;
+  box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.2);
 }
 
 html[dir="rtl"] .sales-payment__select {
@@ -738,7 +635,7 @@ html[dir="rtl"] .sales-payment__input {
   transition: 0.2s;
 }
 .sales-btn--primary {
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
   padding: 16px;
   font-size: 1.1rem;
@@ -754,11 +651,11 @@ html[dir="rtl"] .sales-payment__input {
 .sales-btn--dashed {
   background: none;
   border: 2px dashed rgba(128, 128, 128, 0.3);
-  color: #d4af37;
+  color: #2dd4bf;
 }
 .sales-btn--dashed:hover {
-  border-color: #d4af37;
-  background: rgba(212, 175, 55, 0.05);
+  border-color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.05);
 }
 
 .sales-btn-icon {
@@ -902,15 +799,15 @@ html[dir="rtl"] .sales-payment__input {
   height: 28px;
   border-radius: 6px;
   border: none;
-  background: rgba(212, 175, 55, 0.15);
-  color: #d4af37;
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
   cursor: pointer;
   transition: all 0.2s;
   padding: 0;
 }
 
 .sales-modal__phone-edit-btn:hover {
-  background: rgba(212, 175, 55, 0.25);
+  background: rgba(45, 212, 191, 0.25);
   transform: scale(1.05);
 }
 
@@ -1049,7 +946,7 @@ html[dir="rtl"] .sales-payment__input {
   font-size: 0.95rem;
 }
 .customer-form__input:focus {
-  border-color: #d4af37;
+  border-color: #2dd4bf;
   background: rgba(128, 128, 128, 0.1);
 }
 .customer-form__input--textarea {
@@ -1207,7 +1104,7 @@ html[dir="rtl"] .sales-payment__input {
 
   .sales-cart__mobile-value {
     font-weight: 600;
-    color: #d4af37;
+    color: #2dd4bf;
   }
 
   .sales-cart__mobile-inputs {
@@ -1331,27 +1228,6 @@ html[dir="rtl"] .sales-payment__input {
 
   .sales-header__live-price-label {
     font-size: 0.7rem;
-  }
-
-  .sales-header__karat-prices {
-    gap: 3px;
-  }
-
-  .sales-header__karat-item {
-    padding: 2px 4px;
-    min-width: 45px;
-  }
-
-  .sales-header__karat-label {
-    font-size: 0.55rem;
-  }
-
-  .sales-header__karat-value {
-    font-size: 0.6rem;
-  }
-
-  .sales-header__karat-item--highlight .sales-header__karat-value {
-    font-size: 0.65rem;
   }
 
   .sales-header__live-price-unit {

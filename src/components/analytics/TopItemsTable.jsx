@@ -155,7 +155,7 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
                   </td>
                   <td>{item.category}</td>
                   <td>
-                    <span className="karat-badge">{item.fabric_type || item.karat || "-"}</span>
+                    <span className="fabric-badge">{item.fabric_type || "-"}</span>
                   </td>
                   <td className="currency">
                     {formatValue(item.revenue, "currency")}

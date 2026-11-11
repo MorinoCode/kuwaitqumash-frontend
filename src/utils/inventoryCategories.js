@@ -56,7 +56,7 @@ export const COLORS = [
   opt("Green", "Green", "أخضر"),
   opt("Olive", "Olive", "زيتي"),
   opt("Yellow", "Yellow", "أصفر"),
-  opt("Gold", "Gold", "ذهبي"),
+  opt("Golden", "Golden", "ذهبي"),
   opt("Silver", "Silver", "فضي"),
   opt("Pink", "Pink", "وردي"),
   opt("Purple", "Purple", "بنفسجي"),
@@ -71,35 +71,10 @@ export const UNITS = [
   { value: "piece", label: "Piece", labelAr: "قطعة", short: "pc" },
 ];
 
-export const METAL_CATEGORIES = {
-  Cotton: PATTERNS,
-  Silk: PATTERNS,
-  Wool: PATTERNS,
-  Polyester: PATTERNS,
-  Default: PATTERNS,
-};
-
-export const KARAT_OPTIONS = {};
-
-export const getSubcategories = (fabricType, category) => {
+export const getSubcategories = (fabricType) => {
   if (!fabricType) return [];
-  if (PATTERNS.length) return PATTERNS;
-  return Array.isArray(METAL_CATEGORIES[category]) ? METAL_CATEGORIES[category] : [];
+  return PATTERNS;
 };
-
-export const extractKaratFromSubcategory = (value) => {
-  if (!value) return null;
-  const normalized = normalizeToLatinDigits(String(value));
-  const match = normalized.match(/(\d+)/);
-  return match ? match[1] : null;
-};
-
-export const DIAMOND_CUTS = [];
-export const DIAMOND_COLORS = [];
-export const DIAMOND_CLARITY = [];
-export const DIAMOND_SHAPES = [];
-export const DIAMOND_SETTINGS = [];
-export const STONE_TYPES = [];
 
 export const formatMeters = (value) => {
   const n = parseFloat(normalizeToLatinDigits(String(value ?? "")));

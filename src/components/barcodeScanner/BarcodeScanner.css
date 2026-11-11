@@ -108,7 +108,7 @@
 
 .barcode-scanner-retry {
     padding: 0.75rem 1.5rem;
-    background: #D4AF37;
+    background: #2dd4bf;
     color: #000;
     border: none;
     border-radius: 8px;
@@ -129,9 +129,9 @@
     gap: 0.75rem;
     margin-top: 1rem;
     padding: 1rem;
-    background: rgba(212, 175, 55, 0.1);
+    background: rgba(45, 212, 191, 0.1);
     border-radius: 8px;
-    color: #D4AF37;
+    color: #2dd4bf;
 }
 
 .barcode-scanner-modal--light .barcode-scanner-instructions {

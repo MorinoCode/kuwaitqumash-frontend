@@ -19,7 +19,7 @@ import DateRangePicker from "../../components/dashboard/DateRangePicker";
 import "./DashboardPage.css";
 
 const COLORS_DARK = [
-  "#D4AF37",
+  "#2dd4bf",
   "#10B981",
   "#3B82F6",
   "#F59E0B",
@@ -32,7 +32,7 @@ const COLORS_DARK = [
 ];
 
 const COLORS_LIGHT = [
-  "#D4AF37",
+  "#2dd4bf",
   "#059669",
   "#2563EB",
   "#D97706",
@@ -197,7 +197,7 @@ const ManagerDashboard = () => {
       <div className="kpi-grid">
         <div className={`kpi-card kpi-card--${theme} kpi-card--primary`}>
           <div className="kpi-card__icon-wrapper">
-            <div className="kpi-card__icon-bg kpi-card__icon-bg--gold">
+            <div className="kpi-card__icon-bg kpi-card__icon-bg--brand">
               <DollarSign size={24} className="kpi-card__icon" />
             </div>
           </div>
@@ -388,7 +388,7 @@ const ManagerDashboard = () => {
                   <Tooltip formatter={(value) => formatPrice(value)} />
                   <Bar
                     dataKey="sales"
-                    fill="#D4AF37"
+                    fill="#2dd4bf"
                     radius={[0, 5, 5, 0]}
                     barSize={20}
                   />
@@ -400,17 +400,17 @@ const ManagerDashboard = () => {
           </div>
         </div>
 
-        {data?.charts?.salesByCategoryKarat &&
-          data.charts.salesByCategoryKarat.length > 0 && (
+        {data?.charts?.sales_by_category_fabric &&
+          data.charts.sales_by_category_fabric.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
               <h3 className="chart-box__title">
-                {t("sales_by_category_karat")}
+                {t("sales_by_category_fabric")}
               </h3>
               <div className="chart-box__container">
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
-                      data={data.charts.salesByCategoryKarat}
+                      data={data.charts.sales_by_category_fabric}
                       cx="50%"
                       cy="45%"
                       innerRadius={70}
@@ -420,7 +420,7 @@ const ManagerDashboard = () => {
                       dataKey="revenue"
                       label={false}
                     >
-                      {data.charts.salesByCategoryKarat.map(
+                      {data.charts.sales_by_category_fabric.map(
                         (entry, index) => {
                           const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
                           return (
@@ -452,7 +452,7 @@ const ManagerDashboard = () => {
                         fontSize: "12px",
                       }}
                       formatter={(value) => {
-                        const item = data.charts.salesByCategoryKarat.find(d => d.name === value);
+                        const item = data.charts.sales_by_category_fabric.find(d => d.name === value);
                         return item ? `${value} (${formatPrice(item.revenue)})` : value;
                       }}
                     />
@@ -462,19 +462,19 @@ const ManagerDashboard = () => {
             </div>
           )}
 
-        {data?.charts?.salesByKarat &&
-          data.charts.salesByKarat.length > 0 && (
+        {data?.charts?.sales_by_fabric &&
+          data.charts.sales_by_fabric.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
-              <h3 className="chart-box__title">{t("sales_by_karat")}</h3>
+              <h3 className="chart-box__title">{t("sales_by_fabric")}</h3>
               <div className="chart-box__container">
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={data.charts.salesByKarat}>
-                    <XAxis dataKey="karat" style={{ fontSize: 10 }} />
+                  <BarChart data={data.charts.sales_by_fabric}>
+                    <XAxis dataKey="fabric_type" style={{ fontSize: 10 }} />
                     <YAxis style={{ fontSize: 10 }} />
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Bar
                       dataKey="revenue"
-                      fill="#D4AF37"
+                      fill="#2dd4bf"
                       radius={[5, 5, 0, 0]}
                     />
                   </BarChart>
@@ -503,7 +503,7 @@ const ManagerDashboard = () => {
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Bar
                       dataKey="revenue"
-                      fill="#D4AF37"
+                      fill="#2dd4bf"
                       radius={[0, 5, 5, 0]}
                     />
                   </BarChart>
@@ -530,7 +530,7 @@ const ManagerDashboard = () => {
                       style={{ fontSize: 10 }}
                     />
                     <Tooltip formatter={(value) => formatPrice(value)} />
-                    <Bar dataKey="value" fill="#D4AF37" radius={[0, 5, 5, 0]} />
+                    <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

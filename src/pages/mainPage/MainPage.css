@@ -1,7 +1,7 @@
 :root {
-  --gold-primary: #d4af37;
-  --gold-hover: #b5952f;
-  --gold-light: rgba(212, 175, 55, 0.1);
+  --brand-primary: #2dd4bf;
+  --brand-hover: #0d9488;
+  --brand-light: rgba(45, 212, 191, 0.1);
 
   --bg-dark: #09090b;
   --surface-dark: #18181b;
@@ -86,7 +86,7 @@
 
 .main-dashboard__username {
   font-weight: 700;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .main-dashboard__subtitle {
@@ -171,13 +171,13 @@
 
 .dashboard-card:hover {
   transform: translateY(-4px);
-  border-color: var(--gold-primary);
+  border-color: var(--brand-primary);
   box-shadow: var(--card-hover-shadow);
 }
 
 .main-dashboard--light .dashboard-card:hover {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-  border-color: var(--gold-primary);
+  border-color: var(--brand-primary);
 }
 
 .dashboard-card__icon-box {
@@ -192,8 +192,8 @@
 }
 
 .dashboard-card--primary .dashboard-card__icon-box {
-  background-color: var(--gold-light);
-  color: var(--gold-primary);
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
 }
 
 .dashboard-card--secondary .dashboard-card__icon-box {
@@ -216,7 +216,7 @@
   color: #f97316;
 }
 
-.dashboard-card--gold .dashboard-card__icon-box {
+.dashboard-card--brand .dashboard-card__icon-box {
   background-color: rgba(234, 179, 8, 0.1);
   color: #eab308;
 }
@@ -263,7 +263,7 @@
   opacity: 0;
   transform: translateX(-10px);
   transition: all 0.3s ease;
-  color: var(--gold-primary);
+  color: var(--brand-primary);
 }
 
 .dashboard-card:hover .dashboard-card__action {

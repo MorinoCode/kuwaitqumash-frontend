@@ -126,7 +126,7 @@ const StaffDetailsPage = () => {
                 <span className="staff-ai__label">
                   {t("total_sales_volume")}:
                 </span>
-                <span className="staff-ai__value staff-ai__value--gold">
+                <span className="staff-ai__value staff-ai__value--brand">
                   {analytics?.behavior?.total_sales || stats.total_sales_volume}{" "}
                   <small>{t("kwd")}</small>
                 </span>

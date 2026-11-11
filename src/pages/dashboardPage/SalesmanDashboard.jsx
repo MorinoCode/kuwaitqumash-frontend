@@ -23,7 +23,7 @@ import { useDashboardSalesman } from "../../hooks/useDashboard";
 import DateRangePicker from "../../components/dashboard/DateRangePicker";
 import "./DashboardPage.css";
 
-const COLORS = ["#D4AF37", "#000000", "#FFBB28", "#FF8042", "#8884d8"];
+const COLORS = ["#2dd4bf", "#000000", "#FFBB28", "#FF8042", "#8884d8"];
 
 const SalesmanDashboard = () => {
   const { t, i18n } = useTranslation();
@@ -219,9 +219,9 @@ const SalesmanDashboard = () => {
                     <Line
                       type="monotone"
                       dataKey="revenue"
-                      stroke="#D4AF37"
+                      stroke="#2dd4bf"
                       strokeWidth={3}
-                      dot={{ fill: "#D4AF37", r: 4 }}
+                      dot={{ fill: "#2dd4bf", r: 4 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -229,17 +229,17 @@ const SalesmanDashboard = () => {
             </div>
           )}
 
-        {data?.charts?.sales_by_category_karat &&
-          data.charts.sales_by_category_karat.length > 0 && (
+        {data?.charts?.sales_by_category_fabric &&
+          data.charts.sales_by_category_fabric.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
               <h3 className="chart-box__title">
-                {t("sales_by_category_karat")}
+                {t("sales_by_category_fabric")}
               </h3>
               <div className="chart-box__container">
                 <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie
-                      data={data.charts.sales_by_category_karat}
+                      data={data.charts.sales_by_category_fabric}
                       cx="50%"
                       cy="50%"
                       innerRadius={60}
@@ -251,7 +251,7 @@ const SalesmanDashboard = () => {
                         `${name}: ${formatPrice(value)}`
                       }
                     >
-                      {data.charts.sales_by_category_karat.map(
+                      {data.charts.sales_by_category_fabric.map(
                         (entry, index) => (
                           <Cell
                             key={`cell-${index}`}
@@ -267,24 +267,24 @@ const SalesmanDashboard = () => {
             </div>
           )}
 
-        {data?.charts?.sales_by_karat &&
-          data.charts.sales_by_karat.length > 0 && (
+        {data?.charts?.sales_by_fabric &&
+          data.charts.sales_by_fabric.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
-              <h3 className="chart-box__title">{t("sales_by_karat")}</h3>
+              <h3 className="chart-box__title">{t("sales_by_fabric")}</h3>
               <div className="chart-box__container">
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={data.charts.sales_by_karat}>
+                  <BarChart data={data.charts.sales_by_fabric}>
                     <CartesianGrid
                       strokeDasharray="3 3"
                       stroke={theme === "dark" ? "#444" : "#ddd"}
                       opacity={0.3}
                     />
-                    <XAxis dataKey="karat" style={{ fontSize: 10 }} />
+                    <XAxis dataKey="fabric_type" style={{ fontSize: 10 }} />
                     <YAxis style={{ fontSize: 10 }} />
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Bar
                       dataKey="revenue"
-                      fill="#D4AF37"
+                      fill="#2dd4bf"
                       radius={[5, 5, 0, 0]}
                     />
                   </BarChart>
@@ -312,7 +312,7 @@ const SalesmanDashboard = () => {
                     style={{ fontSize: 10 }}
                   />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#D4AF37" radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[0, 5, 5, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

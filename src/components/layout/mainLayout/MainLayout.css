@@ -90,7 +90,7 @@ html[dir="rtl"] .layout-sidebar.open {
   gap: 12px;
   padding: 8px 25px;
   border-bottom: 1px solid;
-  color: #d4af37;
+  color: #2dd4bf;
   flex-shrink: 0;
   position: sticky;
   top: 0;
@@ -184,10 +184,10 @@ html[dir="rtl"] .layout-sidebar.open {
     rgba(15, 15, 15, 0.95) 50%,
     rgba(20, 20, 20, 0.98) 100%
   );
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(45, 212, 191, 0.25);
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.5),
-    0 2px 6px rgba(212, 175, 55, 0.12),
+    0 2px 6px rgba(45, 212, 191, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -271,7 +271,7 @@ html[dir="rtl"] .layout-sidebar.open {
 
 .main-header__prices--dark
   .main-header__prices-group:not(:first-of-type)::before {
-  background: rgba(212, 175, 55, 0.25);
+  background: rgba(45, 212, 191, 0.25);
 }
 
 .main-header__prices-group-label {
@@ -358,7 +358,7 @@ html[dir="rtl"] .layout-sidebar.open {
     rgba(255, 255, 255, 0.15) 0%,
     rgba(255, 255, 255, 0.08) 100%
   );
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(45, 212, 191, 0.25);
   box-shadow:
     0 3px 8px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -379,13 +379,13 @@ html[dir="rtl"] .layout-sidebar.open {
 .main-header__price-item--highlight {
   background: linear-gradient(
     135deg,
-    rgba(212, 175, 55, 0.3) 0%,
-    rgba(212, 175, 55, 0.2) 100%
+    rgba(45, 212, 191, 0.3) 0%,
+    rgba(45, 212, 191, 0.2) 100%
   );
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid rgba(45, 212, 191, 0.4);
   box-shadow:
-    0 3px 6px rgba(212, 175, 55, 0.25),
-    0 0 12px rgba(212, 175, 55, 0.15),
+    0 3px 6px rgba(45, 212, 191, 0.25),
+    0 0 12px rgba(45, 212, 191, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: scale(1.02);
 }
@@ -393,8 +393,8 @@ html[dir="rtl"] .layout-sidebar.open {
 .main-header__price-item--highlight:hover {
   transform: scale(1.05) translateY(-1px);
   box-shadow:
-    0 4px 10px rgba(212, 175, 55, 0.3),
-    0 0 16px rgba(212, 175, 55, 0.2),
+    0 4px 10px rgba(45, 212, 191, 0.3),
+    0 0 16px rgba(45, 212, 191, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
@@ -414,7 +414,7 @@ html[dir="rtl"] .layout-sidebar.open {
   line-height: 1.2;
   font-weight: 800;
   font-family: "SF Mono", "Monaco", "Courier New", monospace;
-  color: #d4af37;
+  color: #2dd4bf;
   letter-spacing: 0.2px;
   flex-shrink: 0;
   min-width: fit-content;
@@ -447,7 +447,7 @@ html[dir="rtl"] .layout-sidebar.open {
 }
 
 .main-header__prices--dark .main-header__prices-unit {
-  border-left-color: rgba(212, 175, 55, 0.25);
+  border-left-color: rgba(45, 212, 191, 0.25);
 }
 
 .main-header__date {
@@ -483,7 +483,7 @@ html[dir="rtl"] .layout-sidebar.open {
     rgba(26, 26, 26, 0.95) 0%,
     rgba(20, 20, 20, 0.9) 100%
   );
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(45, 212, 191, 0.2);
   color: #ffffff;
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.3),
@@ -505,7 +505,7 @@ html[dir="rtl"] .layout-sidebar.open {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d4af37;
+  color: #2dd4bf;
   transition: transform 0.2s;
 
   margin-right: 20px;
@@ -529,7 +529,7 @@ html[dir="rtl"] .hamburger-btn {
 }
 
 .brand-title span {
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 .brand-logo-wrapper {
@@ -591,9 +591,9 @@ html[dir="rtl"] .hamburger-btn {
 }
 
 .header-btn--dark:hover {
-  border-color: #d4af37;
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .header-btn--logout {
@@ -701,7 +701,7 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices--dark {
-    scrollbar-color: rgba(212, 175, 55, 0.55) rgba(212, 175, 55, 0.1);
+    scrollbar-color: rgba(45, 212, 191, 0.55) rgba(45, 212, 191, 0.1);
   }
 
   .main-header__prices--light {
@@ -715,7 +715,7 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices::-webkit-scrollbar-track {
-    background: rgba(212, 175, 55, 0.08);
+    background: rgba(45, 212, 191, 0.08);
     border-radius: 10px;
     margin: 0 6px;
   }
@@ -725,7 +725,7 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices--dark::-webkit-scrollbar-thumb {
-    background: rgba(212, 175, 55, 0.45);
+    background: rgba(45, 212, 191, 0.45);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
@@ -733,14 +733,14 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices--dark::-webkit-scrollbar-thumb:hover {
-    background: rgba(212, 175, 55, 0.65);
+    background: rgba(45, 212, 191, 0.65);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
 
   .main-header__prices--dark::-webkit-scrollbar-thumb:active {
-    background: rgba(212, 175, 55, 0.85);
+    background: rgba(45, 212, 191, 0.85);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
@@ -1192,7 +1192,7 @@ html[dir="rtl"] .main-header__prices--light .main-header__prices-unit {
 }
 
 html[dir="rtl"] .main-header__prices--dark .main-header__prices-unit {
-  border-right-color: rgba(212, 175, 55, 0.25);
+  border-right-color: rgba(45, 212, 191, 0.25);
 }
 
 html[dir="rtl"] .main-header__prices-group:not(:first-of-type)::before {

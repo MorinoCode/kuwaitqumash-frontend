@@ -326,7 +326,7 @@ const InventoryPage = () => {
               {displayStats.meters} {t("g")}
             </strong>
           </div>
-          <div className="inventory-stat inventory-stat--gold">
+          <div className="inventory-stat inventory-stat--brand">
             <span>{t("market_value")}:</span>{" "}
             <strong>
               {displayStats.value} {t("kwd")}
@@ -606,7 +606,7 @@ const InventoryPage = () => {
                           <span className="inventory-mobile-card__detail-label">
                             {t("live_value")}
                           </span>
-                          <span className="inventory-mobile-card__detail-value inventory-mobile-card__detail-value--gold">
+                          <span className="inventory-mobile-card__detail-value inventory-mobile-card__detail-value--brand">
                             {livePrice || "0.000"}
                           </span>
                         </div>

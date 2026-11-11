@@ -73,11 +73,6 @@
     display: inline-block;
 }
 
-.inventory-item__badge--24k { background: rgba(255, 215, 0, 0.15); color: #eab308; }
-.inventory-item__badge--22k { background: rgba(234, 179, 8, 0.15); color: #ca8a04; }
-.inventory-item__badge--21k { background: rgba(249, 115, 22, 0.15); color: #ea580c; }
-.inventory-item__badge--18k { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
-
 .inventory-item__cell--mono { font-family: monospace; opacity: 0.8; }
 .inventory-item__cell--bold { font-weight: 700; }
 

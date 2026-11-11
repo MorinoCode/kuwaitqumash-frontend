@@ -40,7 +40,7 @@
 }
 
 .refunds-icon {
-  color: #d4af37;
+  color: #2dd4bf;
 }
 
 .refunds-subtitle {
@@ -76,7 +76,7 @@
 
 .refunds-btn:hover:not(:disabled) {
   opacity: 1;
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
 }
 
@@ -86,17 +86,17 @@
 }
 
 .refunds-btn--new {
-  background: rgba(212, 175, 55, 0.15);
-  color: #d4af37;
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
 }
 
 .refunds-btn--new:hover:not(:disabled) {
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
 }
 
 .refunds-btn--primary {
-  background: #d4af37;
+  background: #2dd4bf;
   color: #000;
 }
 
@@ -119,8 +119,8 @@
 }
 
 .refunds-btn--filter:hover:not(:disabled) {
-  background: rgba(212, 175, 55, 0.2);
-  color: #d4af37;
+  background: rgba(45, 212, 191, 0.2);
+  color: #2dd4bf;
 }
 
 .refunds-btn--download .spinner {
@@ -305,5 +305,5 @@ html[dir="rtl"] .refunds-table {
 
 .refunds-row__amount {
   font-weight: 700;
-  color: #d4af37;
+  color: #2dd4bf;
 }

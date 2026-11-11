@@ -389,7 +389,7 @@ const ManagePage = () => {
                     className={`manage-card manage-card--clickable ${branch.is_main ? "manage-card--main" : ""}`}
                   >
                     <div
-                      className={`manage-card__icon ${branch.is_main ? "manage-card__icon--gold" : ""}`}
+                      className={`manage-card__icon ${branch.is_main ? "manage-card__icon--brand" : ""}`}
                     >
                       <Building size={24} />
                     </div>

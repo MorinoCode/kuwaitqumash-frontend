@@ -11,14 +11,44 @@ import {
 } from "recharts";
 import { useTranslation } from "react-i18next";
 
-const KARAT_COLORS = {
-  "24K": "#FFD700",
-  "22K": "#DAA520",
-  "21K": "#B8860B",
-  "18K": "#CD7F32",
+const FABRIC_COLORS = {
+  Cotton: "#6366f1",
+  Silk: "#8b5cf6",
+  Wool: "#0ea5e9",
+  Linen: "#14b8a6",
+  Polyester: "#f59e0b",
+  Viscose: "#ec4899",
+  Chiffon: "#22d3ee",
+  Crepe: "#a78bfa",
+  Satin: "#f472b6",
+  Velvet: "#7c3aed",
+  Lace: "#94a3b8",
+  Denim: "#3b82f6",
+  Jersey: "#10b981",
+  Organza: "#e879f9",
+  Tulle: "#f9a8d4",
+  Kashmir: "#fb923c",
 };
 
-const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
+const FALLBACK_COLORS = [
+  "#6366f1",
+  "#0ea5e9",
+  "#14b8a6",
+  "#f59e0b",
+  "#ec4899",
+  "#8b5cf6",
+  "#22d3ee",
+  "#a3e635",
+];
+
+const fabricColor = (name) => {
+  if (name && FABRIC_COLORS[name]) return FABRIC_COLORS[name];
+  const key = String(name || "");
+  const hash = key.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return FALLBACK_COLORS[hash % FALLBACK_COLORS.length];
+};
+
+const FabricTypeChart = ({ data, comparisonData, theme, metricType, viewType }) => {
   const { t } = useTranslation();
   const isDark = theme === "dark";
 
@@ -29,15 +59,15 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
 
   const chartData = [...data]
     .sort((a, b) =>
-      String(a.fabric_type || a.karat || "").localeCompare(
-        String(b.fabric_type || b.karat || ""),
+      String(a.fabric_type || "").localeCompare(
+        String(b.fabric_type || ""),
       ),
     )
     .map((d) => {
       const item = { ...d };
       if (comparisonData) {
         const compItem = comparisonData.find(
-          (c) => (c.fabric_type || c.karat) === (d.fabric_type || d.karat),
+          (c) => c.fabric_type === d.fabric_type,
         );
         item.compare_value = compItem ? parseFloat(compItem[dataKey]) : 0;
       }
@@ -124,10 +154,7 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
                 <Cell
                   key={`cell-${index}`}
                   fill={
-                    KARAT_COLORS[entry.fabric_type || entry.karat] ||
-                    ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444"][
-                      index % 5
-                    ]
+                    fabricColor(entry.fabric_type)
                   }
                 />
               ))}
@@ -139,4 +166,4 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
   );
 };
 
-export default KaratChart;
+export default FabricTypeChart;

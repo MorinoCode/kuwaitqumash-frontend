@@ -13,8 +13,8 @@ const KPIStats = ({ data, changes, theme }) => {
       title: t("total_revenue"),
       value: `${parseFloat(data.revenue).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })}`,
       unit: "KWD",
-      icon: <Coins size={32} style={{ color: "#ffd700" }} />,
-      color: "gold",
+      icon: <Coins size={32} style={{ color: "#2dd4bf" }} />,
+      color: "brand",
       change: changes?.revenue,
     },
     {
@@ -71,7 +71,7 @@ const KPIStats = ({ data, changes, theme }) => {
           <div className="kpi-card__content">
             <span className="kpi-card__title">{card.title}</span>
             <div className="kpi-card__subtitle">
-              {card.color === "gold" &&
+              {card.color === "brand" &&
                 (t("total_revenue_desc") || "Total sales amount")}
               {card.color === "green" &&
                 (t("gross_profit_desc") || "Profit after costs")}

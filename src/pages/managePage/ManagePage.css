@@ -1,8 +1,8 @@
 :root {
-    --gold-primary: #d4af37;
-    --gold-hover: #b5952f;
-    --gold-light: rgba(212, 175, 55, 0.1);
-    --gold-border: rgba(212, 175, 55, 0.2);
+    --brand-primary: #2dd4bf;
+    --brand-hover: #0d9488;
+    --brand-light: rgba(45, 212, 191, 0.1);
+    --brand-border: rgba(45, 212, 191, 0.2);
 
     --bg-dark: #09090b;
     --surface-dark: #18181b;
@@ -49,8 +49,8 @@
 .manage-page__loader {
     width: 2.5rem;
     height: 2.5rem;
-    border: 3px solid var(--gold-border);
-    border-top-color: var(--gold-primary);
+    border: 3px solid var(--brand-border);
+    border-top-color: var(--brand-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -64,7 +64,7 @@
     font-weight: 700;
     margin-bottom: 1.5rem;
     letter-spacing: -0.025em;
-    color: var(--gold-primary);
+    color: var(--brand-primary);
 }
 
 .manage-header__tabs {
@@ -100,8 +100,8 @@
 
 .manage-tab--active {
     opacity: 1;
-    background-color: var(--gold-light);
-    color: var(--gold-primary);
+    background-color: var(--brand-light);
+    color: var(--brand-primary);
     font-weight: 600;
 }
 
@@ -135,8 +135,8 @@
 }
 
 .manage-search:focus-within {
-    border-color: var(--gold-primary);
-    box-shadow: 0 0 0 2px var(--gold-light);
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 2px var(--brand-light);
 }
 
 .manage-search__icon { opacity: 0.5; margin-inline-end: 0.75rem; }
@@ -166,18 +166,18 @@
 .manage-btn:active { transform: scale(0.98); }
 
 .manage-btn--primary {
-    background-color: var(--gold-primary);
+    background-color: var(--brand-primary);
     color: #000;
     box-shadow: var(--shadow-sm);
 }
 
 .manage-btn--primary:hover {
-    background-color: var(--gold-hover);
+    background-color: var(--brand-hover);
     transform: translateY(-1px);
 }
 
 .manage-btn--submit {
-    background-color: var(--gold-primary);
+    background-color: var(--brand-primary);
     color: #000;
     width: 100%;
     margin-top: 1rem;
@@ -217,33 +217,33 @@
     transition: background-color 0.2s, border-color 0.2s;
 }
 .manage-card--clickable:hover {
-    background-color: rgba(212, 175, 55, 0.06);
+    background-color: rgba(45, 212, 191, 0.06);
 }
 .manage-page--light .manage-card--clickable:hover {
-    background-color: rgba(212, 175, 55, 0.08);
+    background-color: rgba(45, 212, 191, 0.08);
 }
 
 .manage-card--main {
-    border-color: var(--gold-primary);
-    background-color: var(--gold-light);
+    border-color: var(--brand-primary);
+    background-color: var(--brand-light);
 }
 
 .manage-card__icon {
     padding: 0.75rem;
     border-radius: 0.75rem;
-    color: var(--gold-primary);
+    color: var(--brand-primary);
     background-color: rgba(128, 128, 128, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.manage-card__icon--gold {
-    background-color: rgba(212, 175, 55, 0.2);
+.manage-card__icon--brand {
+    background-color: rgba(45, 212, 191, 0.2);
     color: #000;
 }
 
-.manage-page--dark .manage-card__icon--gold { color: var(--gold-primary); }
+.manage-page--dark .manage-card__icon--brand { color: var(--brand-primary); }
 
 .manage-card__info {
     flex: 1;
@@ -275,13 +275,13 @@
 }
 
 .manage-badge--main {
-    background-color: var(--gold-primary);
+    background-color: var(--brand-primary);
     color: #000;
 }
 
 .manage-badge--sales_man { background-color: rgba(128, 128, 128, 0.2); color: inherit; }
 .manage-badge--branch_manager { background-color: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-.manage-badge--store_owner { background-color: var(--gold-light); color: var(--gold-primary); border: 1px solid var(--gold-border); }
+.manage-badge--store_owner { background-color: var(--brand-light); color: var(--brand-primary); border: 1px solid var(--brand-border); }
 
 .manage-card__info p {
     font-size: 0.85rem;
@@ -324,8 +324,8 @@
 }
 
 .manage-action-btn--edit:hover {
-    color: var(--gold-primary);
-    background-color: var(--gold-light);
+    color: var(--brand-primary);
+    background-color: var(--brand-light);
 }
 
 .manage-icon-protected {
@@ -334,7 +334,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gold-primary);
+    color: var(--brand-primary);
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -421,8 +421,8 @@ html[dir="rtl"] .manage-table { text-align: right; }
 .manage-loader {
     width: 2rem;
     height: 2rem;
-    border: 2px solid var(--gold-border);
-    border-top-color: var(--gold-primary);
+    border: 2px solid var(--brand-border);
+    border-top-color: var(--brand-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -520,8 +520,8 @@ html[dir="rtl"] .manage-table { text-align: right; }
 }
 
 .manage-input:focus {
-    border-color: var(--gold-primary);
-    box-shadow: 0 0 0 2px var(--gold-light);
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 2px var(--brand-light);
 }
 
 @keyframes spin {

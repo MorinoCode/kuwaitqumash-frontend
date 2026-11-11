@@ -384,7 +384,7 @@ const InvoicesPage = () => {
               <span>{t("total_invoices")}:</span>
               <strong>{invoices.length}</strong>
             </div>
-            <div className="invoices-stat-box invoices-stat-box--gold">
+            <div className="invoices-stat-box invoices-stat-box--brand">
               <span>{t("total_revenue")}:</span>
               <strong>
                 {totalRevenue.toFixed(3)} {t("kwd")}

@@ -109,7 +109,7 @@ const Sidebar = ({ closeSidebar }) => {
   };
 
   const getAvatarColor = (name) => {
-      const colors = ['#D4AF37', '#2563eb', '#16a34a', '#dc2626', '#9333ea', '#db2777'];
+      const colors = ['#2dd4bf', '#2563eb', '#16a34a', '#dc2626', '#9333ea', '#db2777'];
       let hash = 0;
       for (let i = 0; i < name.length; i++) {
           hash = name.charCodeAt(i) + ((hash << 5) - hash);
