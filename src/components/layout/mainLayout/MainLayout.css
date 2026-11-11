@@ -170,10 +170,10 @@ html[dir="rtl"] .layout-sidebar.open {
     rgba(250, 248, 240, 0.95) 50%,
     rgba(255, 255, 255, 0.98) 100%
   );
-  border: 1px solid rgba(184, 134, 11, 0.2);
+  border: 1px solid rgba(45, 212, 191, 0.2);
   box-shadow:
-    0 8px 24px rgba(184, 134, 11, 0.12),
-    0 2px 6px rgba(184, 134, 11, 0.08),
+    0 8px 24px rgba(45, 212, 191, 0.12),
+    0 2px 6px rgba(45, 212, 191, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
@@ -266,7 +266,7 @@ html[dir="rtl"] .layout-sidebar.open {
 
 .main-header__prices--light
   .main-header__prices-group:not(:first-of-type)::before {
-  background: rgba(184, 134, 11, 0.2);
+  background: rgba(45, 212, 191, 0.2);
 }
 
 .main-header__prices--dark
@@ -334,16 +334,16 @@ html[dir="rtl"] .layout-sidebar.open {
     rgba(255, 255, 255, 0.95) 0%,
     rgba(255, 255, 255, 0.85) 100%
   );
-  border: 1px solid rgba(184, 134, 11, 0.2);
+  border: 1px solid rgba(45, 212, 191, 0.2);
   box-shadow:
-    0 3px 8px rgba(184, 134, 11, 0.1),
+    0 3px 8px rgba(45, 212, 191, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .main-header__prices--light .main-header__price-item:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 6px 12px rgba(184, 134, 11, 0.15),
+    0 6px 12px rgba(45, 212, 191, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
   background: linear-gradient(
     135deg,
@@ -424,7 +424,7 @@ html[dir="rtl"] .layout-sidebar.open {
 
 .main-header__prices--light .main-header__price-value {
   color: #c9a961;
-  text-shadow: 0 1px 3px rgba(184, 134, 11, 0.12);
+  text-shadow: 0 1px 3px rgba(45, 212, 191, 0.12);
 }
 
 .main-header__prices-unit {
@@ -443,7 +443,7 @@ html[dir="rtl"] .layout-sidebar.open {
 }
 
 .main-header__prices--light .main-header__prices-unit {
-  border-left-color: rgba(184, 134, 11, 0.2);
+  border-left-color: rgba(45, 212, 191, 0.2);
 }
 
 .main-header__prices--dark .main-header__prices-unit {
@@ -470,10 +470,10 @@ html[dir="rtl"] .layout-sidebar.open {
     rgba(255, 255, 255, 0.95) 0%,
     rgba(250, 248, 240, 0.9) 100%
   );
-  border: 1px solid rgba(184, 134, 11, 0.15);
+  border: 1px solid rgba(45, 212, 191, 0.15);
   color: #b8952f;
   box-shadow:
-    0 2px 6px rgba(184, 134, 11, 0.08),
+    0 2px 6px rgba(45, 212, 191, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
@@ -785,7 +785,7 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices--light {
-    scrollbar-color: rgba(184, 134, 11, 0.5) rgba(184, 134, 11, 0.1);
+    scrollbar-color: rgba(45, 212, 191, 0.5) rgba(45, 212, 191, 0.1);
   }
 
   .main-header__prices::-webkit-scrollbar {
@@ -801,7 +801,7 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices--light::-webkit-scrollbar-track {
-    background: rgba(184, 134, 11, 0.08);
+    background: rgba(45, 212, 191, 0.08);
   }
 
   .main-header__prices--dark::-webkit-scrollbar-thumb {
@@ -827,7 +827,7 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices--light::-webkit-scrollbar-thumb {
-    background: rgba(184, 134, 11, 0.45);
+    background: rgba(45, 212, 191, 0.45);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
@@ -835,14 +835,14 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices--light::-webkit-scrollbar-thumb:hover {
-    background: rgba(184, 134, 11, 0.65);
+    background: rgba(45, 212, 191, 0.65);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
 
   .main-header__prices--light::-webkit-scrollbar-thumb:active {
-    background: rgba(184, 134, 11, 0.85);
+    background: rgba(45, 212, 191, 0.85);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
@@ -1268,7 +1268,7 @@ html[dir="rtl"] .main-header__prices-unit {
 }
 
 html[dir="rtl"] .main-header__prices--light .main-header__prices-unit {
-  border-right-color: rgba(184, 134, 11, 0.2);
+  border-right-color: rgba(45, 212, 191, 0.2);
 }
 
 html[dir="rtl"] .main-header__prices--dark .main-header__prices-unit {

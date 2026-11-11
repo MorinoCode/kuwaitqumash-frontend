@@ -117,7 +117,7 @@
 }
 
 .top-items-table th.sortable:hover {
-  background: rgba(184, 134, 11, 0.1);
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .top-items-table td {
@@ -140,11 +140,11 @@
 }
 
 .top-items-table tbody tr.top-rank {
-  background: rgba(184, 134, 11, 0.05);
+  background: rgba(45, 212, 191, 0.05);
 }
 
 .top-items-container--dark .top-items-table tbody tr.top-rank {
-  background: rgba(184, 134, 11, 0.1);
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .item-name {

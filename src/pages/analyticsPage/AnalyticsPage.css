@@ -357,7 +357,7 @@
 }
 
 .compare-label:hover {
-  background: rgba(184, 134, 11, 0.05);
+  background: rgba(45, 212, 191, 0.05);
 }
 
 .compare-label input[type="checkbox"] {
@@ -466,7 +466,7 @@
 }
 
 .kpi-card--brand .kpi-card__icon-wrapper {
-  background: rgba(184, 134, 11, 0.1);
+  background: rgba(45, 212, 191, 0.1);
   color: #b8860b;
 }
 
@@ -669,7 +669,7 @@
 }
 
 .toggle-btn:hover {
-  background: rgba(184, 134, 11, 0.1);
+  background: rgba(45, 212, 191, 0.1);
   color: #b8860b;
 }
 
@@ -680,7 +680,7 @@
 .toggle-btn.active {
   background: linear-gradient(135deg, #b8860b 0%, #2dd4bf 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.4);
+  box-shadow: 0 4px 12px rgba(45, 212, 191, 0.4);
 }
 
 .toggle-btn.active svg {

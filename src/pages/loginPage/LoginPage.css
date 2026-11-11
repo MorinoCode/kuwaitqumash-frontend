@@ -162,7 +162,7 @@
 
 .login-card__password-toggle--light:hover {
   color: #b8860b;
-  background: rgba(184, 134, 11, 0.1);
+  background: rgba(45, 212, 191, 0.1);
 }
 
 .login-card__password-toggle--dark {
@@ -298,7 +298,7 @@
 .login-page__theme-btn--light:hover {
   border-color: #b8860b;
   color: #b8860b;
-  background: rgba(184, 134, 11, 0.05);
+  background: rgba(45, 212, 191, 0.05);
 }
 
 .login-page__theme-btn--dark {
@@ -337,7 +337,7 @@
 .login-page__lang-btn--light:hover {
   border-color: #b8860b;
   color: #b8860b;
-  background: rgba(184, 134, 11, 0.05);
+  background: rgba(45, 212, 191, 0.05);
 }
 
 .login-page__lang-btn--light.login-page__lang-btn--active {
