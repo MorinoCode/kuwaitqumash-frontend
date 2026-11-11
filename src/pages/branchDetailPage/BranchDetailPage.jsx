@@ -409,7 +409,7 @@ export default function BranchDetailPage() {
   return (
     <div
       className={`branch-detail branch-detail--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <header className="branch-detail__header">
         <button

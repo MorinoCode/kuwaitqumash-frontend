@@ -16,7 +16,7 @@ const DashboardPage = () => {
 
     if (loading || !user) {
         return (
-            <div className={`dashboard-loader dashboard-loader--${theme}`} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+            <div className={`dashboard-loader dashboard-loader--${theme}`} dir={i18n.language === 'ar' || i18n.language === 'fa' ? 'rtl' : 'ltr'}>
                 <div className="dashboard-loader__spinner"></div>
                 <span className="dashboard-loader__text">{t('loading')}...</span>
             </div>
@@ -24,7 +24,7 @@ const DashboardPage = () => {
     }
 
     return (
-        <div className={`dashboard-page dashboard-page--${theme}`} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className={`dashboard-page dashboard-page--${theme}`} dir={i18n.language === 'ar' || i18n.language === 'fa' ? 'rtl' : 'ltr'}>
             {(() => {
                 switch (userRole) {
                     case 'store_owner':

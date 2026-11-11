@@ -204,7 +204,7 @@ const SignupPage = () => {
   return (
     <div
       className={`signup-page signup-page--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <div
         className="signup-page__logo-link"

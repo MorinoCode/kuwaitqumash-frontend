@@ -1,7 +1,7 @@
 .analytics-page {
   padding: 20px;
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
+  font-family: inherit;
 }
 
 [dir="rtl"] .analytics-page {

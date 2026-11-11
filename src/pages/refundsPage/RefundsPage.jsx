@@ -124,7 +124,7 @@ const RefundsPage = () => {
   };
 
   return (
-    <div className={`refunds-page refunds-page--${theme}`} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+    <div className={`refunds-page refunds-page--${theme}`} dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}>
       <header className="refunds-header">
         <div className="refunds-header__titles">
           <h1 className="refunds-title">

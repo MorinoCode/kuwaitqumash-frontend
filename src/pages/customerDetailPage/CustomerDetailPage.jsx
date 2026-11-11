@@ -333,7 +333,7 @@ const CustomerDetailsPage = () => {
   return (
     <div
       className={`customer-details customer-details--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <header className="customer-details__header">
         <button

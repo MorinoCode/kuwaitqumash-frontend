@@ -342,7 +342,7 @@ const CustomersPage = () => {
   return (
     <div
       className={`customers-page customers-page--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <header className="customers-page__header">
         <div className="customers-page__titles">

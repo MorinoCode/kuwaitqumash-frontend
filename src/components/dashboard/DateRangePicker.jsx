@@ -124,7 +124,7 @@ const DateRangePicker = ({
   return (
     <div
       className={`date-range-picker date-range-picker--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <div className="date-range-picker__quick-selects">
         <button

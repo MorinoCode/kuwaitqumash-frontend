@@ -22,7 +22,7 @@
 .customers-page {
   padding: 2rem;
   min-height: 100vh;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: inherit;
   transition: background-color 0.3s ease;
 }
 

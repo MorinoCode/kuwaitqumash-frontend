@@ -121,7 +121,7 @@ const MainPage = () => {
   return (
     <div
       className={`main-dashboard main-dashboard--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <div className="main-dashboard__content">
 

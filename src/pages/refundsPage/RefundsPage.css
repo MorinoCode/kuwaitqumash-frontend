@@ -2,7 +2,7 @@
   padding: 30px;
   min-height: 100vh;
   overflow-y: auto;
-  font-family: "Inter", sans-serif;
+  font-family: inherit;
 }
 
 .refunds-page--dark {

@@ -148,7 +148,7 @@ const OwnerDashboard = () => {
     return (
       <div
         className={`dashboard-loader dashboard-loader--${theme}`}
-        dir={i18n.language === "ar" ? "rtl" : "ltr"}
+        dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
       >
         <div className="dashboard-loader__spinner"></div>
         <span className="dashboard-loader__text">{t("loading")}...</span>
@@ -159,7 +159,7 @@ const OwnerDashboard = () => {
     return (
       <div
         className={`dashboard-loader dashboard-loader--${theme}`}
-        dir={i18n.language === "ar" ? "rtl" : "ltr"}
+        dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
       >
         <div className="dashboard-loader__error">
           <AlertCircle size={48} />
@@ -181,7 +181,7 @@ const OwnerDashboard = () => {
   return (
     <div
       className={`owner-dashboard owner-dashboard--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
 
       <div className="dashboard-header">

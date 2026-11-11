@@ -1,7 +1,7 @@
 .sales-page {
   padding: 20px;
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
+  font-family: inherit;
   transition: background-color 0.3s;
 }
 

@@ -2,7 +2,7 @@
     padding: 30px;
     height: 100vh;
     overflow-y: auto;
-    font-family: 'Inter', sans-serif;
+    font-family: inherit;
 }
 
 .invoices-page--dark { background: #0a0a0a; color: #fff; }

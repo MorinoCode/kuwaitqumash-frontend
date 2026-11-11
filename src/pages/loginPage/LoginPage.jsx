@@ -112,7 +112,7 @@ const LoginPage = () => {
   return (
     <div
       className={`login-page login-page--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <div
         className="login-page__logo-link"

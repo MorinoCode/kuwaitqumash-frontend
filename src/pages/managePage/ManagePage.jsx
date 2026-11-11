@@ -301,7 +301,7 @@ const ManagePage = () => {
   return (
     <div
       className={`manage-page manage-page--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <header className="manage-header">
         <h1 className="manage-header__title">{t("system_management")}</h1>

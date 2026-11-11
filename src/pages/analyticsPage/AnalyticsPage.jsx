@@ -205,7 +205,7 @@ const AnalyticsPage = () => {
   return (
     <div
       className={`analytics-page analytics-page--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
 
       <div className="ai-header">

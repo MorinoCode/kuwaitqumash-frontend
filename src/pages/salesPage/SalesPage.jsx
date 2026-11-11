@@ -814,7 +814,7 @@ const SalesPage = () => {
   return (
     <div
       className={`sales-page sales-page--${theme}`}
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
       <header className="sales-header">
         <div className="sales-header__title-group">

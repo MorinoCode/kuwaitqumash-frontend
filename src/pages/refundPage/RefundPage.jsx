@@ -158,7 +158,7 @@ const RefundPage = () => {
   };
 
   return (
-    <div className={`refund-page refund-page--${theme}`} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+    <div className={`refund-page refund-page--${theme}`} dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}>
       <header className="refund-page__header">
         <h1 className="refund-page__title">{t("refund") || "Refund"}</h1>
       </header>
