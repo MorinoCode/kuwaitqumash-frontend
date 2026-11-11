@@ -8,7 +8,6 @@ import {
   localizedOption,
   localizeWords,
   localizeItemName,
-  STONE_TYPES,
 } from "../../utils/inventoryCategories";
 
 import { useReactToPrint } from "react-to-print";
