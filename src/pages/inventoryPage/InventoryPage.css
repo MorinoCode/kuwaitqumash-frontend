@@ -1,8 +1,8 @@
 :root {
-    --gold-primary: #d4af37;
-    --gold-hover: #b5952f;
-    --gold-light: rgba(212, 175, 55, 0.1);
-    --gold-border: rgba(212, 175, 55, 0.2);
+    --brand-primary: #d4af37;
+    --brand-hover: #b5952f;
+    --brand-light: rgba(212, 175, 55, 0.1);
+    --brand-border: rgba(212, 175, 55, 0.2);
 
     --bg-dark: #09090b;
     --surface-dark: #18181b;
@@ -51,7 +51,7 @@
     font-weight: 700;
     margin: 0;
     letter-spacing: -0.025em;
-    color: var(--gold-primary);
+    color: var(--brand-primary);
 }
 
 .inventory-page__subtitle {
@@ -104,25 +104,25 @@ html[dir="rtl"] .inventory-page__subtitle {
 }
 
 .inventory-tabs__tab:hover {
-    color: var(--gold-primary);
+    color: var(--brand-primary);
     background: rgba(0, 0, 0, 0.25);
 }
 
 .inventory-tabs--light .inventory-tabs__tab:hover {
     background: rgba(0, 0, 0, 0.06);
-    color: var(--gold-hover);
+    color: var(--brand-hover);
 }
 
 /* Active tab: lighter, "selected" - merges with content (Chrome-style) */
 .inventory-tabs__tab--active {
-    color: var(--gold-primary);
+    color: var(--brand-primary);
     background: var(--surface-dark);
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .inventory-tabs--light .inventory-tabs__tab--active {
     background: var(--surface-light);
-    color: var(--gold-hover);
+    color: var(--brand-hover);
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
 }
 
@@ -154,9 +154,9 @@ html[dir="rtl"] .inventory-page__subtitle {
 }
 
 .inventory-stat--gold {
-    background-color: var(--gold-light);
-    border-color: var(--gold-border);
-    color: var(--gold-primary);
+    background-color: var(--brand-light);
+    border-color: var(--brand-border);
+    color: var(--brand-primary);
 }
 
 .inventory-btn {
@@ -178,13 +178,13 @@ html[dir="rtl"] .inventory-page__subtitle {
 }
 
 .inventory-btn--primary {
-    background-color: var(--gold-primary);
+    background-color: var(--brand-primary);
     color: #000;
     box-shadow: var(--shadow-sm);
 }
 
 .inventory-btn--primary:hover {
-    background-color: var(--gold-hover);
+    background-color: var(--brand-hover);
 }
 
 .inventory-btn--secondary {
@@ -194,7 +194,7 @@ html[dir="rtl"] .inventory-page__subtitle {
 }
 
 .inventory-btn--submit {
-    background-color: var(--gold-primary);
+    background-color: var(--brand-primary);
     color: #000;
     width: 100%;
     margin-top: 1rem;
@@ -240,8 +240,8 @@ html[dir="rtl"] .inventory-page__subtitle {
 }
 
 .inventory-search:focus-within {
-    border-color: var(--gold-primary);
-    box-shadow: 0 0 0 2px var(--gold-light);
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 2px var(--brand-light);
 }
 
 .inventory-search__icon {
@@ -339,7 +339,7 @@ html[dir="rtl"] .inventory-page__subtitle {
 }
 
 .inventory-select:focus {
-    border-color: var(--gold-primary);
+    border-color: var(--brand-primary);
 }
 
 .inventory-table-container {
@@ -456,7 +456,7 @@ html[dir="rtl"] .inventory-table {
 
 .inventory-action-btn:hover {
     background: rgba(212, 175, 55, 0.2);
-    color: var(--gold-primary);
+    color: var(--brand-primary);
 }
 
 .inventory-action-btn--delete:hover {
@@ -666,8 +666,8 @@ html[dir="rtl"] .inventory-table {
 }
 
 .inventory-form__input:focus {
-    border-color: var(--gold-primary);
-    box-shadow: 0 0 0 2px var(--gold-light);
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 2px var(--brand-light);
 }
 
 .inventory-form__input--barcode {
@@ -747,8 +747,8 @@ html[dir="rtl"] .inventory-form__remove-thumb {
 
 .inventory-form__add-thumb:hover {
     opacity: 1;
-    border-color: var(--gold-primary);
-    color: var(--gold-primary);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
 }
 
 .inventory-modal--small {
@@ -1004,7 +1004,7 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 
     .inventory-mobile-card__detail-value--gold {
-        color: var(--gold-primary);
+        color: var(--brand-primary);
     }
 
     .inventory-mobile-card__detail-value--profit {

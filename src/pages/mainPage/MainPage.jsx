@@ -45,20 +45,6 @@ const MainPage = () => {
           color: "secondary",
           desc: "manage_crm",
         },
-        {
-          title: "gold_calculator",
-          icon: Calculator,
-          link: "/calculator",
-          color: "success",
-          desc: "quick_calc",
-        },
-        {
-          title: "live_prices",
-          icon: TrendingUp,
-          link: "/prices",
-          color: "accent",
-          desc: "view_live_prices",
-        },
       ],
     },
     {

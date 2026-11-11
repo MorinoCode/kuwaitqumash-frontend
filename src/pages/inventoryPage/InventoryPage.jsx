@@ -51,7 +51,7 @@ const InventoryPage = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterCategory, setFilterCategory] = useState("All");
+  const [filterPattern, setFilterPattern] = useState("All");
   const [filterMetal, setFilterMetal] = useState("All");
   const [filterCountry, setFilterCountry] = useState("All");
   const [priceMin, setPriceMin] = useState("");
@@ -91,7 +91,7 @@ const InventoryPage = () => {
     branch_id: !isOwner ? activeBranchId : undefined,
     search: searchTerm || undefined,
     fabric_type: filterMetal !== "All" ? filterMetal : undefined,
-    category: filterCategory !== "All" ? filterCategory : undefined,
+    pattern: filterPattern !== "All" ? filterPattern : undefined,
     country_of_origin: filterCountry !== "All" ? filterCountry : undefined,
     status: inventoryTab === "sold_out" ? "Sold" : undefined,
     page: pagination.currentPage,
@@ -105,14 +105,12 @@ const InventoryPage = () => {
 
   // Get unique categories from inventory items (includes both default and custom categories)
   // This ensures we show all categories that exist in the current tenant's inventory
-  const uniqueCategories = useMemo(() => {
-    const categories = new Set();
+  const uniquePatterns = useMemo(() => {
+    const patterns = new Set();
     items.forEach((item) => {
-      if (item.category) {
-        categories.add(item.category);
-      }
+      if (item.pattern) patterns.add(item.pattern);
     });
-    return Array.from(categories).sort();
+    return Array.from(patterns).sort();
   }, [items]);
 
   // Update pagination from API response
@@ -456,8 +454,8 @@ const InventoryPage = () => {
               <div className="inventory-select-box">
                 <select
                   className="inventory-select"
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                  value={filterCategory}
+                  onChange={(e) => setFilterPattern(e.target.value)}
+                  value={filterPattern}
                 >
                   <option value="All">{t("all_categories")}</option>
                   <option value="Ring">{t("rings")}</option>

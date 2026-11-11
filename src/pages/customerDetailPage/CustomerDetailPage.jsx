@@ -563,13 +563,13 @@ const CustomerDetailsPage = () => {
                         <span>{t("ai_new_customer")}</span>
                       )}
                     </div>
-                    {analytics.preferences?.preferred_karat && (
+                    {analytics.preferences?.preferred_fabric_type && (
                       <div className="customer-insights__preference">
                         <span className="customer-insights__preference-label">
-                          {t("preferred_karat")}:
+                          {t("preferred_fabric_type") || "Preferred fabric"}:
                         </span>
                         <span className="customer-insights__preference-value">
-                          {analytics.preferences.preferred_karat}
+                          {analytics.preferences.preferred_fabric_type}
                         </span>
                       </div>
                     )}

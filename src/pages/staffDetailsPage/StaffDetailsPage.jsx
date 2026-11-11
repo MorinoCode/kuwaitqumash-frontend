@@ -183,13 +183,13 @@ const StaffDetailsPage = () => {
                       </span>
                     )}
                   </div>
-                  {analytics.preferences?.preferred_karat && (
+                  {analytics.preferences?.preferred_fabric_type && (
                     <div className="staff-ai__preference">
                       <span className="staff-ai__preference-label">
                         {t("sells_mostly")}:
                       </span>
                       <span className="staff-ai__preference-value">
-                        {analytics.preferences.preferred_karat}
+                        {analytics.preferences.preferred_fabric_type}
                       </span>
                     </div>
                   )}
