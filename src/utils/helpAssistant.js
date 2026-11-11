@@ -108,12 +108,15 @@ export const detectLanguage = (text, fallback = "fa") => {
   return fallback === "ar" ? "ar" : "fa";
 };
 
-const scoreTopic = (entry, normalizedQuery, queryTokens) => {
+const scoreTopic = (entry, queryTokens) => {
   let score = 0;
+  let matched = 0;
+  let phraseMatch = false;
 
   queryTokens.forEach((token) => {
     if (entry.keywordSet.has(token)) {
       score += tokenWeight(token) * 1.1;
+      matched += 1;
     }
   });
 
@@ -122,10 +125,13 @@ const scoreTopic = (entry, normalizedQuery, queryTokens) => {
     const parts = keyword.split(" ").filter((part) => part.length > 1 && !SCRIPT_STOP.has(part));
     if (parts.length < 2) return;
     const allPresent = parts.every((part) => queryTokens.includes(part));
-    if (allPresent) score += 2.6 + parts.length * 0.6;
+    if (allPresent) {
+      score += 2.6 + parts.length * 0.6;
+      phraseMatch = true;
+    }
   });
 
-  return score;
+  return { score, matched, phraseMatch };
 };
 
 export const findTopic = (question) => {
@@ -135,13 +141,15 @@ export const findTopic = (question) => {
 
   let best = null;
   INDEX.forEach((entry) => {
-    const score = scoreTopic(entry, normalizedQuery, queryTokens);
-    if (!best || score > best.score) {
-      best = { entry, score };
+    const result = scoreTopic(entry, queryTokens);
+    if (!best || result.score > best.score) {
+      best = { entry, ...result };
     }
   });
 
-  if (!best || best.score < 2.8) return null;
+  if (!best || best.score < 3.2) return null;
+  // A single loosely matching word is not enough; require a phrase hit or two words.
+  if (!best.phraseMatch && best.matched < 2) return null;
   return best.entry.topic;
 };
 
@@ -183,6 +191,10 @@ export const QUICK_QUESTIONS = {
     "چطور فاکتور PDF بگیرم؟",
     "چطور کارمند اضافه کنم؟",
     "چطور شعبه جدید بسازم؟",
+    "چطور لوگو آپلود کنم؟",
+    "چطور پیام گروهی بفرستم؟",
+    "چطور خروجی اکسل بگیرم؟",
+    "چطور فاکتور را چاپ کنم؟",
   ],
   en: [
     "How do I record a sale?",
@@ -193,6 +205,10 @@ export const QUICK_QUESTIONS = {
     "How do I get the invoice PDF?",
     "How do I add a staff member?",
     "How do I create a new branch?",
+    "How do I upload the logo?",
+    "How do I send a bulk message?",
+    "How do I export Excel?",
+    "How do I print an invoice?",
   ],
   ar: [
     "كيف أسجل عملية بيع؟",
@@ -203,6 +219,10 @@ export const QUICK_QUESTIONS = {
     "كيف أحصل على الفاتورة PDF؟",
     "كيف أضيف موظفًا؟",
     "كيف أنشئ فرعًا جديدًا؟",
+    "كيف أرفع الشعار؟",
+    "كيف أرسل رسالة جماعية؟",
+    "كيف أصدّر إكسل؟",
+    "كيف أطبع الفاتورة؟",
   ],
 };
 
