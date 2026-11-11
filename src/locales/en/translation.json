@@ -991,5 +991,8 @@
   "unit": "Unit",
   "width_cm": "Width (cm)",
   "language": "Language",
-  "menu": "Menu"
+  "menu": "Menu",
+  "pattern_placeholder": "e.g. Plain, Floral",
+  "color_placeholder": "e.g. White, Navy",
+  "composition_placeholder": "e.g. 100% Cotton"
 }

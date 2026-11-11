@@ -1013,5 +1013,8 @@
   "meters_sold_desc": "متراژ پارچه فروش‌رفته",
   "preferred_fabric_type": "نوع پارچه ترجیحی",
   "price_per_meter_required": "قیمت هر متر الزامی است",
-  "menu": "منو"
+  "menu": "منو",
+  "pattern_placeholder": "مثلاً ساده، گلدار",
+  "color_placeholder": "مثلاً سفید، سرمه‌ای",
+  "composition_placeholder": "مثلاً 100% پنبه"
 }

@@ -8,6 +8,8 @@ import {
   useUpdateInventoryItem,
 } from "../../hooks/useInventory";
 import {
+  optionValue,
+  optionLabel,
   FABRIC_TYPES,
   PATTERNS,
   COMPOSITIONS,
@@ -20,18 +22,18 @@ import "./AddItemModal.css";
 import "../../pages/inventoryPage/InventoryPage.css";
 
 const GCC_COUNTRIES = [
-  { value: "Kuwait", label: "Kuwait", labelAr: "الكويت" },
-  { value: "Saudi Arabia", label: "Saudi Arabia", labelAr: "السعودية" },
-  { value: "UAE", label: "UAE", labelAr: "الإمارات" },
-  { value: "Bahrain", label: "Bahrain", labelAr: "البحرين" },
-  { value: "Qatar", label: "Qatar", labelAr: "قطر" },
-  { value: "Oman", label: "Oman", labelAr: "عمان" },
-  { value: "China", label: "China", labelAr: "الصين" },
-  { value: "India", label: "India", labelAr: "الهند" },
-  { value: "Turkey", label: "Turkey", labelAr: "تركيا" },
-  { value: "Italy", label: "Italy", labelAr: "إيطاليا" },
-  { value: "Korea", label: "South Korea", labelAr: "كوريا الجنوبية" },
-  { value: "Other", label: "Other", labelAr: "أخرى" },
+  { value: "Kuwait", label: "Kuwait", labelAr: "الكويت", labelFa: "کویت" },
+  { value: "Saudi Arabia", label: "Saudi Arabia", labelAr: "السعودية", labelFa: "عربستان" },
+  { value: "UAE", label: "UAE", labelAr: "الإمارات", labelFa: "امارات" },
+  { value: "Bahrain", label: "Bahrain", labelAr: "البحرين", labelFa: "بحرین" },
+  { value: "Qatar", label: "Qatar", labelAr: "قطر", labelFa: "قطر" },
+  { value: "Oman", label: "Oman", labelAr: "عمان", labelFa: "عمان" },
+  { value: "China", label: "China", labelAr: "الصين", labelFa: "چین" },
+  { value: "India", label: "India", labelAr: "الهند", labelFa: "هند" },
+  { value: "Turkey", label: "Turkey", labelAr: "تركيا", labelFa: "ترکیه" },
+  { value: "Italy", label: "Italy", labelAr: "إيطاليا", labelFa: "ایتالیا" },
+  { value: "Korea", label: "South Korea", labelAr: "كوريا الجنوبية", labelFa: "کره جنوبی" },
+  { value: "Other", label: "Other", labelAr: "أخرى", labelFa: "سایر" },
 ];
 
 const EMPTY_ITEM = {
@@ -141,17 +143,21 @@ const AddItemModal = ({
   };
 
   const buildPayload = () => {
-    const fabricType = (form.fabric_type || "").trim();
-    const fallbackName = [fabricType, form.pattern, form.color]
+    const fabricType = optionValue(FABRIC_TYPES, form.fabric_type);
+    const fallbackName = [
+      fabricType,
+      optionValue(PATTERNS, form.pattern),
+      optionValue(COLORS, form.color),
+    ]
       .filter(Boolean)
       .join(" ");
 
     return {
       fabric_type: fabricType,
       item_name: (form.item_name || fallbackName || "").trim() || undefined,
-      composition: form.composition || undefined,
-      pattern: form.pattern || undefined,
-      color: form.color || undefined,
+      composition: optionValue(COMPOSITIONS, form.composition) || undefined,
+      pattern: optionValue(PATTERNS, form.pattern) || undefined,
+      color: optionValue(COLORS, form.color) || undefined,
       width_cm: num(form.width_cm),
       unit: form.unit || "meter",
       length_m: num(form.length_m) ?? 0,
@@ -245,9 +251,7 @@ const AddItemModal = ({
               />
               <datalist id="fabric-type-options">
                 {FABRIC_TYPES.map((type) => (
-                  <option key={type.value} value={type.value}>
-                    {i18n.language === "ar" ? type.labelAr : type.label}
-                  </option>
+                  <option key={type.value} value={optionLabel(type, i18n.language)} />
                 ))}
               </datalist>
             </div>
@@ -261,12 +265,11 @@ const AddItemModal = ({
                 list="pattern-options"
                 value={form.pattern}
                 onChange={update("pattern")}
+                placeholder={t("pattern_placeholder") || "e.g. Plain, Floral"}
               />
               <datalist id="pattern-options">
                 {PATTERNS.map((pattern) => (
-                  <option key={pattern.value} value={pattern.value}>
-                    {i18n.language === "ar" ? pattern.labelAr : pattern.label}
-                  </option>
+                  <option key={pattern.value} value={optionLabel(pattern, i18n.language)} />
                 ))}
               </datalist>
             </div>
@@ -282,12 +285,11 @@ const AddItemModal = ({
                 list="color-options"
                 value={form.color}
                 onChange={update("color")}
+                placeholder={t("color_placeholder") || "e.g. White, Navy"}
               />
               <datalist id="color-options">
                 {COLORS.map((color) => (
-                  <option key={color.value} value={color.value}>
-                    {i18n.language === "ar" ? color.labelAr : color.label}
-                  </option>
+                  <option key={color.value} value={optionLabel(color, i18n.language)} />
                 ))}
               </datalist>
             </div>
@@ -301,11 +303,11 @@ const AddItemModal = ({
                 list="composition-options"
                 value={form.composition}
                 onChange={update("composition")}
-                placeholder="100% Cotton"
+                placeholder={t("composition_placeholder") || "e.g. 100% Cotton"}
               />
               <datalist id="composition-options">
                 {COMPOSITIONS.map((item) => (
-                  <option key={item.value} value={item.value} />
+                  <option key={item.value} value={optionLabel(item, i18n.language)} />
                 ))}
               </datalist>
             </div>
@@ -337,7 +339,7 @@ const AddItemModal = ({
               >
                 {UNITS.map((unit) => (
                   <option key={unit.value} value={unit.value}>
-                    {i18n.language === "ar" ? unit.labelAr : unit.label}
+                    {optionLabel(unit, i18n.language)}
                   </option>
                 ))}
               </select>
@@ -459,7 +461,7 @@ const AddItemModal = ({
               >
                 {GCC_COUNTRIES.map((country) => (
                   <option key={country.value} value={country.value}>
-                    {i18n.language === "ar" ? country.labelAr : country.label}
+                    {optionLabel(country, i18n.language)}
                   </option>
                 ))}
               </select>

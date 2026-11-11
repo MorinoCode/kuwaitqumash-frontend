@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  optionLabel,
   FABRIC_TYPES,
   PATTERNS,
 } from "../../utils/inventoryCategories";
@@ -416,7 +417,7 @@ const InventoryPage = () => {
                   </option>
                   {FABRIC_TYPES.map((fabric) => (
                     <option key={fabric.value} value={fabric.value}>
-                      {i18n.language === "ar" ? fabric.labelAr : fabric.label}
+                      {optionLabel(fabric, i18n.language)}
                     </option>
                   ))}
                 </select>
@@ -432,7 +433,7 @@ const InventoryPage = () => {
                   </option>
                   {PATTERNS.map((pattern) => (
                     <option key={pattern.value} value={pattern.value}>
-                      {i18n.language === "ar" ? pattern.labelAr : pattern.label}
+                      {optionLabel(pattern, i18n.language)}
                     </option>
                   ))}
                   {uniquePatterns
