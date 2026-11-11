@@ -42,7 +42,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 .signup-card__title--light {
-  color: #b8860b;
+  color: #2dd4bf;
 }
 .signup-card__subtitle--light {
   color: #555;
@@ -62,7 +62,7 @@
   color: #777;
 }
 .signup-card__link-btn--light {
-  color: #b8860b;
+  color: #2dd4bf;
   background: none;
   border: none;
   font-weight: bold;
@@ -183,7 +183,7 @@
 }
 
 .signup-card__input--light:focus {
-  border-color: #b8860b;
+  border-color: #2dd4bf;
 }
 
 .signup-card__input--dark {
@@ -222,7 +222,7 @@
 }
 
 .signup-card__password-toggle--light:hover {
-  color: #b8860b;
+  color: #2dd4bf;
   background: rgba(45, 212, 191, 0.1);
 }
 
@@ -264,7 +264,7 @@
 }
 
 .signup-card__submit-btn--light {
-  background: #b8860b;
+  background: #2dd4bf;
   color: white;
 }
 
@@ -329,8 +329,8 @@
 }
 
 .signup-page__theme-btn--light:hover {
-  border-color: #b8860b;
-  color: #b8860b;
+  border-color: #2dd4bf;
+  color: #2dd4bf;
   background: rgba(45, 212, 191, 0.05);
 }
 
@@ -368,15 +368,15 @@
 }
 
 .signup-page__lang-btn--light:hover {
-  border-color: #b8860b;
-  color: #b8860b;
+  border-color: #2dd4bf;
+  color: #2dd4bf;
   background: rgba(45, 212, 191, 0.05);
 }
 
 .signup-page__lang-btn--light.signup-page__lang-btn--active {
-  background: #b8860b;
+  background: #2dd4bf;
   color: white;
-  border-color: #b8860b;
+  border-color: #2dd4bf;
 }
 
 .signup-page__lang-btn--dark {

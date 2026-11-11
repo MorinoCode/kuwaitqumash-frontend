@@ -156,7 +156,7 @@
 
 .rank-badge {
   display: inline-block;
-  background: #b8860b;
+  background: #2dd4bf;
   color: white;
   padding: 2px 8px;
   border-radius: 12px;
@@ -166,7 +166,7 @@
 
 .fabric-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #ffd700, #b8860b);
+  background: linear-gradient(135deg, #5eead4, #2dd4bf);
   color: white;
   padding: 3px 10px;
   border-radius: 4px;
@@ -176,7 +176,7 @@
 
 .currency {
   font-weight: 500;
-  color: #b8860b;
+  color: #2dd4bf;
   text-align: right;
 }
 

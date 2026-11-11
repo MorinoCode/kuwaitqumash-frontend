@@ -61,8 +61,8 @@
 
 .pagination__btn--light:hover:not(:disabled) {
   background: #f5f5f5;
-  border-color: #b8860b;
-  color: #b8860b;
+  border-color: #2dd4bf;
+  color: #2dd4bf;
 }
 
 .pagination__btn--dark {
@@ -101,13 +101,13 @@
 
 .pagination__page--light:hover {
   background: #f5f5f5;
-  border-color: #b8860b;
-  color: #b8860b;
+  border-color: #2dd4bf;
+  color: #2dd4bf;
 }
 
 .pagination__page--light.pagination__page--active {
-  background: #b8860b;
-  border-color: #b8860b;
+  background: #2dd4bf;
+  border-color: #2dd4bf;
   color: white;
   font-weight: 600;
 }
