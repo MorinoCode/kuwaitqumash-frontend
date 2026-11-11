@@ -33,12 +33,17 @@ const SignupPage = () => {
 
   useEffect(() => {
 
-    const currentLang = i18n.language || "en";
-    document.dir = currentLang === "ar" ? "rtl" : "ltr";
-    document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
-    document.body.classList.remove("font-arabic", "font-english");
+    const currentLang = i18n.language || "fa";
+    const isRtlLang = currentLang === "ar" || currentLang === "fa";
+    document.dir = isRtlLang ? "rtl" : "ltr";
+    document.body.dir = isRtlLang ? "rtl" : "ltr";
+    document.body.classList.remove("font-arabic", "font-english", "font-persian");
     document.body.classList.add(
-      currentLang === "ar" ? "font-arabic" : "font-english"
+      currentLang === "fa"
+        ? "font-persian"
+        : currentLang === "ar"
+          ? "font-arabic"
+          : "font-english",
     );
   }, [i18n.language]);
 
@@ -229,6 +234,15 @@ const SignupPage = () => {
         <div
           className={`signup-page__language-selector signup-page__language-selector--${theme}`}
         >
+          <button
+            type="button"
+            className={`signup-page__lang-btn ${
+              i18n.language === "fa" ? "signup-page__lang-btn--active" : ""
+            } signup-page__lang-btn--${theme}`}
+            onClick={() => changeLanguage("fa")}
+          >
+            FA
+          </button>
           <button
             type="button"
             className={`signup-page__lang-btn ${
