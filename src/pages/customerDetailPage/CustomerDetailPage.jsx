@@ -42,7 +42,6 @@ const CustomerDetailsPage = () => {
   const [analytics, setAnalytics] = useState(null);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
 
-  // Use React Query for customer data
   const { data: customerData, isLoading: loading, refetch } = useCustomer(id);
   const updateCustomerMutation = useUpdateCustomer();
   const deleteCustomerMutation = useDeleteCustomer();
@@ -70,7 +69,6 @@ const CustomerDetailsPage = () => {
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const { activeBranchId } = useBranchStore();
 
-  // Update data from React Query
   useEffect(() => {
     if (customerData) {
       setData(customerData);
@@ -87,21 +85,17 @@ const CustomerDetailsPage = () => {
       if (response.data.success) {
         setAnalytics(response.data.data.analysis);
       }
-    } catch {
-      // Silently ignore fetch errors
-    } finally {
+    } catch { void 0; } finally {
       setAnalyticsLoading(false);
     }
   }, [id]);
 
-  // Fetch customer analytics
   useEffect(() => {
     if (id) {
       fetchCustomerAnalytics();
     }
   }, [id, fetchCustomerAnalytics]);
 
-  // Handle errors and navigation
   useEffect(() => {
     if (!id || isNaN(parseInt(id))) {
       navigate("/customers");
@@ -136,7 +130,7 @@ const CustomerDetailsPage = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       toast.error(t("file_too_large") || "File size must be less than 5MB");
       return;
@@ -232,7 +226,6 @@ const CustomerDetailsPage = () => {
       if (idFiles.front) payload.append("front_image", idFiles.front);
       if (idFiles.back) payload.append("back_image", idFiles.back);
 
-      // Convert FormData to object for mutation
       const dataObj = {};
       payload.forEach((value, key) => {
         if (key === "front_image" || key === "back_image") {
@@ -243,12 +236,10 @@ const CustomerDetailsPage = () => {
       });
 
       await updateCustomerMutation.mutateAsync({ id, data: dataObj });
-      refetch(); // Refetch customer data
+      refetch();
       setIsEditModalOpen(false);
       setIdFiles({ front: null, back: null });
-    } catch {
-      // Error is handled by mutation
-    } finally {
+    } catch { void 0; } finally {
       setIsSubmitting(false);
     }
   };
@@ -262,7 +253,7 @@ const CustomerDetailsPage = () => {
       await deleteCustomerMutation.mutateAsync(id);
       navigate("/customers");
     } catch {
-      // Error is handled by mutation
+
       setIsDeleteModalOpen(false);
     }
   };
@@ -286,7 +277,7 @@ const CustomerDetailsPage = () => {
         new Blob([res.data], { type: "application/pdf" }),
       );
       window.open(url, "_blank");
-      // Cleanup blob URL after 60 seconds to prevent memory leaks
+
       setTimeout(() => {
         URL.revokeObjectURL(url);
       }, 60000);
@@ -321,7 +312,6 @@ const CustomerDetailsPage = () => {
       </div>
     );
 
-  // Check if data exists before destructuring
   if (!data || !data.customer) {
     return (
       <div
@@ -334,7 +324,6 @@ const CustomerDetailsPage = () => {
 
   const { customer, history = [], stats = {} } = data;
 
-  // Safe defaults
   const safeStats = {
     total_spent: stats.total_spent || "0.000",
     invoice_count: stats.invoice_count || 0,
@@ -682,7 +671,6 @@ const CustomerDetailsPage = () => {
         </main>
       </div>
 
-      {/* Edit Modal */}
       {isEditModalOpen && (
         <div className="customers-modal-overlay">
           <div className={`customers-modal customers-modal--${theme}`}>
@@ -868,7 +856,6 @@ const CustomerDetailsPage = () => {
         </div>
       )}
 
-      {/* Delete Confirm Modal */}
       {isDeleteModalOpen && (
         <div className="customers-modal-overlay">
           <div className={`customers-modal customers-modal--${theme}`}>

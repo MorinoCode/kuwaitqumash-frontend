@@ -31,7 +31,6 @@ import "../inventoryPage/InventoryPage.css";
 import { ShoppingCart, CheckCircle, Loader } from "lucide-react";
 import AddItemModal from "../../components/addItemModal/AddItemModal";
 
-// Fabric line total: meters x price per meter x units, minus the line discount.
 const computeLineTotal = (item) => {
   const meters = Math.max(0, parseFloat(item.meters) || 0);
   const price = Math.max(0, parseFloat(item.price_per_meter) || 0);
@@ -45,7 +44,6 @@ const SalesPage = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
 
-  // Get activeBranchId first (before using it in hooks)
   const { activeBranchId } = useBranchStore();
 
   const [customerSearch, setCustomerSearch] = useState("");
@@ -53,7 +51,6 @@ const SalesPage = () => {
   const [showCustDropdown, setShowCustDropdown] = useState(false);
   const [showItemDropdown, setShowItemDropdown] = useState(false);
 
-  // Use React Query hooks
   const { data: customersData } = useCustomers({
     search: customerSearch.trim() ? customerSearch.trim() : undefined,
     branch_id: activeBranchId,
@@ -64,7 +61,7 @@ const SalesPage = () => {
     search: itemSearch.trim() ? itemSearch.trim() : undefined,
     branch_id: activeBranchId,
   });
-  // Memoize filtered inventory list to avoid re-filtering on every render
+
   const inventoryList = useMemo(
     () => (inventoryData?.data || []).filter((i) => i.status === "In Stock"),
     [inventoryData?.data],
@@ -97,9 +94,7 @@ const SalesPage = () => {
   const itemInputRef = useRef(null);
   const paymentAmountInitialized = useRef(false);
   const lastGrandTotal = useRef(0);
-  // Fabric prices come from each inventory item (price_per_meter).
 
-  // Use mutation for creating sale
   const createSaleMutation = useCreateSale();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -123,7 +118,6 @@ const SalesPage = () => {
     expiry_date: "",
   });
 
-  // Restore draft from store when entering sales page or when branch changes
   useEffect(() => {
     if (!activeBranchId) return;
     const draft = useSaleDraftStore.getState().getDraft(activeBranchId);
@@ -137,7 +131,6 @@ const SalesPage = () => {
     setDraftHydrated(true);
   }, [activeBranchId, defaultPayments]);
 
-  // Persist draft to store when customer, cart, or payments change (after first hydration)
   useEffect(() => {
     if (!activeBranchId || !draftHydrated) return;
     useSaleDraftStore.getState().setDraft(activeBranchId, {
@@ -153,7 +146,7 @@ const SalesPage = () => {
 
     const fetchWaStatus = async () => {
       try {
-        // Check WhatsApp status for current branch
+
         const branchId = activeBranchId || user?.branch_id;
         const url = branchId
           ? `/whatsapp/status?branch_id=${branchId}`
@@ -189,7 +182,7 @@ const SalesPage = () => {
 
     (async () => {
       try {
-        // Check WhatsApp status for the invoice's branch
+
         const branchId =
           lastInvoice.branch_id || activeBranchId || user?.branch_id;
         const url = branchId
@@ -212,10 +205,6 @@ const SalesPage = () => {
       abortController.abort();
     };
   }, [isPreviewOpen, lastInvoice, activeBranchId, user?.branch_id]);
-
-  // Customer dropdown: opened on focus, closed on blur or when customer selected
-
-  // Dropdown visibility: opened on focus, closed on blur (or when item selected in addToCart)
 
   const addToCart = useCallback(
     (item) => {
@@ -344,7 +333,6 @@ const SalesPage = () => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
-  // Memoize calculations: grandTotal = sum of line totals (total_price already includes quantity)
   const grandTotal = useMemo(
     () =>
       cart.reduce((acc, item) => {
@@ -364,7 +352,6 @@ const SalesPage = () => {
     [grandTotal, totalPaid],
   );
 
-  // Auto-fill payment amounts when grandTotal changes
   useEffect(() => {
     if (payments.length > 0 && grandTotal > 0) {
       const grandTotalChanged =
@@ -374,14 +361,12 @@ const SalesPage = () => {
         let hasChanges = false;
         const newPayments = [...prev];
 
-        // Calculate current total paid
         const currentTotalPaid = prev.reduce(
           (acc, p) => acc + (parseFloat(p.amount) || 0),
           0,
         );
         const remaining = grandTotal - currentTotalPaid;
 
-        // If this is the first time and first payment is empty, fill it with grandTotal
         if (!paymentAmountInitialized.current) {
           const firstPayment = newPayments[0];
           if (
@@ -401,10 +386,9 @@ const SalesPage = () => {
             lastGrandTotal.current = grandTotal;
           }
         } else if (grandTotalChanged) {
-          // If grandTotal changed, update first payment amount to match grandTotal
-          // Only if there's a single payment
+
           if (newPayments.length === 1) {
-            // If only one payment exists, sync it with grandTotal
+
             newPayments[0] = {
               ...newPayments[0],
               amount: grandTotal.toFixed(3),
@@ -412,7 +396,7 @@ const SalesPage = () => {
             hasChanges = true;
             lastGrandTotal.current = grandTotal;
           } else {
-            // If multiple payments exist, only update if first payment is empty
+
             if (
               remaining > 0 &&
               (!newPayments[0].amount ||
@@ -425,8 +409,7 @@ const SalesPage = () => {
               };
               hasChanges = true;
             } else if (remaining < -0.0005) {
-              // grandTotal dropped below total paid (e.g. an item was removed):
-              // trim the excess from the last payment rows so Paid/Balance reconcile.
+
               let excess = -remaining;
               for (
                 let i = newPayments.length - 1;
@@ -453,8 +436,7 @@ const SalesPage = () => {
         return hasChanges ? newPayments : prev;
       });
     }
-    // Reset when cart is cleared: there is nothing to pay, so clear any
-    // previously auto-filled amount instead of leaving stale Paid/Balance values.
+
     if (cart.length === 0) {
       paymentAmountInitialized.current = false;
       lastGrandTotal.current = 0;
@@ -472,7 +454,7 @@ const SalesPage = () => {
   const addPaymentMethod = useCallback(() => {
     setPayments((prev) => {
       const newPayment = { method: "K-Net", amount: "", reference: "" };
-      // Calculate remaining amount to auto-fill
+
       const currentTotalPaid = prev.reduce(
         (acc, p) => acc + (parseFloat(p.amount) || 0),
         0,
@@ -489,7 +471,7 @@ const SalesPage = () => {
     (index, field, value) => {
       setPayments((prev) => {
         const newPayments = [...prev];
-        // Validate amount field - ensure it's not negative
+
         if (field === "amount") {
           const numValue = parseFloat(value);
           const validatedValue = isNaN(numValue) || numValue < 0 ? "" : value;
@@ -498,7 +480,6 @@ const SalesPage = () => {
             [field]: validatedValue,
           };
 
-          // If amount becomes empty or zero, auto-fill with remaining balance
           if (
             !validatedValue ||
             validatedValue === "" ||
@@ -515,7 +496,7 @@ const SalesPage = () => {
           }
           newPayments[index] = updatedPayment;
         } else if (field === "method") {
-          // When method changes, auto-fill amount with remaining balance if amount is empty
+
           const currentPayment = { ...newPayments[index], [field]: value };
           if (
             !currentPayment.amount ||
@@ -559,21 +540,18 @@ const SalesPage = () => {
         data: customerData,
       });
       setSelectedCustomer(res.data || res);
-    } catch {
-      // Silently ignore customer select errors
-    }
+    } catch { void 0; }
   };
 
   const handleSubmitSale = async () => {
     if (!selectedCustomer) return toast.warning(t("select_customer_first"));
     if (cart.length === 0) return toast.warning(t("cart_empty"));
-    // Calculate actual grand total from cart items (same as grandTotal memo)
+
     const actualGrandTotal = cart.reduce((acc, item) => {
       const lineTotal = parseFloat(item.total_price) || 0;
       return acc + lineTotal;
     }, 0);
 
-    // Calculate actual total paid
     const actualTotalPaid = payments
       .filter((p) => parseFloat(p.amount) > 0)
       .reduce((acc, p) => {
@@ -581,7 +559,6 @@ const SalesPage = () => {
         return acc + amount;
       }, 0);
 
-    // Validate: no line quantity may exceed inventory stock
     const exceedsStock = cart.some((i) => {
       const qty = Math.max(1, parseInt(i.cartQty, 10) || 1);
       const stock = parseInt(i.quantity, 10) ?? 1;
@@ -600,7 +577,6 @@ const SalesPage = () => {
       return toast.error(t("payment_mismatch"));
     }
 
-    // Validation
     const hasInvalidAmounts = payments.some((p) => {
       const amount = parseFloat(p.amount);
       return isNaN(amount) || amount < 0;
@@ -615,7 +591,7 @@ const SalesPage = () => {
 
     const payload = {
       customer_id: selectedCustomer.id,
-      branch_id: activeBranchId, // Send active branch ID to backend
+      branch_id: activeBranchId,
       items: cart.map((i) => ({
         id: i.id,
         meters: Math.max(0, parseFloat(i.meters) || 0),
@@ -648,12 +624,10 @@ const SalesPage = () => {
       setCart([]);
       setPayments([{ method: "K-Net", amount: "", reference: "" }]);
       setSelectedCustomer(null);
-      paymentAmountInitialized.current = false; // Reset for next sale
+      paymentAmountInitialized.current = false;
       useSaleDraftStore.getState().clearDraft(activeBranchId);
-      // Success toast is handled by mutation
-    } catch {
-      // Error is handled by mutation
-    } finally {
+
+    } catch { void 0; } finally {
       setIsLoading(false);
     }
   };
@@ -671,24 +645,22 @@ const SalesPage = () => {
         responseType: "blob",
       });
 
-      // Validate that response is actually a PDF
       if (!res.data || res.data.size === 0) {
         throw new Error("Empty PDF response");
       }
 
-      // Check content type
       const contentType = res.headers["content-type"] || "";
       if (
         !contentType.includes("application/pdf") &&
         !contentType.includes("pdf")
       ) {
-        // Try to read error message if it's JSON
+
         try {
           const text = await res.data.text();
           const errorData = JSON.parse(text);
           throw new Error(errorData.message || "PDF generation failed");
         } catch {
-          // Silently ignore blob read errors
+
           throw new Error("Invalid PDF response");
         }
       }
@@ -696,10 +668,9 @@ const SalesPage = () => {
       const blob = new Blob([res.data], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
-      // Try to open in new window
       const w = window.open(url, "_blank", "noopener");
       if (!w || w.closed) {
-        // Popup blocked, download instead
+
         const a = document.createElement("a");
         a.href = url;
         a.download = `invoice-${
@@ -714,7 +685,7 @@ const SalesPage = () => {
             "Popup blocked; PDF downloaded. Open it to print.",
         );
       } else {
-        // Cleanup blob URL after 60 seconds to prevent memory leaks
+
         setTimeout(() => {
           URL.revokeObjectURL(url);
         }, 60000);
@@ -756,9 +727,7 @@ const SalesPage = () => {
       });
       setWaStep(null);
       setWaCustomPhone("");
-    } catch {
-      // Silently ignore send errors - toast handled by mutation
-    } finally {
+    } catch { void 0; } finally {
       setWaSending(false);
     }
   };
@@ -832,12 +801,9 @@ const SalesPage = () => {
         expiry_date: "",
       });
       setIdFiles({ front: null, back: null });
-    } catch {
-      // Silently ignore save errors
-    }
+    } catch { void 0; }
   };
 
-  // Format price helper - consistent number formatting
   const formatPrice = useCallback((price) => {
     if (price === null || price === undefined || price === "") return "--";
     const num = parseFloat(price);
@@ -983,7 +949,7 @@ const SalesPage = () => {
         onSubmit={handleSaveNewCustomer}
         theme={theme}
       />
-      {/* Barcode Scanner Modal */}
+
       <BarcodeScanner
         isOpen={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
@@ -991,14 +957,13 @@ const SalesPage = () => {
         theme={theme}
       />
 
-      {/* ADD ITEM MODAL */}
       <AddItemModal
         isOpen={isAddItemModalOpen}
         onClose={() => setIsAddItemModalOpen(false)}
         onSuccess={() => {
-          // Refresh inventory list after adding item
+
           if (itemSearch.length > 1) {
-            // Inventory search is handled by useInventory hook automatically
+
           }
         }}
         activeBranchId={activeBranchId}

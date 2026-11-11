@@ -32,7 +32,7 @@ const SignupPage = () => {
   const PASSWORD_MIN_LENGTH = 6;
 
   useEffect(() => {
-    // Set direction and font on mount and language change
+
     const currentLang = i18n.language || "en";
     document.dir = currentLang === "ar" ? "rtl" : "ltr";
     document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
@@ -42,7 +42,6 @@ const SignupPage = () => {
     );
   }, [i18n.language]);
 
-  // Derive local validation errors
   const localErrors = useMemo(() => {
     const newErrors = {};
     if (formData.password && formData.password.length < PASSWORD_MIN_LENGTH) {
@@ -212,9 +211,9 @@ const SignupPage = () => {
           className="signup-page__top-logo"
         />
       </div>
-      {/* Language & Theme Selectors */}
+
       <div className={`signup-page__controls signup-page__controls--${theme}`}>
-        {/* Theme Toggle */}
+
         <button
           type="button"
           className={`signup-page__theme-btn signup-page__theme-btn--${theme}`}
@@ -227,7 +226,6 @@ const SignupPage = () => {
           {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        {/* Language Selector */}
         <div
           className={`signup-page__language-selector signup-page__language-selector--${theme}`}
         >

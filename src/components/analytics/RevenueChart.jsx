@@ -27,24 +27,22 @@ const RevenueChart = ({
     if (!dateStr) return "";
     const date = new Date(dateStr);
 
-    // Determine format based on data density
-    // If we have many data points (>30), use weekly/monthly format
     const dataLength = data?.length || 0;
 
     if (dataLength > 30) {
-      // Monthly format for long ranges
+
       return date.toLocaleDateString("en-GB", {
         month: "short",
         year: "2-digit",
       });
     } else if (dataLength > 14) {
-      // Weekly format - show week start date
+
       return date.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",
       });
     } else {
-      // Daily format
+
       return date.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",
@@ -52,10 +50,8 @@ const RevenueChart = ({
     }
   };
 
-  // Determine which data key to use
   const dataKey = viewType === "quantity" ? "quantity" : metricType;
 
-  // Get chart title
   const getChartTitle = () => {
     if (viewType === "quantity") {
       return t("quantity_items") + " - " + t("sales_trend");
@@ -65,12 +61,10 @@ const RevenueChart = ({
       : t("sales_performance");
   };
 
-  // Get Y-axis label
   const getYAxisLabel = () => {
     return viewType === "quantity" ? t("items_sold") : "KWD";
   };
 
-  // Get gradient color
   const gradientColor = metricType === "profit" ? "#10B981" : "#B8860B";
 
   const chartData = data.map((d, index) => {

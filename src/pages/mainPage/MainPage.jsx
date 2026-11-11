@@ -103,11 +103,10 @@ const MainPage = () => {
     }
   };
 
-  // Filter menu items based on user role
   const filteredMenuItems = menuItems
     .map((section) => {
       if (section.category === "management") {
-        // Hide "manage" button for sales_man
+
         return {
           ...section,
           items: section.items.filter(
@@ -117,7 +116,7 @@ const MainPage = () => {
       }
       return section;
     })
-    .filter((section) => section.items.length > 0); // Hide empty sections
+    .filter((section) => section.items.length > 0);
 
   return (
     <div
@@ -125,7 +124,7 @@ const MainPage = () => {
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
       <div className="main-dashboard__content">
-        {/* Quick Actions */}
+
         {filteredMenuItems.map((section, idx) => (
           <section key={idx} className="main-dashboard__section">
             <h3 className="main-dashboard__section-title">
@@ -155,13 +154,12 @@ const MainPage = () => {
         ))}
       </div>
 
-      {/* Add Item Modal */}
       <AddItemModal
         isOpen={isAddItemModalOpen}
         onClose={() => setIsAddItemModalOpen(false)}
         onSuccess={() => {
           setIsAddItemModalOpen(false);
-          // Optionally navigate to inventory page
+
           navigate("/inventory");
         }}
         activeBranchId={activeBranchId}

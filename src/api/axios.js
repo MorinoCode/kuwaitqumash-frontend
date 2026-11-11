@@ -4,7 +4,7 @@ import useTenantStore from '../store/tenantStore';
 const instance = axios.create({
     baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api',
     withCredentials: true,
-    timeout: 30000, // 30 seconds timeout
+    timeout: 30000,
     headers: {
         'Content-Type': 'application/json'
     }
@@ -43,7 +43,6 @@ instance.interceptors.response.use(
             const errorMessage = error.response.data?.message || '';
 
             if (errorMessage.includes('tenant') || errorMessage.includes('Tenant')) {
-
 
                 const tenantId = useTenantStore.getState().tenantId;
                 if (!tenantId || tenantId.trim() === '') {

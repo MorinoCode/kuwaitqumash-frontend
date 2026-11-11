@@ -42,7 +42,6 @@ const ItemDetailsPage = () => {
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const currency = "KWD";
 
-  // Use React Query hooks
   const {
     data: item,
     isLoading: loading,
@@ -54,17 +53,14 @@ const ItemDetailsPage = () => {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  // Print Logic
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
   const printRef = useRef(null);
   const imagePrintRef = useRef(null);
 
-  // Confirm Modal
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState("");
 
-  // Get active branch ID
   const { activeBranchId } = useBranchStore();
 
   const handlePrintConfirm = useReactToPrint({
@@ -87,12 +83,12 @@ const ItemDetailsPage = () => {
       toast.error(t("print_error") || "Print failed. Please try again.");
     },
     pageStyle: `
-            @page { 
-                size: 55mm 18mm; 
-                margin: 0; 
+            @page {
+                size: 55mm 18mm;
+                margin: 0;
             }
-            body { 
-                margin: 0; 
+            body {
+                margin: 0;
                 padding: 0;
             }
             @media print {
@@ -199,13 +195,9 @@ const ItemDetailsPage = () => {
         `,
   });
 
-  // Swipe logic state
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
-  // No need for formData and stones state - AddItemModal handles it
-
-  // Navigate if item not found
   useEffect(() => {
     if (!loading && !item && id) {
       navigate("/inventory");
@@ -217,8 +209,6 @@ const ItemDetailsPage = () => {
     setIsEditModalOpen(false);
   };
 
-  // Image deletion is now handled in AddItemModal
-
   const handleDeleteItem = async () => {
     setConfirmMessage(t("confirm_delete_item_permanent"));
     setConfirmAction(() => async () => {
@@ -226,7 +216,7 @@ const ItemDetailsPage = () => {
         await deleteItemMutation.mutateAsync(id);
         navigate("/inventory");
       } catch {
-        // Error is handled by mutation's onError
+
         setIsConfirmModalOpen(false);
       }
     });
@@ -439,7 +429,6 @@ const ItemDetailsPage = () => {
         <div className="item-info">
           <h1 className="item-info__title">{item.item_name}</h1>
 
-          {/* Item Name AR */}
           {item.item_name_ar && (
             <p className="item-info__title-ar" dir="rtl">
               {item.item_name_ar}
@@ -526,7 +515,6 @@ const ItemDetailsPage = () => {
               </p>
             </div>
 
-          {/* Descriptions */}
           </div>
           <div className="item-info__desc">
             <label>{t("description_en")}</label>
@@ -550,7 +538,6 @@ const ItemDetailsPage = () => {
         </div>
       </div>
 
-      {/* PRINT MODAL */}
       {isPrintModalOpen && item && (
         <div className="details-modal-overlay">
           <div className={`details-modal details-modal--${theme}`}>
@@ -564,7 +551,7 @@ const ItemDetailsPage = () => {
               </button>
             </div>
             <div className="details-modal__body">
-              {/* Visual Preview */}
+
               <div className="print-preview-area">
                 <BarcodeLabel
                   item={item}
@@ -573,7 +560,6 @@ const ItemDetailsPage = () => {
                 />
               </div>
 
-              {/* Hidden Component for ReactToPrint */}
               <div
                 style={{
                   position: "absolute",
@@ -622,7 +608,6 @@ const ItemDetailsPage = () => {
         </div>
       )}
 
-      {/* Confirm Modal */}
       {isConfirmModalOpen && (
         <div className="details-modal-overlay">
           <div className={`details-modal details-modal--${theme}`}>
@@ -660,7 +645,6 @@ const ItemDetailsPage = () => {
         </div>
       )}
 
-      {/* Edit Modal */}
       <AddItemModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}

@@ -27,7 +27,7 @@ const InvoicesPage = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { t } = useTranslation();
-  const { user } = useAuth(); // Get current user info
+  const { user } = useAuth();
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   const [invoices, setInvoices] = useState([]);
@@ -38,15 +38,15 @@ const InvoicesPage = () => {
   const [exportEndDate, setExportEndDate] = useState("");
   const [pdfLoadingId, setPdfLoadingId] = useState(null);
   const [waLoadingId, setWaLoadingId] = useState(null);
-  const [branchWaStatus, setBranchWaStatus] = useState({}); // Map of branch_id -> status
-  const [waStep, setWaStep] = useState({}); // Map of invoice_id -> 'input' or null
-  const [waCustomPhone, setWaCustomPhone] = useState({}); // Map of invoice_id -> phone
+  const [branchWaStatus, setBranchWaStatus] = useState({});
+  const [waStep, setWaStep] = useState({});
+  const [waCustomPhone, setWaCustomPhone] = useState({});
 
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedBranchIds, setSelectedBranchIds] = useState([]); // Changed to array for multi-select
-  const [activeTab, setActiveTab] = useState("current"); // 'current' or 'old'
+  const [selectedBranchIds, setSelectedBranchIds] = useState([]);
+  const [activeTab, setActiveTab] = useState("current");
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -56,35 +56,31 @@ const InvoicesPage = () => {
     hasPrevPage: false,
   });
 
-  // Get active branch from Zustand store
   const { activeBranchId } = useBranchStore();
   const isOwner = user?.role === "store_owner";
 
-  // Branches are now loaded via React Query hook
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
 
-  // Initialize branch selection (only once on mount or when key dependencies change)
   const branchesInitialized = useRef(false);
   useEffect(() => {
-    // Skip if already initialized or branches are still loading
+
     if (branchesInitialized.current || branchesLoading) return;
 
     if (!isOwner && activeBranchId) {
-      // Non-owners: set to their active branch
+
       const activeId = parseInt(activeBranchId);
       if (!isNaN(activeId)) {
         setSelectedBranchIds([activeId]);
         branchesInitialized.current = true;
       }
     } else if (isOwner && branches.length > 0) {
-      // Owners: default to all branches
+
       const branchIds = branches.map((b) => b.id);
       setSelectedBranchIds(branchIds);
       branchesInitialized.current = true;
     }
   }, [isOwner, activeBranchId, branches.length, branchesLoading, branches]);
 
-  // Listen for storage changes (when user switches branch)
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === "active_branch_id" && e.newValue) {
@@ -97,7 +93,6 @@ const InvoicesPage = () => {
 
     window.addEventListener("storage", handleStorageChange);
 
-    // Also listen for custom event (for same-tab changes)
     const handleBranchChange = () => {
       const currentActiveBranchId = useBranchStore.getState().activeBranchId;
       if (currentActiveBranchId) {
@@ -116,13 +111,11 @@ const InvoicesPage = () => {
     };
   }, [isOwner]);
 
-  // Memoize branchIdsKey to avoid recalculating on every render
   const branchIdsKey = useMemo(
     () => [...selectedBranchIds].sort((a, b) => a - b).join(","),
     [selectedBranchIds],
   );
 
-  // Use React Query for invoices
   const invoiceFilters = {
     branch_ids:
       isOwner && selectedBranchIds.length > 0
@@ -142,10 +135,8 @@ const InvoicesPage = () => {
     refetch: refetchInvoices,
   } = useInvoices(invoiceFilters);
 
-  // Use mutation for sending WhatsApp
   const sendInvoiceWhatsAppMutation = useSendInvoiceWhatsApp();
 
-  // Update state and pagination from React Query
   useEffect(() => {
     if (invoicesData) {
       setInvoices(invoicesData.data || []);
@@ -159,16 +150,14 @@ const InvoicesPage = () => {
     }
   }, [invoicesData, invoicesLoading]);
 
-  // Reset to page 1 when filters change (but not on initial mount)
   useEffect(() => {
-    // Only reset if we're not on page 1 already
+
     setPagination((prev) => {
       if (prev.currentPage === 1) return prev;
       return { ...prev, currentPage: 1 };
     });
   }, [branchIdsKey, searchTerm, startDate, endDate]);
 
-  // Fetch WhatsApp status for each branch when invoices are loaded
   useEffect(() => {
     let isMounted = true;
     const abortController = new AbortController();
@@ -185,7 +174,6 @@ const InvoicesPage = () => {
         return;
       }
 
-      // Use Promise.all to fetch all statuses in parallel (fixes N+1 query problem)
       try {
         const statusPromises = branchIds.map((branchId) =>
           api
@@ -214,7 +202,7 @@ const InvoicesPage = () => {
         setBranchWaStatus(statusMap);
       } catch (err) {
         if (err.name !== "CanceledError" && isMounted) {
-          // If all requests fail, set all to false
+
           const statusMap = {};
           branchIds.forEach((branchId) => {
             statusMap[branchId] = false;
@@ -234,9 +222,6 @@ const InvoicesPage = () => {
     };
   }, [invoices]);
 
-  // Branches are now loaded via React Query hook - no need for fetchBranches
-
-  // fetchInvoices is now handled by React Query hook - keeping for compatibility
   const fetchInvoices = async (page = pagination.currentPage) => {
     setPagination((prev) => ({ ...prev, currentPage: page }));
     refetchInvoices();
@@ -315,13 +300,12 @@ const InvoicesPage = () => {
   const handleDownload = async (invoice) => {
     try {
       setPdfLoadingId(invoice.id);
-      // Use axios to fetch PDF with proper headers (including x-tenant-id)
+
       const response = await api.get(`/sales/invoices/${invoice.id}/pdf`, {
-        responseType: "blob", // Important: receive as blob
+        responseType: "blob",
         params: { disposition: "inline" },
       });
 
-      // Create blob URL and download
       const blob = new Blob([response.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -358,9 +342,7 @@ const InvoicesPage = () => {
       });
       setWaStep((prev) => ({ ...prev, [invoice.id]: null }));
       setWaCustomPhone((prev) => ({ ...prev, [invoice.id]: "" }));
-    } catch {
-      // Silently ignore send errors - toast handled by mutation
-    } finally {
+    } catch { void 0; } finally {
       setWaLoadingId(null);
     }
   };
@@ -412,7 +394,6 @@ const InvoicesPage = () => {
         )}
       </header>
 
-      {/* Tabs */}
       <div className="invoices-tabs">
         <button
           className={`invoices-tab ${activeTab === "current" ? "invoices-tab--active" : ""}`}
@@ -652,7 +633,6 @@ const InvoicesPage = () => {
             </div>
           </div>
 
-          {/* Pagination */}
           {!loading && pagination.totalPages > 1 && (
             <Pagination
               currentPage={pagination.currentPage}
@@ -667,7 +647,6 @@ const InvoicesPage = () => {
         null
       )}
 
-      {/* Export Excel Modal */}
       {showExportModal && (
         <div
           className="old-invoices-modal-overlay"

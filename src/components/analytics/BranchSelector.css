@@ -91,7 +91,6 @@
     margin: 4px 0;
 }
 
-/* Dark mode support */
 :root {
     --card-bg: #ffffff;
     --border-color: #e5e7eb;

@@ -44,7 +44,6 @@ export default function BranchDetailPage() {
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
 
-  // Use React Query hooks
   const queryClient = useQueryClient();
   const {
     data: branch,
@@ -73,7 +72,7 @@ export default function BranchDetailPage() {
   const connectSucceededRef = useRef(false);
 
   const [bulkSegment, setBulkSegment] = useState("all");
-  const [bulkBranchId, setBulkBranchId] = useState(id || ""); // Default to current branch
+  const [bulkBranchId, setBulkBranchId] = useState(id || "");
   const [bulkMessage, setBulkMessage] = useState("");
   const [bulkDelay, setBulkDelay] = useState(3000);
   const [bulkSending, setBulkSending] = useState(false);
@@ -87,7 +86,6 @@ export default function BranchDetailPage() {
   const canEditSendToCustomer = isOwner || (isManager && ownBranch);
   const canManageLogo = isOwner || (isManager && ownBranch);
 
-  // Update form when branch data changes
   useEffect(() => {
     if (branch) {
       setForm({
@@ -115,7 +113,6 @@ export default function BranchDetailPage() {
   useEffect(() => {
     if (isOwner) fetchWaStatus();
 
-    // Cleanup: Clear any pending intervals when component unmounts
     return () => {
       if (connectPollRef.current) {
         clearInterval(connectPollRef.current);
@@ -143,9 +140,7 @@ export default function BranchDetailPage() {
       });
       setEditing(false);
       refetchBranch();
-    } catch {
-      // Silently ignore update errors - toast is shown by mutation
-    } finally {
+    } catch { void 0; } finally {
       setSaving(false);
     }
   };
@@ -163,15 +158,13 @@ export default function BranchDetailPage() {
         },
       });
       refetchBranch();
-    } catch {
-      // Silently ignore save to store errors
-    } finally {
+    } catch { void 0; } finally {
       setSaving(false);
     }
   };
 
   const handleConnectWa = async () => {
-    // Cleanup any existing connection attempts
+
     if (connectPollRef.current) {
       clearInterval(connectPollRef.current);
       connectPollRef.current = null;
@@ -191,7 +184,6 @@ export default function BranchDetailPage() {
       abort.abort();
     }, 90_000);
 
-    // Store abort controller and timeout for cleanup
     fetch(`${apiBaseURL}/whatsapp/connect?branch_id=${id}`, {
       method: "GET",
       credentials: "include",
@@ -246,9 +238,7 @@ export default function BranchDetailPage() {
               setWaStatus(data);
               toast.success(t("connected") || "Connected");
             }
-          } catch {
-            // Ignore error during polling
-          }
+          } catch { void 0; }
         }, 2000);
 
         const read = () => {
@@ -311,9 +301,7 @@ export default function BranchDetailPage() {
                     fetchWaStatus();
                     return;
                   }
-                } catch {
-                  // Ignore parse error
-                }
+                } catch { void 0; }
               }
               read();
             })
@@ -351,8 +339,6 @@ export default function BranchDetailPage() {
         setConnecting(false);
       });
 
-    // Note: Cleanup is handled in useEffect and error handlers
-    // No need to return cleanup from async function
   };
 
   const handleDisconnectWa = async () => {
@@ -382,8 +368,7 @@ export default function BranchDetailPage() {
           Math.min(60000, parseInt(bulkDelay, 10) || 3000),
         ),
       };
-      // Always send branch_id if available, otherwise use current branch
-      // If user wants tenant-level, they can explicitly select "All branches"
+
       const branchIdToUse = bulkBranchId
         ? parseInt(bulkBranchId, 10)
         : id
@@ -553,9 +538,7 @@ export default function BranchDetailPage() {
                             },
                           });
                           refetchBranch();
-                        } catch {
-                          // Silently ignore save errors
-                        } finally {
+                        } catch { void 0; } finally {
                           setSaving(false);
                         }
                       }}
@@ -698,9 +681,7 @@ export default function BranchDetailPage() {
                         whatsapp_invoice_to_store_enabled: false,
                       }));
                       refetchBranch();
-                    } catch {
-                      // Silently ignore deactivate errors
-                    } finally {
+                    } catch { void 0; } finally {
                       setSaving(false);
                     }
                   }}
@@ -920,7 +901,7 @@ export default function BranchDetailPage() {
               branchId={id}
               currentLogoUrl={branch?.logo_url || null}
               onLogoUpdated={async () => {
-                // Invalidate queries to ensure fresh data on next fetch
+
                 queryClient.invalidateQueries({
                   queryKey: queryKeys.branch(id),
                 });
@@ -928,12 +909,9 @@ export default function BranchDetailPage() {
                   queryKey: queryKeys.branches(),
                 });
 
-                // Refetch branch data to get updated logo_url from server
                 try {
                   await refetchBranch();
-                } catch {
-                  // Silently ignore refetch errors
-                }
+                } catch { void 0; }
               }}
               theme={theme}
             />

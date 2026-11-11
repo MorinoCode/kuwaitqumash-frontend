@@ -1,6 +1,3 @@
-/**
- * Custom hook for customer queries using React Query
- */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 import { queryKeys } from "../config/queryClient";
@@ -23,9 +20,9 @@ export const useCustomers = (filters = {}) => {
       const res = await api.get(url);
       return res.data;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes - data is fresh for 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes - cache time
-    refetchOnMount: false, // Don't refetch if data is fresh
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnMount: false,
   });
 };
 
@@ -49,7 +46,7 @@ export const useCustomerHistory = (id) => {
       return res.data.data || [];
     },
     enabled: !!id,
-    staleTime: 2 * 60 * 1000, // 2 minutes (history changes frequently)
+    staleTime: 2 * 60 * 1000,
   });
 };
 
@@ -74,13 +71,12 @@ export const useCreateCustomer = () => {
       return res.data;
     },
     onSuccess: (data) => {
-      // Optimistically update customers list with new customer
+
       const newCustomer = data.data;
 
       queryClient.setQueriesData({ queryKey: queryKeys.customers() }, (old) => {
         if (!old || !old.data) return old;
 
-        // Check if customer already exists
         const exists = old.data.some(
           (customer) => customer.id === newCustomer.id,
         );
@@ -92,10 +88,9 @@ export const useCreateCustomer = () => {
         };
       });
 
-      // Invalidate to ensure consistency (but don't force immediate refetch)
       queryClient.invalidateQueries({
         queryKey: queryKeys.customers(),
-        refetchType: "none", // Don't refetch immediately, use cached data
+        refetchType: "none",
       });
 
       toast.success(
@@ -135,13 +130,11 @@ export const useUpdateCustomer = () => {
     onSuccess: (data, variables) => {
       const updatedCustomer = data.data;
 
-      // Update single customer query
       queryClient.setQueryData(
         queryKeys.customer(variables.id),
         updatedCustomer,
       );
 
-      // Update customers list
       queryClient.setQueriesData({ queryKey: queryKeys.customers() }, (old) => {
         if (!old || !old.data) return old;
 
@@ -153,7 +146,6 @@ export const useUpdateCustomer = () => {
         };
       });
 
-      // Invalidate to ensure consistency (but don't force immediate refetch)
       queryClient.invalidateQueries({
         queryKey: queryKeys.customer(variables.id),
         refetchType: "none",
@@ -187,17 +179,15 @@ export const useDeleteCustomer = () => {
       return res.data;
     },
     onMutate: async (id) => {
-      // Cancel outgoing queries to prevent race conditions
+
       await queryClient.cancelQueries({ queryKey: queryKeys.customers() });
       await queryClient.cancelQueries({ queryKey: queryKeys.customer(id) });
 
-      // Snapshot previous values for rollback
       const previousQueries = queryClient.getQueriesData({
         queryKey: queryKeys.customers(),
       });
       const previousCustomer = queryClient.getQueryData(queryKeys.customer(id));
 
-      // Optimistically remove customer from list
       previousQueries.forEach(([queryKey, oldData]) => {
         if (oldData && oldData.data) {
           queryClient.setQueryData(queryKey, (old) => {
@@ -212,13 +202,12 @@ export const useDeleteCustomer = () => {
         }
       });
 
-      // Remove single customer query
       queryClient.removeQueries({ queryKey: queryKeys.customer(id) });
 
       return { previousQueries, previousCustomer };
     },
     onSuccess: () => {
-      // Invalidate to ensure consistency (but don't force immediate refetch)
+
       queryClient.invalidateQueries({
         queryKey: queryKeys.customers(),
         refetchType: "none",
@@ -229,7 +218,7 @@ export const useDeleteCustomer = () => {
       );
     },
     onError: (error, id, context) => {
-      // Rollback optimistic updates on error
+
       if (context?.previousQueries) {
         context.previousQueries.forEach(([queryKey, oldData]) => {
           queryClient.setQueryData(queryKey, oldData);

@@ -21,7 +21,6 @@
   --radius-lg: 1rem;
 }
 
-/* Base Layout */
 .staff-page {
   padding: 2rem;
   min-height: 100vh;
@@ -43,7 +42,6 @@
   color: var(--text-light);
 }
 
-/* Loading State */
 .staff-page--loading {
   display: flex;
   flex-direction: column;
@@ -62,7 +60,6 @@
   animation: spin 1s linear infinite;
 }
 
-/* Header */
 .staff-page__header {
   margin-bottom: 2rem;
 }
@@ -129,7 +126,6 @@ html[dir="rtl"] .staff-page__back-btn svg {
   border: 1px solid var(--gold-border);
 }
 
-/* Grid Layout */
 .staff-grid {
   display: grid;
   grid-template-columns: 350px 1fr;
@@ -137,7 +133,6 @@ html[dir="rtl"] .staff-page__back-btn svg {
   align-items: start;
 }
 
-/* Sidebar & Cards */
 .staff-sidebar {
   display: flex;
   flex-direction: column;
@@ -191,7 +186,6 @@ html[dir="rtl"] .staff-page__back-btn svg {
   font-weight: 600;
 }
 
-/* Staff Info Card */
 .staff-info {
   text-align: center;
 }
@@ -239,7 +233,6 @@ html[dir="rtl"] .staff-page__back-btn svg {
   opacity: 0.6;
 }
 
-/* AI Analytics Card */
 .staff-ai__stats {
   display: flex;
   flex-direction: column;
@@ -388,7 +381,6 @@ html[dir="rtl"] .staff-page__back-btn svg {
   font-weight: 700;
 }
 
-/* History Table */
 .staff-content {
   display: flex;
   flex-direction: column;
@@ -460,7 +452,6 @@ html[dir="rtl"] .staff-table {
   }
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .staff-grid {
     grid-template-columns: 1fr;

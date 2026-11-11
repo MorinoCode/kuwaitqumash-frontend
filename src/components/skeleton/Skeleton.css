@@ -49,7 +49,6 @@
   100% { background-position: -200% 0; }
 }
 
-/* RTL: reverse animation direction for consistency */
 html[dir="rtl"] .skeleton {
   animation: skeleton-shimmer-rtl 1.2s ease-in-out infinite;
 }

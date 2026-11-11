@@ -1,7 +1,3 @@
-/**
- * Tenant Store using Zustand
- * Manages tenant state with localStorage persistence
- */
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { getStorageItem, setStorageItem } from "../utils/storage";
@@ -26,7 +22,6 @@ const useTenantStore = create(
         });
       },
 
-      // Completely reset storage (for logout)
       resetStorage: () => {
         try {
           localStorage.removeItem("tenant-storage");
@@ -34,9 +29,7 @@ const useTenantStore = create(
             tenantId: null,
             tenantName: null,
           });
-        } catch {
-          // Silently ignore reset errors
-        }
+        } catch { void 0; }
       },
     }),
     {
@@ -50,16 +43,12 @@ const useTenantStore = create(
           try {
             const parsed = JSON.parse(value);
             setStorageItem(name, parsed);
-          } catch {
-            // Silently ignore parse errors
-          }
+          } catch { void 0; }
         },
         removeItem: (name) => {
           try {
             localStorage.removeItem(name);
-          } catch {
-            // Silently ignore removal errors
-          }
+          } catch { void 0; }
         },
       })),
       partialize: (state) => ({

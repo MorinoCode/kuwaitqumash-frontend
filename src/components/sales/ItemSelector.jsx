@@ -20,10 +20,10 @@ const ItemSelector = ({
         <div className="sales-card sales-search">
             <div className="sales-search__wrapper">
                 <Search className="sales-search__icon" size={20}/>
-                <input 
+                <input
                     ref={itemInputRef}
                     className="sales-search__input"
-                    placeholder={t('scan_barcode_placeholder')} 
+                    placeholder={t('scan_barcode_placeholder')}
                     value={itemSearch}
                     onChange={e => setItemSearch(e.target.value)}
                     onFocus={onSearchFocus}
@@ -52,9 +52,9 @@ const ItemSelector = ({
                 {showItemDropdown && inventoryList.length > 0 && (
                     <ul className="sales-dropdown" role="listbox">
                         {inventoryList.map(item => (
-                            <li 
-                                key={item.id} 
-                                onClick={() => onAddToCart(item)} 
+                            <li
+                                key={item.id}
+                                onClick={() => onAddToCart(item)}
                                 className="sales-dropdown__item"
                                 role="option"
                             >

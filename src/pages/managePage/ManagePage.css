@@ -3,19 +3,19 @@
     --gold-hover: #b5952f;
     --gold-light: rgba(212, 175, 55, 0.1);
     --gold-border: rgba(212, 175, 55, 0.2);
-    
+
     --bg-dark: #09090b;
     --surface-dark: #18181b;
     --border-dark: #27272a;
     --text-dark: #f4f4f5;
     --text-muted-dark: #a1a1aa;
-    
+
     --bg-light: #f8fafc;
     --surface-light: #ffffff;
     --border-light: #e2e8f0;
     --text-light: #0f172a;
     --text-muted-light: #64748b;
-    
+
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --radius-md: 0.75rem;
@@ -55,7 +55,6 @@
     animation: spin 1s linear infinite;
 }
 
-/* Header */
 .manage-header {
     margin-bottom: 2rem;
 }
@@ -106,7 +105,6 @@
     font-weight: 600;
 }
 
-/* Controls */
 .manage-controls {
     margin-bottom: 1.5rem;
     display: flex;
@@ -186,7 +184,6 @@
     justify-content: center;
 }
 
-/* Branch Grid */
 .manage-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -243,7 +240,7 @@
 
 .manage-card__icon--gold {
     background-color: rgba(212, 175, 55, 0.2);
-    color: #000; 
+    color: #000;
 }
 
 .manage-page--dark .manage-card__icon--gold { color: var(--gold-primary); }
@@ -342,7 +339,6 @@
     cursor: not-allowed;
 }
 
-/* Staff Table */
 .manage-table-wrapper {
     overflow-x: auto;
     border-radius: var(--radius-lg);
@@ -413,7 +409,6 @@ html[dir="rtl"] .manage-table { text-align: right; }
     font-size: 0.85rem;
 }
 
-/* Loader */
 .manage-loader-wrapper {
     display: flex;
     flex-direction: column;
@@ -432,7 +427,6 @@ html[dir="rtl"] .manage-table { text-align: right; }
     animation: spin 1s linear infinite;
 }
 
-/* Modals */
 .manage-modal-overlay {
     position: fixed;
     top: 0;
@@ -534,7 +528,6 @@ html[dir="rtl"] .manage-table { text-align: right; }
     to { transform: rotate(360deg); }
 }
 
-/* RTL Support */
 html[dir="rtl"] .manage-search__icon {
     margin-inline-end: 0;
     margin-inline-start: 0.75rem;
@@ -560,16 +553,15 @@ html[dir="rtl"] .manage-modal__header {
     flex-direction: row-reverse;
 }
 
-/* Responsive Design */
 @media (max-width: 900px) {
     .manage-page {
         padding: 1.5rem;
     }
-    
+
     .manage-header__title {
         font-size: 1.5rem;
     }
-    
+
     .manage-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 1rem;
@@ -580,30 +572,30 @@ html[dir="rtl"] .manage-modal__header {
     .manage-page {
         padding: 1rem;
     }
-    
+
     .manage-header__title {
         font-size: 1.25rem;
     }
-    
+
     .manage-header__tabs {
         flex-wrap: wrap;
         gap: 0.5rem;
     }
-    
+
     .manage-tab {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
     }
-    
+
     .manage-controls {
         flex-direction: column;
     }
-    
+
     .manage-search {
         width: 100%;
         min-width: unset;
     }
-    
+
     .manage-btn {
         width: 100%;
         justify-content: center;
@@ -612,11 +604,11 @@ html[dir="rtl"] .manage-modal__header {
     .manage-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .manage-card {
         padding: 1rem;
     }
-    
+
     .manage-card__header h3 {
         font-size: 1rem;
     }
@@ -624,7 +616,7 @@ html[dir="rtl"] .manage-modal__header {
     .manage-table-wrapper {
         overflow-x: auto;
     }
-    
+
     .manage-table__head {
         display: none;
     }
@@ -649,7 +641,7 @@ html[dir="rtl"] .manage-modal__header {
         border: none;
         border-bottom: 1px dashed;
     }
-    
+
     .manage-table__cell:last-child {
         border-bottom: none;
     }
@@ -662,23 +654,23 @@ html[dir="rtl"] .manage-modal__header {
         text-transform: uppercase;
         margin-inline-end: 1rem;
     }
-    
+
     html[dir="rtl"] .manage-table__cell::before {
         margin-inline-end: 0;
         margin-inline-start: 1rem;
     }
-    
+
     .manage-table__actions {
         width: 100%;
         justify-content: flex-end;
         margin-top: 0.5rem;
     }
-    
+
     .manage-modal {
         padding: 1.5rem;
         max-width: 95%;
     }
-    
+
     .manage-modal__header h3 {
         font-size: 1.25rem;
     }
@@ -688,28 +680,28 @@ html[dir="rtl"] .manage-modal__header {
     .manage-page {
         padding: 0.75rem;
     }
-    
+
     .manage-header__title {
         font-size: 1.1rem;
     }
-    
+
     .manage-card {
         padding: 0.75rem;
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .manage-card__actions {
         flex-direction: row;
         width: 100%;
         justify-content: flex-end;
         margin-top: 0.5rem;
     }
-    
+
     .manage-modal {
         padding: 1rem;
     }
-    
+
     .manage-input {
         padding: 0.75rem;
         font-size: 0.875rem;

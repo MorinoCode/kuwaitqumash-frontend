@@ -1,6 +1,3 @@
-/**
- * Custom hook for staff queries using React Query
- */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../api/axios';
 import { queryKeys } from '../config/queryClient';
@@ -14,7 +11,7 @@ export const useStaff = () => {
       const res = await api.get('/manage/staff');
       return res.data.data || [];
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 };
@@ -34,7 +31,7 @@ export const useStaffMember = (id) => {
 export const useCreateStaff = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  
+
   return useMutation({
     mutationFn: async (data) => {
       const res = await api.post('/manage/staff', data);
@@ -54,7 +51,7 @@ export const useCreateStaff = () => {
 export const useUpdateStaff = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  
+
   return useMutation({
     mutationFn: async ({ id, data }) => {
       const res = await api.put(`/manage/staff/${id}`, data);
@@ -75,7 +72,7 @@ export const useUpdateStaff = () => {
 export const useDeleteStaff = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  
+
   return useMutation({
     mutationFn: async (id) => {
       const res = await api.delete(`/manage/staff/${id}`);

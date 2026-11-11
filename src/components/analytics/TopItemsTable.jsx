@@ -27,9 +27,7 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
       if (response.data.success) {
         setItems(response.data.data);
       }
-    } catch {
-      // Silently ignore fetch errors - loading state is cleared in finally
-    } finally {
+    } catch { void 0; } finally {
       setLoading(false);
     }
   }, [dateRange, selectedBranches, metricType, limit]);

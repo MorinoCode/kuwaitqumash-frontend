@@ -25,22 +25,21 @@ const InvoicePreviewModal = ({
             <div className="sales-modal">
                 <div className="sales-modal__header">
                     <h2>{t('invoice_created')}</h2>
-                    <button 
-                        className="sales-modal__close" 
+                    <button
+                        className="sales-modal__close"
                         onClick={onClose}
                         aria-label={t('close') || 'Close modal'}
                     >
                         <X size={24}/>
                     </button>
                 </div>
-                
+
                 <div className="sales-modal__body">
                     <div className="sales-modal__success">
                         <CheckCircle size={48} color="#10b981" style={{margin:'0 auto'}}/>
                         <p>{t('transaction_saved_msg', { number: lastInvoice.invoice_number })}</p>
                     </div>
 
-                    {/* Customer Phone Display/Edit Section */}
                     {waConnected && lastInvoice?.customer && (
                         <div className="sales-modal__customer-info">
                             <div className="sales-modal__customer-phone-section">
@@ -95,9 +94,9 @@ const InvoicePreviewModal = ({
                     {waStep === 'input' && (
                         <div className="sales-modal__wa-flow">
                             <div className="sales-modal__wa-btns">
-                                <button 
-                                    type="button" 
-                                    className="sales-btn sales-btn--secondary" 
+                                <button
+                                    type="button"
+                                    className="sales-btn sales-btn--secondary"
                                     onClick={onCancelEditPhone}
                                     disabled={waSending}
                                     aria-label={t('cancel') || 'Cancel'}
@@ -128,8 +127,8 @@ const InvoicePreviewModal = ({
                     )}
 
                     <div className="sales-modal__actions">
-                        <button 
-                            className="sales-btn sales-btn--secondary" 
+                        <button
+                            className="sales-btn sales-btn--secondary"
                             onClick={onClose}
                             aria-label={t('close') || 'Close'}
                         >

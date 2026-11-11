@@ -1,8 +1,3 @@
-/**
- * Sale Draft Store (Zustand + persist)
- * Keeps New Sale state (customer, cart, payments) across route changes and refresh.
- * Draft is stored per branch so each branch has its own draft.
- */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -13,7 +8,7 @@ const getDefaultPayments = () => [
 const useSaleDraftStore = create(
   persist(
     (set, get) => ({
-      // { [branchId]: { selectedCustomer, cart, payments } }
+
       draftByBranch: {},
 
       getDraft: (branchId) => {
@@ -126,7 +121,6 @@ const useSaleDraftStore = create(
         });
       },
 
-      /** Clear all drafts (e.g. on logout so next account does not see previous cart). */
       clearAllDrafts: () => {
         set({ draftByBranch: {} });
       },

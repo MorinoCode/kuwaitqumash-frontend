@@ -191,55 +191,46 @@
   transition: all 0.3s ease;
 }
 
-/* Primary - Yellow/Gold (New Sale) */
 .dashboard-card--primary .dashboard-card__icon-box {
   background-color: var(--gold-light);
   color: var(--gold-primary);
 }
 
-/* Secondary - Green (Customers) */
 .dashboard-card--secondary .dashboard-card__icon-box {
   background-color: rgba(16, 185, 129, 0.1);
   color: #10b981;
 }
 
-/* Success - Bright Green (Gold Calculator, Add Item) */
 .dashboard-card--success .dashboard-card__icon-box {
   background-color: rgba(34, 197, 94, 0.1);
   color: #22c55e;
 }
 
-/* Accent - Blue (Live Prices, Dashboard) */
 .dashboard-card--accent .dashboard-card__icon-box {
   background-color: rgba(59, 130, 246, 0.1);
   color: #3b82f6;
 }
 
-/* Orange - Orange (Inventory) */
 .dashboard-card--orange .dashboard-card__icon-box {
   background-color: rgba(249, 115, 22, 0.1);
   color: #f97316;
 }
 
-/* Gold - Gold/Yellow (Old Gold) */
 .dashboard-card--gold .dashboard-card__icon-box {
   background-color: rgba(234, 179, 8, 0.1);
   color: #eab308;
 }
 
-/* Info - Cyan/Blue (Invoices) */
 .dashboard-card--info .dashboard-card__icon-box {
   background-color: rgba(6, 182, 212, 0.1);
   color: #06b6d4;
 }
 
-/* Purple - Purple (Manage Store) */
 .dashboard-card--purple .dashboard-card__icon-box {
   background-color: rgba(168, 85, 247, 0.1);
   color: #a855f7;
 }
 
-/* Default - Gray (fallback) */
 .dashboard-card--default .dashboard-card__icon-box {
   background-color: rgba(128, 128, 128, 0.1);
   color: inherit;

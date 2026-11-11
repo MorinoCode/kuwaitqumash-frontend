@@ -1,14 +1,6 @@
 import React from 'react';
 import ErrorFallback from './ErrorFallback';
 
-/**
- * React Error Boundary. Catches JS errors in child tree and shows fallback UI.
- * @param {React.ReactNode} children
- * @param {React.ComponentType|React.ReactNode} [fallback] - Custom fallback component or element. Receives { error, resetErrorBoundary }.
- * @param {Function} [onError] - (error, errorInfo) => void. Log to service.
- * @param {Function} [onReset] - Called when user retries.
- * @param {Array} [resetKeys] - When any key changes, boundary resets (e.g. [pathname] for route-level).
- */
 class ErrorBoundary extends React.Component {
   state = { hasError: false, error: null, errorInfo: null };
 

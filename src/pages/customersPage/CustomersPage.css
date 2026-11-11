@@ -5,13 +5,13 @@
   --success: #10b981;
   --danger: #ef4444;
   --danger-bg: rgba(239, 68, 68, 0.1);
-  
+
   --bg-dark: #09090b;
   --surface-dark: #18181b;
   --border-dark: #27272a;
   --text-dark: #f4f4f5;
   --text-muted-dark: #a1a1aa;
-  
+
   --bg-light: #f8fafc;
   --surface-light: #ffffff;
   --border-light: #e2e8f0;
@@ -497,18 +497,17 @@ html[dir="rtl"] .customers-table {
   to { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
 @media (max-width: 900px) {
   .customers-page__header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .customers-page__actions {
     width: 100%;
   }
-  
+
   .customers-page__btn {
     width: 100%;
     justify-content: center;

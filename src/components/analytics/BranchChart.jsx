@@ -25,10 +25,9 @@ const BranchChart = ({
     return <div className="no-data">No Data Available</div>;
 
   const chartData = data.map((d) => {
-    // Remove "KuwaitQumash" prefix from branch names
+
     let cleanName = d.name.replace(/^KuwaitQumash\s*/i, "");
 
-    // Determine which value to display
     const dataKey = viewType === "quantity" ? "quantity" : metricType;
 
     const item = {
@@ -45,7 +44,6 @@ const BranchChart = ({
     return item;
   });
 
-  // Get chart title
   const getChartTitle = () => {
     if (viewType === "quantity") {
       return t("quantity_items") + " - " + t("branch_performance");
@@ -57,7 +55,6 @@ const BranchChart = ({
     );
   };
 
-  // Get Y-axis label
   const getYAxisLabel = () => {
     return viewType === "quantity" ? t("items_sold") : "KWD";
   };

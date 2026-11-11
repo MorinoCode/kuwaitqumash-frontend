@@ -7,7 +7,7 @@ import "./i18n";
 import App from "./App.jsx";
 import ErrorBoundary from "./components/errorBoundary/ErrorBoundary";
 import { queryClient } from "./config/queryClient";
-// Import logger to disable console.log in production
+
 import "./utils/logger";
 
 if (typeof window !== "undefined") {
@@ -16,7 +16,7 @@ if (typeof window !== "undefined") {
   });
 
   window.addEventListener("error", () => {
-    // Silently ignore global errors
+
   });
 }
 

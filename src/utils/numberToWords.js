@@ -16,7 +16,7 @@ export const numberToWords = (amount) => {
     if (amount === 0) return "Zero Dinar";
 
     const integerPart = Math.floor(amount);
-    const decimalPart = Math.round((amount - integerPart) * 1000); // 3 decimal places for KD
+    const decimalPart = Math.round((amount - integerPart) * 1000);
 
     let result = "";
 

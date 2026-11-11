@@ -22,7 +22,6 @@
   --radius-lg: 1rem;
 }
 
-/* Base Block */
 .customer-details {
   padding: 2rem;
   min-height: 100vh;
@@ -34,7 +33,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* Theme Modifiers */
 .customer-details--dark {
   background-color: var(--bg-dark);
   color: var(--text-dark);
@@ -45,7 +43,6 @@
   color: var(--text-light);
 }
 
-/* Loading State */
 .customer-details--loading {
   display: flex;
   flex-direction: column;
@@ -64,7 +61,6 @@
   animation: spin 1s linear infinite;
 }
 
-/* Header */
 .customer-details__header {
   margin-bottom: 2rem;
   display: flex;
@@ -178,7 +174,6 @@ html[dir="rtl"] .customer-details__back-btn svg {
   border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
-/* Grid Layout */
 .customer-details__grid {
   display: grid;
   grid-template-columns: 350px 1fr;
@@ -186,7 +181,6 @@ html[dir="rtl"] .customer-details__back-btn svg {
   align-items: start;
 }
 
-/* Common Card Style */
 .customer-card {
   border-radius: var(--radius-lg);
   padding: 1.5rem;
@@ -228,14 +222,12 @@ html[dir="rtl"] .customer-details__back-btn svg {
   color: inherit;
 }
 
-/* Sidebar Columns */
 .customer-details__sidebar {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* Profile Card */
 .customer-profile {
   text-align: center;
 }
@@ -335,7 +327,6 @@ html[dir="rtl"] .customer-profile__address {
   margin-top: 0.1rem;
 }
 
-/* ID Cards Section */
 .customer-ids__grid {
   display: flex;
   flex-direction: column;
@@ -352,7 +343,7 @@ html[dir="rtl"] .customer-profile__address {
 
 .customer-ids__image-container {
   width: 100%;
-  aspect-ratio: 1.586; /* Credit card ratio */
+  aspect-ratio: 1.586;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid;
@@ -398,14 +389,12 @@ html[dir="rtl"] .customer-profile__address {
   background: #f8fafc;
 }
 
-/* Main Content Column */
 .customer-details__content {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-/* Insights Stats */
 .customer-insights__stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -487,7 +476,6 @@ html[dir="rtl"] .customer-profile__address {
   color: var(--gold-primary);
 }
 
-/* AI Analysis Details */
 .customer-insights__analysis-details {
   display: flex;
   flex-direction: column;
@@ -545,7 +533,6 @@ html[dir="rtl"] .customer-profile__address {
   color: var(--gold-primary);
 }
 
-/* History Table */
 .customer-history__wrapper {
   overflow-x: auto;
 }
@@ -655,7 +642,6 @@ html[dir="rtl"] .customer-history__table {
   }
 }
 
-/* Responsive Design */
 @media (max-width: 900px) {
   .customer-details__grid {
     grid-template-columns: 1fr;
@@ -786,7 +772,6 @@ html[dir="rtl"] .customer-history__table {
   }
 }
 
-/* Modal Styles (shared with CustomersPage) */
 .customers-modal-overlay {
   position: fixed;
   top: 0;

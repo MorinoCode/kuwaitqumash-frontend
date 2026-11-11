@@ -1,11 +1,3 @@
-/**
- * Normalize Arabic-Indic (٠١٢٣٤٥٦٧٨٩) and Persian/Extended (۰۱۲۳۴۵۶۷۸۹)
- * digits to Latin (0-9) so parseInt/parseFloat and [0-9] regex work correctly.
- * Use before saving or before any numeric calculation/validation.
- *
- * @param {string} str - User input that may contain Arabic/Persian digits
- * @returns {string} - Same string with digits converted to Latin 0-9
- */
 export function normalizeToLatinDigits(str) {
   if (str == null || typeof str !== "string")
     return str === null || str === undefined ? "" : String(str);

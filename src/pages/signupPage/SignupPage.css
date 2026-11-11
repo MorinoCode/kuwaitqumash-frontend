@@ -294,7 +294,6 @@
   margin-top: 20px;
 }
 
-/* Controls Container (Theme + Language) */
 .signup-page__controls {
   position: absolute;
   top: 20px;
@@ -310,7 +309,6 @@
   left: 20px;
 }
 
-/* Theme Toggle Button */
 .signup-page__theme-btn {
   padding: 8px;
   border: 1.5px solid;
@@ -347,7 +345,6 @@
   background: rgba(212, 175, 55, 0.1);
 }
 
-/* Language Selector */
 .signup-page__language-selector {
   display: flex;
   gap: 8px;
@@ -399,7 +396,6 @@
   border-color: #d4af37;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .signup-card {
     max-width: 100%;
@@ -550,4 +546,3 @@
     height: 30px;
   }
 }
-

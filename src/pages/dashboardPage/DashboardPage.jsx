@@ -11,7 +11,7 @@ const DashboardPage = () => {
     const { t, i18n } = useTranslation();
     const { theme } = useTheme();
     const { user, loading } = useAuth();
-    
+
     const userRole = user?.role;
 
     if (loading || !user) {
@@ -23,7 +23,6 @@ const DashboardPage = () => {
         );
     }
 
-    // Container for the specific dashboard
     return (
         <div className={`dashboard-page dashboard-page--${theme}`} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
             {(() => {

@@ -137,7 +137,6 @@
   user-select: none;
 }
 
-/* RTL Support */
 html[dir="rtl"] .pagination {
   flex-direction: row-reverse;
 }
@@ -150,7 +149,6 @@ html[dir="rtl"] .pagination__pages {
   flex-direction: row-reverse;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .pagination {
     flex-direction: column;

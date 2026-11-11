@@ -1,12 +1,9 @@
-/* InvoiceReceipt.css */
-
-/* تنظیمات پرینت */
 @media print {
     body * {
-        visibility: hidden; /* مخفی کردن کل صفحه */
+        visibility: hidden;
     }
     .receipt-box, .receipt-box * {
-        visibility: visible; /* فقط فاکتور دیده شود */
+        visibility: visible;
     }
     .receipt-box {
         position: absolute;
@@ -19,14 +16,14 @@
 }
 
 .receipt-box {
-    width: 80mm; /* عرض استاندارد فاکتور حرارتی */
+    width: 80mm;
     padding: 5mm;
     background: #fff;
     color: #000;
-    font-family: 'Courier New', Courier, monospace; /* فونت فیش پرینتر */
+    font-family: 'Courier New', Courier, monospace;
     font-size: 12px;
     line-height: 1.4;
-    margin: 0 auto; /* مرکز چین برای تست */
+    margin: 0 auto;
 }
 
 .receipt-header {
@@ -98,7 +95,7 @@
 
 .receipt-barcode {
     text-align: center;
-    font-family: 'Libre Barcode 39', cursive; /* اگر فونت بارکد دارید */
+    font-family: 'Libre Barcode 39', cursive;
     font-size: 24px;
     margin-top: 10px;
     letter-spacing: 2px;
@@ -119,7 +116,7 @@
         z-index: 9999;
     }
     .invoice-box {
-        border: none !important; /* حذف کادر در پرینت واقعی */
+        border: none !important;
         box-shadow: none !important;
         margin: 0;
         width: 100%;
@@ -166,7 +163,6 @@
 .id-card-section { margin-top: 40px; display: flex; justify-content: center; gap: 20px; }
 .customer-id-img { width: 45%; max-height: 200px; object-fit: contain; border: 1px dashed #999; padding: 5px; }
 
-/* KYC Section Styles */
 .kyc-container {
     margin-top: 40px;
     font-family: 'Arial', sans-serif;

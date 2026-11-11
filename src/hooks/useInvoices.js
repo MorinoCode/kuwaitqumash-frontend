@@ -1,6 +1,3 @@
-/**
- * Custom hook for invoice queries using React Query
- */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 import { queryKeys } from "../config/queryClient";
@@ -14,7 +11,7 @@ export const useInvoices = (filters = {}) => {
   if (filters.search) queryParams.append("search", filters.search);
   if (filters.start_date) queryParams.append("start_date", filters.start_date);
   if (filters.end_date) queryParams.append("end_date", filters.end_date);
-  if (filters.date) queryParams.append("date", filters.date); // Backward compatibility
+  if (filters.date) queryParams.append("date", filters.date);
   if (filters.page) queryParams.append("page", filters.page || 1);
   if (filters.limit) queryParams.append("limit", filters.limit || 20);
 
@@ -27,9 +24,9 @@ export const useInvoices = (filters = {}) => {
       const res = await api.get(url);
       return res.data;
     },
-    staleTime: 3 * 60 * 1000, // 3 minutes (increased from 1 minute)
-    gcTime: 10 * 60 * 1000, // 10 minutes cache (increased from 5 minutes)
-    refetchOnMount: false, // Don't refetch if data is fresh (prevents race conditions)
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnMount: false,
   });
 };
 
@@ -55,7 +52,7 @@ export const useCreateSale = () => {
       return res.data;
     },
     onSuccess: (data) => {
-      // Optimistically update invoices list with new invoice
+
       const newInvoice = data.data;
 
       if (newInvoice) {
@@ -64,7 +61,6 @@ export const useCreateSale = () => {
           (old) => {
             if (!old || !old.data) return old;
 
-            // Check if invoice already exists
             const exists = old.data.some(
               (invoice) => invoice.id === newInvoice.id,
             );
@@ -84,10 +80,9 @@ export const useCreateSale = () => {
         );
       }
 
-      // Invalidate related queries (but don't force immediate refetch)
       queryClient.invalidateQueries({
         queryKey: queryKeys.invoices(),
-        refetchType: "none", // Don't refetch immediately, use cached data
+        refetchType: "none",
       });
       queryClient.invalidateQueries({
         queryKey: queryKeys.inventory(),

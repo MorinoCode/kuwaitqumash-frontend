@@ -8,7 +8,6 @@
 .invoices-page--dark { background: #0a0a0a; color: #fff; }
 .invoices-page--light { background: #f8f9fa; color: #333; }
 
-/* Header */
 .invoices-header {
     display: flex;
     justify-content: space-between;
@@ -86,7 +85,6 @@ html[dir="rtl"] .invoices-filter__select {
     padding-left: 35px;
 }
 
-/* Tabs */
 .invoices-tabs {
     display: flex;
     gap: 8px;
@@ -136,7 +134,6 @@ html[dir="rtl"] .invoices-filter__select {
 .invoices-stat-box span { font-size: 0.75rem; opacity: 0.8; margin-bottom: 4px; }
 .invoices-stat-box strong { font-size: 1.1rem; }
 
-/* Controls */
 .invoices-controls {
     display: flex; gap: 15px; margin-bottom: 24px; flex-wrap: wrap;
 }
@@ -171,7 +168,6 @@ html[dir="rtl"] .invoices-filter__select {
 }
 .invoices-filter__clear:hover { opacity: 1; color: #ff4d4d; }
 
-/* Excel report section */
 .invoices-excel-section {
     margin-bottom: 24px;
     padding: 20px;
@@ -234,7 +230,6 @@ html[dir="rtl"] .invoices-filter__select {
 }
 .invoices-btn--excel:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* Table */
 .invoices-table-container {
     background: rgba(128,128,128,0.03);
     border-radius: 16px;
@@ -245,7 +240,6 @@ html[dir="rtl"] .invoices-filter__select {
 .invoices-table-wrapper { width: 100%; overflow-x: auto; }
 .invoices-table { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
 
-/* RTL Table */
 html[dir="rtl"] .invoices-table { text-align: right; }
 
 .invoices-table__head th {
@@ -296,11 +290,11 @@ html[dir="rtl"] .invoices-table { text-align: right; }
     background: #ef4444;
     color: #fff;
 }
-.invoices-btn--wa { 
+.invoices-btn--wa {
     background: rgba(37, 211, 102, 0.15);
     color: #25d366;
 }
-.invoices-btn--wa:hover:not(:disabled) { 
+.invoices-btn--wa:hover:not(:disabled) {
     background: #25d366;
     color: #fff;
 }

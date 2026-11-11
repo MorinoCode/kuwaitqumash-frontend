@@ -1,14 +1,3 @@
-/**
- * LocalStorage utility with error handling and type safety
- * Provides safe access to localStorage with fallbacks
- */
-
-/**
- * Get item from localStorage
- * @param {string} key - Storage key
- * @param {any} defaultValue - Default value if key doesn't exist
- * @returns {any} - Stored value or default
- */
 export const getStorageItem = (key, defaultValue = null) => {
   try {
     const item = localStorage.getItem(key);
@@ -24,12 +13,6 @@ export const getStorageItem = (key, defaultValue = null) => {
   }
 };
 
-/**
- * Set item in localStorage
- * @param {string} key - Storage key
- * @param {any} value - Value to store (will be JSON stringified)
- * @returns {boolean} - Success status
- */
 export const setStorageItem = (key, value) => {
   try {
     const serialized =
@@ -41,11 +24,6 @@ export const setStorageItem = (key, value) => {
   }
 };
 
-/**
- * Remove item from localStorage
- * @param {string} key - Storage key
- * @returns {boolean} - Success status
- */
 export const removeStorageItem = (key) => {
   try {
     localStorage.removeItem(key);
@@ -55,10 +33,6 @@ export const removeStorageItem = (key) => {
   }
 };
 
-/**
- * Clear all localStorage items (use with caution)
- * @returns {boolean} - Success status
- */
 export const clearStorage = () => {
   try {
     localStorage.clear();
@@ -68,9 +42,6 @@ export const clearStorage = () => {
   }
 };
 
-/**
- * Clear auth-related items
- */
 export const clearAuthStorage = () => {
   const authKeys = [
     "user_data",
@@ -85,11 +56,6 @@ export const clearAuthStorage = () => {
   authKeys.forEach((key) => removeStorageItem(key));
 };
 
-/**
- * Get multiple items at once
- * @param {string[]} keys - Array of keys
- * @returns {object} - Object with key-value pairs
- */
 export const getMultipleStorageItems = (keys) => {
   const result = {};
   keys.forEach((key) => {
@@ -98,11 +64,6 @@ export const getMultipleStorageItems = (keys) => {
   return result;
 };
 
-/**
- * Set multiple items at once
- * @param {object} items - Object with key-value pairs
- * @returns {boolean} - Success status (true if all succeeded)
- */
 export const setMultipleStorageItems = (items) => {
   let allSuccess = true;
   Object.entries(items).forEach(([key, value]) => {

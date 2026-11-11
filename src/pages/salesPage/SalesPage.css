@@ -24,7 +24,6 @@
   }
 }
 
-/* Header */
 .sales-header {
   display: flex;
   justify-content: space-between;
@@ -162,7 +161,6 @@
   flex-shrink: 0;
 }
 
-/* Responsive for Karat Prices */
 @media (max-width: 1200px) {
   .sales-header__karat-prices {
     gap: 6px;
@@ -255,7 +253,6 @@
   font-size: 0.9rem;
 }
 
-/* Layout Grid */
 .sales-grid {
   display: grid;
   grid-template-columns: 7fr 3fr;
@@ -269,7 +266,6 @@
   gap: 24px;
 }
 
-/* Cards */
 .sales-card {
   background: rgba(128, 128, 128, 0.03);
   border-radius: 16px;
@@ -296,12 +292,11 @@
   margin: 0;
 }
 
-/* Search */
 .sales-search__wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 8px; /* Added gap for the button */
+  gap: 8px;
 }
 
 .sales-search__icon {
@@ -405,7 +400,6 @@ html[dir="rtl"] .sales-search__scan-btn {
   background: #c5a028;
 }
 
-/* RTL Search Icon */
 html[dir="rtl"] .sales-search__icon {
   left: auto;
   right: 14px;
@@ -414,7 +408,6 @@ html[dir="rtl"] .sales-search__input {
   padding: 14px 45px 14px 14px;
 }
 
-/* Dropdown */
 .sales-dropdown {
   position: absolute;
   top: 105%;
@@ -453,7 +446,6 @@ html[dir="rtl"] .sales-search__input {
   opacity: 0.6;
 }
 
-/* Cart Table */
 .sales-cart__table-wrapper {
   overflow-x: auto;
 }
@@ -521,7 +513,6 @@ html[dir="rtl"] .sales-search__input {
   margin-top: 4px;
 }
 
-/* Customer Details */
 .sales-customer__details {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -575,7 +566,7 @@ html[dir="rtl"] .sales-search__input {
 .sales-upload-btn:hover {
   background: rgba(212, 175, 55, 0.1);
 }
-/* Green style when ID card is already uploaded */
+
 .sales-upload-btn--done {
   background: rgba(0, 200, 83, 0.15) !important;
   color: #00c853 !important;
@@ -586,7 +577,6 @@ html[dir="rtl"] .sales-search__input {
   background: rgba(0, 200, 83, 0.25) !important;
 }
 
-/* Payment Panel */
 .sales-payment__total {
   background: rgba(128, 128, 128, 0.05);
   padding: 20px;
@@ -699,7 +689,7 @@ html[dir="rtl"] .sales-payment__select {
   font-size: 0.8rem;
   opacity: 0.5;
 }
-/* RTL Suffix */
+
 html[dir="rtl"] .sales-payment__suffix {
   right: auto;
   left: 10px;
@@ -734,7 +724,6 @@ html[dir="rtl"] .sales-payment__input {
   color: #ff3d00;
 }
 
-/* Buttons */
 .sales-btn {
   width: 100%;
   border: none;
@@ -788,7 +777,6 @@ html[dir="rtl"] .sales-payment__input {
   color: #ff3d00;
 }
 
-/* Modal */
 .sales-modal-overlay {
   position: fixed;
   top: 0;
@@ -869,7 +857,6 @@ html[dir="rtl"] .sales-payment__input {
   background: rgba(37, 211, 102, 0.2);
 }
 
-/* Customer Info Section */
 .sales-modal__customer-info {
   margin-top: 20px;
   padding-top: 20px;
@@ -1004,7 +991,6 @@ html[dir="rtl"] .sales-payment__input {
   }
 }
 
-/* Customer Form inside Sales Modal (Borrowed Styles) */
 .customer-scan-section {
   margin-bottom: 20px;
 }
@@ -1071,7 +1057,6 @@ html[dir="rtl"] .sales-payment__input {
   min-height: 80px;
 }
 
-/* Responsive Design - Tablet */
 @media (max-width: 1024px) {
   .sales-grid {
     grid-template-columns: 1fr;
@@ -1083,7 +1068,6 @@ html[dir="rtl"] .sales-payment__input {
   }
 }
 
-/* Responsive Design - Mobile Large (Tablet Portrait) */
 @media (max-width: 900px) {
   .sales-page {
     padding: 16px;
@@ -1125,7 +1109,6 @@ html[dir="rtl"] .sales-payment__input {
   }
 }
 
-/* Responsive Design - Mobile (768px) */
 @media (max-width: 768px) {
   .sales-page {
     padding: 12px;
@@ -1154,16 +1137,14 @@ html[dir="rtl"] .sales-payment__input {
     font-size: 1rem;
   }
 
-  /* Cart Table - Convert to Cards on Mobile */
   .sales-cart__table-wrapper {
     overflow-x: visible;
   }
 
   .sales-cart__table {
-    display: none; /* Hide table on mobile */
+    display: none;
   }
 
-  /* Mobile Cart Card Layout */
   .sales-cart__mobile-list {
     display: flex;
     flex-direction: column;
@@ -1314,16 +1295,15 @@ html[dir="rtl"] .sales-payment__input {
 
   .customer-form__input {
     padding: 14px;
-    font-size: 1rem; /* Prevent zoom on iOS */
+    font-size: 1rem;
   }
 
   .sales-search__input {
     padding: 12px 12px 12px 45px;
-    font-size: 1rem; /* Prevent zoom on iOS */
+    font-size: 1rem;
   }
 }
 
-/* Responsive Design - Small Mobile (480px) */
 @media (max-width: 480px) {
   .sales-page {
     padding: 8px;
@@ -1404,7 +1384,6 @@ html[dir="rtl"] .sales-payment__input {
     border-radius: 10px;
   }
 
-  /* Mobile Cart Items */
   .sales-cart__mobile-item {
     padding: 10px;
   }
@@ -1521,7 +1500,6 @@ html[dir="rtl"] .sales-payment__input {
   }
 }
 
-/* Desktop: Show table, hide mobile cards */
 @media (min-width: 769px) {
   .sales-cart__mobile-list {
     display: none;
@@ -1532,7 +1510,6 @@ html[dir="rtl"] .sales-payment__input {
   }
 }
 
-/* Mobile: Hide table, show mobile cards */
 @media (max-width: 768px) {
   .sales-cart__table-wrapper {
     display: none;

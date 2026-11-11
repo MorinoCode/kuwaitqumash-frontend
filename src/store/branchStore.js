@@ -1,7 +1,3 @@
-/**
- * Branch Store using Zustand
- * Manages active branch state with localStorage persistence and cross-tab sync
- */
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { getStorageItem, setStorageItem } from "../utils/storage";
@@ -19,7 +15,6 @@ const useBranchStore = create(
           activeBranchName: branch?.name || null,
         });
 
-        // Dispatch event for same-tab listeners
         window.dispatchEvent(
           new CustomEvent("branchChanged", {
             detail: { branchId: branch?.id, branchName: branch?.name },
@@ -38,7 +33,6 @@ const useBranchStore = create(
         });
       },
 
-      // Completely reset storage (for logout)
       resetStorage: () => {
         try {
           localStorage.removeItem("branch-storage");
@@ -47,19 +41,16 @@ const useBranchStore = create(
             activeBranchName: null,
             branches: [],
           });
-        } catch {
-          // Silently ignore clear errors
-        }
+        } catch { void 0; }
       },
 
-      // Sync with server - validate branch exists
       validateBranch: async (branchId, api) => {
         if (!branchId) return false;
 
         try {
           const branches = get().branches;
           if (branches.length === 0) {
-            // Fetch branches if not loaded
+
             const res = await api.get("/manage/branches");
             const fetchedBranches = res.data.data || [];
             get().setBranches(fetchedBranches);
@@ -79,7 +70,7 @@ const useBranchStore = create(
           }
           return true;
         } catch {
-          // Silently ignore validation errors
+
           return false;
         }
       },
@@ -95,16 +86,12 @@ const useBranchStore = create(
           try {
             const parsed = JSON.parse(value);
             setStorageItem(name, parsed);
-          } catch {
-            // Silently ignore parse errors
-          }
+          } catch { void 0; }
         },
         removeItem: (name) => {
           try {
             localStorage.removeItem(name);
-          } catch {
-            // Silently ignore removal errors
-          }
+          } catch { void 0; }
         },
       })),
       partialize: (state) => ({
@@ -115,7 +102,6 @@ const useBranchStore = create(
   ),
 );
 
-// Listen for storage changes (cross-tab sync)
 if (typeof window !== "undefined") {
   window.addEventListener("storage", (e) => {
     if (e.key === "branch-storage" && e.newValue) {
@@ -125,9 +111,7 @@ if (typeof window !== "undefined") {
           activeBranchId: newState.state?.activeBranchId || null,
           activeBranchName: newState.state?.activeBranchName || null,
         });
-      } catch {
-        // Silently ignore storage parse errors
-      }
+      } catch { void 0; }
     }
   });
 }

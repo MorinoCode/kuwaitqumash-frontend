@@ -33,7 +33,7 @@ const LoginPage = () => {
     !isSubmitting;
 
   useEffect(() => {
-    // Set direction and font on mount and language change
+
     const currentLang = i18n.language || "en";
     document.dir = currentLang === "ar" ? "rtl" : "ltr";
     document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
@@ -80,7 +80,7 @@ const LoginPage = () => {
 
       login(data);
     } catch (err) {
-      // Security: Don't log full error object which might contain sensitive data
+
       const serverError =
         err.response?.data?.message ||
         t("invalid_credentials") ||
@@ -119,9 +119,9 @@ const LoginPage = () => {
           className="login-page__top-logo"
         />
       </div>
-      {/* Language & Theme Selectors */}
+
       <div className={`login-page__controls login-page__controls--${theme}`}>
-        {/* Theme Toggle */}
+
         <button
           type="button"
           className={`login-page__theme-btn login-page__theme-btn--${theme}`}
@@ -134,7 +134,6 @@ const LoginPage = () => {
           {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        {/* Language Selector */}
         <div
           className={`login-page__language-selector login-page__language-selector--${theme}`}
         >

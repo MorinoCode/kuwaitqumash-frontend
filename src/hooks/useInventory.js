@@ -1,7 +1,3 @@
-/**
- * Custom hook for inventory queries using React Query
- * Provides caching, automatic refetching, and error handling
- */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 import { queryKeys } from "../config/queryClient";
@@ -38,9 +34,9 @@ export const useInventory = (filters = {}) => {
       const res = await api.get(url);
       return res.data;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes for inventory (increased from 2 minutes)
-    gcTime: 10 * 60 * 1000, // 10 minutes cache (increased from 5 minutes)
-    refetchOnMount: false, // Don't refetch if data is fresh (prevents race conditions)
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnMount: false,
   });
 };
 
@@ -51,7 +47,7 @@ export const useInventoryItem = (id) => {
       const res = await api.get(`/inventory/${id}`);
       return res.data.data;
     },
-    enabled: !!id, // Only fetch if id exists
+    enabled: !!id,
     staleTime: 5 * 60 * 1000,
   });
 };
@@ -66,7 +62,7 @@ export const useInventoryByBarcode = (barcode) => {
       return res.data.data || [];
     },
     enabled: !!barcode && barcode.length > 0,
-    staleTime: 1 * 60 * 1000, // 1 minute for barcode searches
+    staleTime: 1 * 60 * 1000,
   });
 };
 
@@ -97,37 +93,31 @@ export const useCreateInventoryItem = () => {
       return res.data;
     },
     onMutate: async (newItem) => {
-      // Optimistic update: Cancel any outgoing refetches
+
       await queryClient.cancelQueries({ queryKey: queryKeys.inventory() });
 
-      // Snapshot the previous value for rollback
       const previousQueries = queryClient.getQueriesData({
         queryKey: queryKeys.inventory(),
       });
 
-      // Create optimistic item (will be replaced with real data from server)
       const tempId = `temp_${Date.now()}`;
       const optimisticItem = {
         ...newItem,
-        id: tempId, // Temporary ID for tracking
+        id: tempId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         status: "In Stock",
-        // Add other required fields with defaults
+
         images: newItem.images || [],
         quantity: newItem.quantity || 1,
         length_m: parseFloat(newItem.length_m) || 0,
         cost_per_meter: parseFloat(newItem.cost_per_meter) || 0,
       };
 
-      // Optimistically update inventory queries that match the item's branch
-      // Only update queries that would include this item (same branch filter)
       previousQueries.forEach(([queryKey, oldData]) => {
         if (oldData && oldData.data) {
           const [, filters] = queryKey;
 
-          // Check if this query should include the new item
-          // Match by branch_id if filters specify it
           const shouldInclude =
             !filters?.branch_id ||
             !filters?.branch_ids ||
@@ -139,7 +129,6 @@ export const useCreateInventoryItem = () => {
             queryClient.setQueryData(queryKey, (old) => {
               if (!old || !old.data) return old;
 
-              // Check if item already exists (by temporary ID or barcode)
               const exists = old.data.some(
                 (item) =>
                   (typeof item.id === "string" && item.id === tempId) ||
@@ -165,21 +154,19 @@ export const useCreateInventoryItem = () => {
       return { previousQueries, tempId };
     },
     onSuccess: (data, variables, context) => {
-      // Replace optimistic update with real data from server
+
       const newItem = data.data;
       const tempId = context?.tempId;
 
       queryClient.setQueriesData({ queryKey: queryKeys.inventory() }, (old) => {
         if (!old || !old.data) return old;
 
-        // Remove optimistic item (by temporary ID) and add real item
         const filtered = old.data.filter(
           (item) =>
             !(typeof item.id === "string" && item.id === tempId) &&
             item.id !== newItem.id,
         );
 
-        // Check if real item already exists
         const exists = filtered.some((item) => item.id === newItem.id);
 
         return {
@@ -195,16 +182,15 @@ export const useCreateInventoryItem = () => {
         };
       });
 
-      // Invalidate to ensure consistency (but don't force immediate refetch)
       queryClient.invalidateQueries({
         queryKey: queryKeys.inventory(),
-        refetchType: "none", // Don't refetch immediately, use cached data
+        refetchType: "none",
       });
 
       toast.success(t("item_added_successfully") || "Item added successfully");
     },
     onError: (error, variables, context) => {
-      // Rollback optimistic updates on error
+
       if (context?.previousQueries) {
         context.previousQueries.forEach(([queryKey, oldData]) => {
           queryClient.setQueryData(queryKey, oldData);
@@ -249,13 +235,12 @@ export const useUpdateInventoryItem = () => {
       return res.data;
     },
     onMutate: async ({ id, data }) => {
-      // Cancel outgoing queries
+
       await queryClient.cancelQueries({ queryKey: queryKeys.inventory() });
       await queryClient.cancelQueries({
         queryKey: queryKeys.inventoryItem(id),
       });
 
-      // Snapshot previous values
       const previousQueries = queryClient.getQueriesData({
         queryKey: queryKeys.inventory(),
       });
@@ -263,7 +248,6 @@ export const useUpdateInventoryItem = () => {
         queryKeys.inventoryItem(id),
       );
 
-      // Optimistically update inventory queries
       const qtyNum = data.quantity != null ? parseInt(data.quantity, 10) : null;
       const willBecomeInStock = typeof qtyNum === "number" && qtyNum > 0;
 
@@ -302,7 +286,6 @@ export const useUpdateInventoryItem = () => {
         }
       });
 
-      // Optimistically update single item query
       if (previousItem) {
         queryClient.setQueryData(queryKeys.inventoryItem(id), (old) => ({
           ...old,
@@ -317,7 +300,6 @@ export const useUpdateInventoryItem = () => {
       const updatedItem = data.data;
       const becameInStock = updatedItem?.status === "In Stock";
 
-      // Update each inventory cache: Sold list = remove item; In Stock list = add/update
       const allQueries = queryClient.getQueriesData({
         queryKey: queryKeys.inventory(),
       });
@@ -394,7 +376,7 @@ export const useUpdateInventoryItem = () => {
       );
     },
     onError: (error, variables, context) => {
-      // Rollback optimistic updates
+
       if (context?.previousQueries) {
         context.previousQueries.forEach(([queryKey, oldData]) => {
           queryClient.setQueryData(queryKey, oldData);
@@ -426,13 +408,12 @@ export const useDeleteInventoryItem = () => {
       return res.data;
     },
     onMutate: async (id) => {
-      // Cancel outgoing queries
+
       await queryClient.cancelQueries({ queryKey: queryKeys.inventory() });
       await queryClient.cancelQueries({
         queryKey: queryKeys.inventoryItem(id),
       });
 
-      // Snapshot previous values
       const previousQueries = queryClient.getQueriesData({
         queryKey: queryKeys.inventory(),
       });
@@ -440,7 +421,6 @@ export const useDeleteInventoryItem = () => {
         queryKeys.inventoryItem(id),
       );
 
-      // Optimistically remove item from inventory queries
       previousQueries.forEach(([queryKey, oldData]) => {
         if (oldData && oldData.data) {
           queryClient.setQueryData(queryKey, (old) => {
@@ -461,13 +441,12 @@ export const useDeleteInventoryItem = () => {
         }
       });
 
-      // Remove single item query
       queryClient.removeQueries({ queryKey: queryKeys.inventoryItem(id) });
 
       return { previousQueries, previousItem };
     },
     onSuccess: () => {
-      // Invalidate to ensure consistency (but don't force immediate refetch)
+
       queryClient.invalidateQueries({
         queryKey: queryKeys.inventory(),
         refetchType: "none",
@@ -478,7 +457,7 @@ export const useDeleteInventoryItem = () => {
       );
     },
     onError: (error, id, context) => {
-      // Rollback optimistic updates
+
       if (context?.previousQueries) {
         context.previousQueries.forEach(([queryKey, oldData]) => {
           queryClient.setQueryData(queryKey, oldData);
@@ -500,7 +479,6 @@ export const useDeleteInventoryItem = () => {
   });
 };
 
-// Custom inventory options hooks
 export const useCustomOptions = (filters = {}) => {
   const queryParams = new URLSearchParams();
   if (filters.type) queryParams.append("type", filters.type);
@@ -518,9 +496,9 @@ export const useCustomOptions = (filters = {}) => {
       const data = res.data?.data || res.data || [];
       return Array.isArray(data) ? data : [];
     },
-    staleTime: 0, // Always refetch when invalidated
-    gcTime: 5 * 60 * 1000, // 5 minutes cache
-    // Provide default value to ensure it's always an array
+    staleTime: 0,
+    gcTime: 5 * 60 * 1000,
+
     placeholderData: [],
   });
 };

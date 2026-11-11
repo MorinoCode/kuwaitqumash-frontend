@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 
 import { VitePWA } from 'vite-plugin-pwa'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -30,7 +29,7 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
-        icons: [] // Can be configured later if needed
+        icons: []
       }
     })
   ],
@@ -41,7 +40,7 @@ export default defineConfig({
     },
   },
   build: {
-    // Optimize chunk splitting
+
     rollupOptions: {
       output: {
         manualChunks: {
@@ -51,10 +50,10 @@ export default defineConfig({
         },
       },
     },
-    // Reduce bundle size
+
     chunkSizeWarningLimit: 1000,
   },
-  // Optimize dependencies
+
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query'],
   },

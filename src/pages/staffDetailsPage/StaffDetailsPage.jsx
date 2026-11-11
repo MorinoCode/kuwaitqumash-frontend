@@ -14,7 +14,6 @@ import {
   BadgeCheck,
 } from "lucide-react";
 
-//stafDetailsPage
 const StaffDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,14 +46,11 @@ const StaffDetailsPage = () => {
       if (response.data.success) {
         setAnalytics(response.data.data.analysis);
       }
-    } catch {
-      // Silently ignore fetch errors
-    } finally {
+    } catch { void 0; } finally {
       setAnalyticsLoading(false);
     }
   }, [id]);
 
-  // Fetch staff analytics
   useEffect(() => {
     if (id) {
       fetchStaffAnalytics();

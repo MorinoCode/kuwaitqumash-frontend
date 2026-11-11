@@ -193,9 +193,7 @@ const AddItemModal = ({
       }
       onSuccess?.();
       onClose();
-    } catch {
-      // mutation hooks already surface the error toast
-    } finally {
+    } catch { void 0; } finally {
       setIsSubmitting(false);
     }
   };

@@ -21,17 +21,14 @@ const Sidebar = ({ closeSidebar }) => {
 
   const [isStoreMenuOpen, setIsStoreMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  
-  // Use Zustand store for branch management
+
   const { activeBranchId, setActiveBranch, validateBranch } = useBranchStore();
   const { clearTenant } = useTenantStore();
-  
-  // Use React Query for branches
+
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
-  
+
   const activeStore = branches.find(b => b.id === activeBranchId) || null;
 
-  // Initialize user on mount
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -39,11 +36,11 @@ const Sidebar = ({ closeSidebar }) => {
         const user = userRes.data.data || userRes.data;
         setCurrentUser(user);
       } catch (err) {
-        
+
         if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
           return;
         }
-        
+
         if (err.response?.status === 400) {
           const errorMessage = err.response.data?.message || '';
           if (errorMessage.includes('tenant') || errorMessage.includes('Tenant')) {
@@ -55,7 +52,7 @@ const Sidebar = ({ closeSidebar }) => {
             return;
           }
         }
-        
+
         if (err.response && (err.response.status === 401 || err.response.status === 403)) {
           clearTenant();
           useBranchStore.getState().clearBranch();
@@ -65,24 +62,23 @@ const Sidebar = ({ closeSidebar }) => {
         }
       }
     };
-    
+
     fetchUser();
   }, [navigate, clearTenant]);
-  
-  // Initialize branch when branches load
+
   useEffect(() => {
     if (!branchesLoading && branches.length > 0 && currentUser) {
-      // Validate current active branch
+
       if (activeBranchId) {
         validateBranch(activeBranchId, api).then(isValid => {
           if (!isValid) {
-            // Set default branch if current is invalid
+
             const defaultBranch = branches.find(b => b.is_main) || branches[0];
             setActiveBranch(defaultBranch);
           }
         });
       } else {
-        // Set default branch if none selected
+
         const defaultBranch = branches.find(b => b.is_main) || branches[0];
         setActiveBranch(defaultBranch);
       }
@@ -92,22 +88,18 @@ const Sidebar = ({ closeSidebar }) => {
   const handleSwitchBranch = (branch) => {
     setActiveBranch(branch);
     setIsStoreMenuOpen(false);
-    
-    // Navigate to current page to trigger re-fetch
+
     navigate(location.pathname, { replace: true });
   };
-  
-  // Listen for branch changes (cross-tab sync via Zustand storage listener)
+
   useEffect(() => {
     const handleBranchChange = () => {
-      // Branch changed - state is already updated via Zustand
-      // Force re-render if needed
+
     };
-    
+
     window.addEventListener('branchChanged', handleBranchChange);
     return () => window.removeEventListener('branchChanged', handleBranchChange);
   }, []);
-
 
   const getInitials = (name) => {
     if (!name) return "U";
@@ -133,8 +125,8 @@ const Sidebar = ({ closeSidebar }) => {
       <div className="sidebar__header-row">
         <div className={`sidebar__logo sidebar__logo--${theme}`}>
           <Layers className="sidebar__logo-icon" size={28} />
-          <span 
-            className="sidebar__logo-text" 
+          <span
+            className="sidebar__logo-text"
             onClick={() => navigate('/home')}
             role="button"
             tabIndex={0}
@@ -149,8 +141,8 @@ const Sidebar = ({ closeSidebar }) => {
             KuwaitQumash
           </span>
         </div>
-        <button 
-          className="sidebar__close-btn" 
+        <button
+          className="sidebar__close-btn"
           onClick={closeSidebar}
           aria-label={t('close') || 'Close'}
           title={t('close') || 'Close'}
@@ -161,7 +153,7 @@ const Sidebar = ({ closeSidebar }) => {
 
       {currentUser && (
          <div className={`sidebar__user-profile sidebar__user-profile--${theme}`}>
-            <div 
+            <div
                 className="sidebar__user-avatar-circle"
                 style={{ backgroundColor: getAvatarColor(currentUser.full_name || 'User') }}
             >
@@ -208,8 +200,8 @@ const Sidebar = ({ closeSidebar }) => {
         {isStoreMenuOpen && canSwitchBranch && (
           <div className={`branch-dropdown branch-dropdown--${theme}`}>
             {branches.map(branch => (
-              <div 
-                key={branch.id} 
+              <div
+                key={branch.id}
                 className={`branch-item ${branch.id === activeStore?.id ? 'active' : ''}`}
                 onClick={() => handleSwitchBranch(branch)}
                 role="button"
@@ -234,63 +226,63 @@ const Sidebar = ({ closeSidebar }) => {
       </div>
 
       <nav className="sidebar__nav">
-        <Link 
-          to="/home" 
-          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/home")}`} 
+        <Link
+          to="/home"
+          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/home")}`}
           onClick={closeSidebar}
           aria-label={t('home') || 'Home'}
           aria-current={isActive("/home") ? 'page' : undefined}
         >
           <Home size={20} /> <span>{t('home')}</span>
         </Link>
-        <Link 
-          to="/dashboard" 
-          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/dashboard")}`} 
+        <Link
+          to="/dashboard"
+          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/dashboard")}`}
           onClick={closeSidebar}
           aria-label={t('dashboard') || 'Dashboard'}
           aria-current={isActive("/dashboard") ? 'page' : undefined}
         >
           <LayoutDashboard size={20} /> <span>{t('dashboard')}</span>
         </Link>
-        <Link 
-          to="/inventory" 
-          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/inventory")}`} 
+        <Link
+          to="/inventory"
+          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/inventory")}`}
           onClick={closeSidebar}
           aria-label={t('inventory') || 'Inventory'}
           aria-current={isActive("/inventory") ? 'page' : undefined}
         >
           <Package size={20} /> <span>{t('inventory')}</span>
         </Link>
-        <Link 
-          to="/sales" 
-          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/sales")}`} 
+        <Link
+          to="/sales"
+          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/sales")}`}
           onClick={closeSidebar}
           aria-label={t('sales') || 'Sales'}
           aria-current={isActive("/sales") ? 'page' : undefined}
         >
           <ShoppingCart size={20} /> <span>{t('sales')}</span>
         </Link>
-        <Link 
-          to="/invoices" 
-          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/invoices")}`} 
+        <Link
+          to="/invoices"
+          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/invoices")}`}
           onClick={closeSidebar}
           aria-label={t('invoices') || 'Invoices'}
           aria-current={isActive("/invoices") ? 'page' : undefined}
         >
           <FileText size={20} /> <span>{t('invoices')}</span>
         </Link>
-        <Link 
-          to="/refunds" 
-          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/refunds") || isActive("/refund")}`} 
+        <Link
+          to="/refunds"
+          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/refunds") || isActive("/refund")}`}
           onClick={closeSidebar}
           aria-label={t('refunds') || 'Refunds'}
           aria-current={isActive("/refunds") || isActive("/refund") ? 'page' : undefined}
         >
           <RotateCcw size={20} /> <span>{t('refunds') || 'Refunds'}</span>
         </Link>
-        <Link 
-          to="/customers" 
-          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/customers")}`} 
+        <Link
+          to="/customers"
+          className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/customers")}`}
           onClick={closeSidebar}
           aria-label={t('customers') || 'Customers'}
           aria-current={isActive("/customers") ? 'page' : undefined}
@@ -298,9 +290,9 @@ const Sidebar = ({ closeSidebar }) => {
           <Users size={20} /> <span>{t('customers')}</span>
         </Link>
         {currentUser?.role !== 'sales_man' && (
-          <Link 
-            to="/manage" 
-            className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/manage")}`} 
+          <Link
+            to="/manage"
+            className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/manage")}`}
             onClick={closeSidebar}
             aria-label={t('manage') || 'Manage'}
             aria-current={isActive("/manage") ? 'page' : undefined}

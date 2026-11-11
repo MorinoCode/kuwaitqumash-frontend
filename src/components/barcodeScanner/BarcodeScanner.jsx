@@ -30,9 +30,7 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
           await html5QrCodeRef.current.stop();
         }
         await html5QrCodeRef.current.clear();
-      } catch {
-        // Silently ignore scanner cleanup errors
-      }
+      } catch { void 0; }
       setIsScanning(false);
     }
   }, []);
@@ -54,12 +52,11 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
       setError(null);
       setIsScanning(true);
 
-      // Check if camera permission is available
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
         });
-        stream.getTracks().forEach((track) => track.stop()); // Stop immediately to check permission
+        stream.getTracks().forEach((track) => track.stop());
         setHasPermission(true);
       } catch {
         setHasPermission(false);
@@ -71,7 +68,6 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
         return;
       }
 
-      // Try to find back camera (environment)
       let cameraId = null;
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -79,9 +75,8 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
           (device) => device.kind === "videoinput",
         );
 
-        // Try to find back camera
         for (const device of videoDevices) {
-          // Check device label for back camera indicators
+
           const label = device.label.toLowerCase();
           if (
             label.includes("back") ||
@@ -93,9 +88,8 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
           }
         }
 
-        // If no back camera found by label, try to get it by constraint
         if (!cameraId && videoDevices.length > 0) {
-          // Try to get back camera using facingMode
+
           try {
             const backStream = await navigator.mediaDevices.getUserMedia({
               video: { facingMode: { ideal: "environment" } },
@@ -104,13 +98,9 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
             const settings = track.getSettings();
             cameraId = settings.deviceId || null;
             backStream.getTracks().forEach((t) => t.stop());
-          } catch {
-            // Silently ignore back camera setup
-          }
+          } catch { void 0; }
         }
-      } catch {
-        // Silently ignore secondary camera initialization
-      }
+      } catch { void 0; }
 
       const config = {
         fps: 10,
@@ -127,10 +117,9 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
         ],
       };
 
-      // Use camera ID if found, otherwise use facingMode
       const cameraConfig = cameraId
         ? { deviceId: { exact: cameraId } }
-        : { facingMode: "environment" }; // Prefer back camera
+        : { facingMode: "environment" };
 
       await html5QrCodeRef.current.start(
         cameraConfig,
@@ -139,11 +128,11 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
           handleScanSuccess(decodedText);
         },
         () => {
-          // Error callback - ignore, it's just scanning
+
         },
       );
     } catch (err) {
-      // If environment camera fails, try without constraint as fallback
+
       if (err.message && err.message.includes("environment")) {
         try {
           const config = {
@@ -162,17 +151,15 @@ const BarcodeScanner = ({ isOpen, onClose, onScanSuccess, theme = "dark" }) => {
           };
 
           await html5QrCodeRef.current.start(
-            { facingMode: { ideal: "environment" } }, // Less strict constraint
+            { facingMode: { ideal: "environment" } },
             config,
             (decodedText) => {
               handleScanSuccess(decodedText);
             },
             () => {},
           );
-          return; // Success with fallback
-        } catch {
-          // Silently ignore fallback camera setup errors
-        }
+          return;
+        } catch { void 0; }
       }
 
       setError(err.message || t("camera_error") || "Failed to start camera");

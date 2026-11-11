@@ -282,7 +282,6 @@
   min-width: 120px;
 }
 
-/* Dark theme: dropdown options visible */
 .refund-page--dark .refund-page__select {
   color-scheme: dark;
   background: rgba(255, 255, 255, 0.05);

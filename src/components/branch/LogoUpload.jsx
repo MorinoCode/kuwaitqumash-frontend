@@ -17,14 +17,8 @@ const LogoUpload = ({
   const [localLogoUrl, setLocalLogoUrl] = useState(currentLogoUrl);
   const prevLogoUrlRef = React.useRef(currentLogoUrl);
 
-  // Sync localLogoUrl with currentLogoUrl prop
-  // Only update if currentLogoUrl is a real change (not undefined/null during refetch)
-  // This prevents clearing the logo during refetch operations
   React.useEffect(() => {
-    // Update if:
-    // 1. currentLogoUrl is explicitly provided (not undefined) AND
-    // 2. It's different from the previous value
-    // This allows null values (when logo is deleted) but prevents clearing during refetch
+
     if (currentLogoUrl !== undefined) {
       if (currentLogoUrl !== prevLogoUrlRef.current) {
         setLocalLogoUrl(currentLogoUrl);
@@ -41,7 +35,6 @@ const LogoUpload = ({
   const imgRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Convert cropped image to blob
   const getCroppedImg = useCallback((image, crop) => {
     return new Promise((resolve) => {
       const canvas = document.createElement("canvas");
@@ -77,13 +70,11 @@ const LogoUpload = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith("image/")) {
       toast.error(t("invalid_file_type") || "Please select an image file");
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error(t("file_too_large") || "File size must be less than 5MB");
       return;
@@ -93,7 +84,7 @@ const LogoUpload = ({
     reader.addEventListener("load", () => {
       setImgSrc(reader.result);
       setShowCropModal(true);
-      // Set initial crop to center square
+
       setCrop({
         unit: "px",
         width: 200,
@@ -117,7 +108,6 @@ const LogoUpload = ({
         completedCrop,
       );
 
-      // Create FormData
       const formData = new FormData();
       formData.append("logo", croppedImageBlob, "logo.webp");
 
@@ -132,11 +122,9 @@ const LogoUpload = ({
         },
       );
 
-      // Update local state immediately with the new logo URL
       const newLogoUrl = res.data.data.logo_url;
       setLocalLogoUrl(newLogoUrl);
 
-      // Close modal and reset form
       setShowCropModal(false);
       setImgSrc("");
       setCrop(null);
@@ -145,18 +133,14 @@ const LogoUpload = ({
         fileInputRef.current.value = "";
       }
 
-      // Show success message
       toast.success(
         t("logo_uploaded_successfully") || "Logo uploaded successfully",
       );
 
-      // Call onLogoUpdated callback, but don't let its errors affect this function
       if (onLogoUpdated) {
         try {
           await onLogoUpdated(newLogoUrl);
-        } catch {
-          // Silently ignore callback errors
-        }
+        } catch { void 0; }
       }
     } catch (error) {
       const errorMessage =
@@ -185,7 +169,6 @@ const LogoUpload = ({
         t("logo_deleted_successfully") || "Logo deleted successfully",
       );
 
-      // Update local state immediately
       setLocalLogoUrl(null);
 
       if (onLogoUpdated) {
@@ -202,7 +185,6 @@ const LogoUpload = ({
     }
   };
 
-  // Use localLogoUrl for display (updates immediately)
   const displayLogoUrl = localLogoUrl || currentLogoUrl;
 
   return (
@@ -260,7 +242,6 @@ const LogoUpload = ({
         </label>
       </div>
 
-      {/* Crop Modal */}
       {showCropModal && imgSrc && (
         <div className="logo-upload__modal">
           <div className="logo-upload__modal-content">
@@ -277,7 +258,7 @@ const LogoUpload = ({
                 crop={crop}
                 onChange={(c) => setCrop(c)}
                 onComplete={(c) => setCompletedCrop(c)}
-                aspect={null} // Free aspect ratio
+                aspect={null}
                 minWidth={100}
                 minHeight={100}
               >
@@ -287,7 +268,7 @@ const LogoUpload = ({
                   alt="Crop preview"
                   style={{ maxWidth: "100%", maxHeight: "400px" }}
                   onLoad={() => {
-                    // Set initial crop to center square
+
                     if (imgRef.current) {
                       const { width, height } = imgRef.current;
                       const size = Math.min(width, height, 300);

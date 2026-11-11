@@ -74,7 +74,6 @@ html[dir="rtl"] .inventory-page__subtitle {
     margin-top: 0.5rem;
 }
 
-/* Tabs: Items | Sold out | Old Gold - Chrome-style browser tabs */
 .inventory-tabs {
     display: flex;
     align-items: flex-end;
@@ -113,7 +112,6 @@ html[dir="rtl"] .inventory-page__subtitle {
     color: var(--brand-hover);
 }
 
-/* Active tab: lighter, "selected" - merges with content (Chrome-style) */
 .inventory-tabs__tab--active {
     color: var(--brand-primary);
     background: var(--surface-dark);
@@ -385,7 +383,6 @@ html[dir="rtl"] .inventory-table {
     text-align: right;
 }
 
-/* Old Gold table rows/cells - theme support */
 .inventory-table__row {
     transition: background-color 0.2s ease;
 }
@@ -779,7 +776,6 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     text-align: center;
 }
 
-/* Responsive Design - Tablet */
 @media (max-width: 1024px) {
     .inventory-page {
         padding: 1.5rem;
@@ -790,7 +786,6 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-/* Responsive Design - Mobile Large (Tablet Portrait) */
 @media (max-width: 900px) {
     .inventory-page {
         padding: 1.25rem;
@@ -812,7 +807,6 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-/* Responsive Design - Mobile (768px) */
 @media (max-width: 768px) {
     .inventory-page {
         padding: 1rem;
@@ -874,17 +868,15 @@ html[dir="rtl"] .inventory-form__remove-thumb {
         min-width: 100%;
     }
 
-    /* Table - Convert to Cards on Mobile */
     .inventory-table-wrapper {
         overflow-x: visible;
     }
 
     .inventory-table {
         display: none;
-        /* Hide table on mobile */
+
     }
 
-    /* Mobile Card Layout */
     .inventory-mobile-list {
         display: flex;
         flex-direction: column;
@@ -1065,7 +1057,7 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     .inventory-form__input {
         padding: 0.75rem 0.875rem;
         font-size: 1rem;
-        /* Prevent zoom on iOS */
+
     }
 
     .inventory-btn--submit {
@@ -1076,7 +1068,6 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-/* Responsive Design - Small Mobile (480px) */
 @media (max-width: 480px) {
     .inventory-page {
         padding: 0.75rem;
@@ -1160,7 +1151,6 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-/* Desktop: Show table, hide mobile cards */
 @media (min-width: 769px) {
     .inventory-mobile-list {
         display: none;
@@ -1171,7 +1161,6 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-/* Mobile: Hide table, show mobile cards */
 @media (max-width: 768px) {
     .inventory-table-wrapper {
         display: none;
@@ -1181,7 +1170,6 @@ html[dir="rtl"] .inventory-form__remove-thumb {
         display: flex;
     }
 
-    /* Old Gold mobile cards - no image */
     .inventory-mobile-card--old-gold .inventory-mobile-card__header {
         align-items: center;
     }

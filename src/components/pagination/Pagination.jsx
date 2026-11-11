@@ -4,9 +4,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import './Pagination.css';
 
-const Pagination = memo(({ 
-  currentPage, 
-  totalPages, 
+const Pagination = memo(({
+  currentPage,
+  totalPages,
   totalItems,
   itemsPerPage,
   onPageChange,
@@ -16,7 +16,7 @@ const Pagination = memo(({
   const { t } = useTranslation();
 
   if (totalPages <= 1) {
-    return null; // Don't show pagination if only one page
+    return null;
   }
 
   const handlePageChange = (newPage) => {
@@ -28,50 +28,44 @@ const Pagination = memo(({
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5;
-    
+
     if (totalPages <= maxVisible) {
-      // Show all pages if total pages is less than max visible
+
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Always show first page
+
       pages.push(1);
-      
+
       let start = Math.max(2, currentPage - 1);
       let end = Math.min(totalPages - 1, currentPage + 1);
-      
-      // Adjust if we're near the start
+
       if (currentPage <= 3) {
         end = Math.min(4, totalPages - 1);
       }
-      
-      // Adjust if we're near the end
+
       if (currentPage >= totalPages - 2) {
         start = Math.max(2, totalPages - 3);
       }
-      
-      // Add ellipsis if needed
+
       if (start > 2) {
         pages.push('...');
       }
-      
-      // Add middle pages
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-      
-      // Add ellipsis if needed
+
       if (end < totalPages - 1) {
         pages.push('...');
       }
-      
-      // Always show last page
+
       if (totalPages > 1) {
         pages.push(totalPages);
       }
     }
-    
+
     return pages;
   };
 
@@ -85,7 +79,7 @@ const Pagination = memo(({
           {t('showing') || 'Showing'} {startItem}-{endItem} {t('of') || 'of'} {totalItems} {t('items') || 'items'}
         </span>
       </div>
-      
+
       <div className="pagination__controls">
         <button
           className={`pagination__btn pagination__btn--prev pagination__btn--${theme}`}
@@ -95,7 +89,7 @@ const Pagination = memo(({
         >
           <ChevronLeft size={18} />
         </button>
-        
+
         <div className="pagination__pages">
           {getPageNumbers().map((page, index) => {
             if (page === '...') {
@@ -105,7 +99,7 @@ const Pagination = memo(({
                 </span>
               );
             }
-            
+
             return (
               <button
                 key={page}
@@ -121,7 +115,7 @@ const Pagination = memo(({
             );
           })}
         </div>
-        
+
         <button
           className={`pagination__btn pagination__btn--next pagination__btn--${theme}`}
           onClick={() => handlePageChange(currentPage + 1)}

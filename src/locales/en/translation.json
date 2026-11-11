@@ -964,5 +964,6 @@
   "login": "Login",
   "branchChanged": "BranchChanged",
   "preferred_pattern": "Preferred Pattern",
-  "patterns": "Patterns"
+  "patterns": "Patterns",
+  "all_patterns": "All Patterns"
 }

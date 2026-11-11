@@ -15,7 +15,6 @@
   color: #333;
 }
 
-/* Header */
 .refunds-header {
   display: flex;
   justify-content: space-between;
@@ -128,7 +127,6 @@
   animation: refunds-spin 0.8s linear infinite;
 }
 
-/* Controls - Search & Filter */
 .refunds-controls {
   display: flex;
   gap: 15px;
@@ -205,7 +203,6 @@
   }
 }
 
-/* Table */
 .refunds-table-container {
   background: rgba(128, 128, 128, 0.03);
   border-radius: 16px;

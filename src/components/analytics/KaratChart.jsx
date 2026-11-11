@@ -12,10 +12,10 @@ import {
 import { useTranslation } from "react-i18next";
 
 const KARAT_COLORS = {
-  "24K": "#FFD700", // Pure gold
-  "22K": "#DAA520", // Goldenrod
-  "21K": "#B8860B", // Dark goldenrod
-  "18K": "#CD7F32", // Bronze
+  "24K": "#FFD700",
+  "22K": "#DAA520",
+  "21K": "#B8860B",
+  "18K": "#CD7F32",
 };
 
 const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
@@ -25,10 +25,8 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
   if (!data || data.length === 0)
     return <div className="no-data">No Data Available</div>;
 
-  // Determine which data key to use
   const dataKey = viewType === "quantity" ? "quantity" : metricType;
 
-  // Merge and sort data
   const chartData = [...data]
     .sort((a, b) =>
       String(a.fabric_type || a.karat || "").localeCompare(
@@ -46,7 +44,6 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
       return item;
     });
 
-  // Get chart title
   const getChartTitle = () => {
     if (viewType === "quantity") {
       return t("quantity_items") + " - " + (t("fabric_distribution") || "Fabric Distribution");
@@ -58,7 +55,6 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
     );
   };
 
-  // Get Y-axis label
   const getYAxisLabel = () => {
     return viewType === "quantity" ? t("items_sold") : "KWD";
   };

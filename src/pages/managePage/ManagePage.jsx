@@ -36,7 +36,6 @@ const ManagePage = () => {
   const { t, i18n } = useTranslation();
   const { user, loading: authLoading } = useAuth();
 
-  // States
   const [activeTabState, setActiveTabState] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const activeTab =
@@ -47,13 +46,11 @@ const ManagePage = () => {
     setSearchTerm("");
   };
 
-  // Use React Query for branches
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
   const createBranchMutation = useCreateBranch();
   const updateBranchMutation = useUpdateBranch();
   const deleteBranchMutation = useDeleteBranch();
 
-  // Use React Query for staff
   const { data: staffList = [], isLoading: dataLoading } = useStaff();
   const createStaffMutation = useCreateStaff();
   const updateStaffMutation = useUpdateStaff();
@@ -77,8 +74,6 @@ const ManagePage = () => {
     role: "sales_man",
   });
 
-  // useEffects for tab syncing removed to prevent cascading renders
-
   const canEditStaff = (staffMember) => {
     if (!user) return false;
 
@@ -96,7 +91,6 @@ const ManagePage = () => {
   const handleSaveBranch = async (e) => {
     e.preventDefault();
 
-    // Input validation
     if (!branchForm.name || branchForm.name.trim().length < 2) {
       toast.error(
         t("branch_name_required") ||
@@ -143,10 +137,8 @@ const ManagePage = () => {
     if (!window.confirm(t("confirm_delete_branch"))) return;
     try {
       await deleteBranchMutation.mutateAsync(id);
-      // Branches will be refetched automatically by React Query
-    } catch {
-      // Error is handled by mutation
-    }
+
+    } catch { void 0; }
   };
 
   const openEditBranch = (branch) => {
@@ -157,7 +149,6 @@ const ManagePage = () => {
   const handleSaveStaff = async (e) => {
     e.preventDefault();
 
-    // Input validation
     if (!staffForm.full_name || staffForm.full_name.trim().length < 2) {
       toast.error(
         t("full_name_required") || "Full name must be at least 2 characters",
@@ -170,7 +161,7 @@ const ManagePage = () => {
       );
       return;
     }
-    // Username validation (alphanumeric and underscore only)
+
     if (!/^[a-zA-Z0-9_]+$/.test(staffForm.username.trim())) {
       toast.error(
         t("username_invalid") ||
@@ -200,7 +191,6 @@ const ManagePage = () => {
         branch_id: staffForm.branch_id || null,
       };
 
-      // Only include password if provided (for updates) or required (for new staff)
       if (staffForm.password) {
         payload.password = staffForm.password;
       }
@@ -274,10 +264,8 @@ const ManagePage = () => {
     if (!window.confirm(t("confirm_delete_staff"))) return;
     try {
       await deleteStaffMutation.mutateAsync(id);
-      // Staff list will be refetched automatically by React Query
-    } catch {
-      // Silently ignore delete errors - toast handled by mutation
-    }
+
+    } catch { void 0; }
   };
 
   if (authLoading || !user || branchesLoading) {
@@ -594,7 +582,6 @@ const ManagePage = () => {
         )}
       </div>
 
-      {/* Staff Modal */}
       {isStaffModalOpen && (
         <div className="manage-modal-overlay">
           <div className={`manage-modal manage-modal--${theme}`}>
@@ -682,7 +669,6 @@ const ManagePage = () => {
         </div>
       )}
 
-      {/* Branch Modal */}
       {isBranchModalOpen && (
         <div className="manage-modal-overlay">
           <div className={`manage-modal manage-modal--${theme}`}>

@@ -3,7 +3,6 @@ import Barcode from "react-barcode";
 import { useTranslation } from "react-i18next";
 import "./BarcodeLabel.css";
 
-/** CODE128 only supports ASCII; strip non-ASCII so barcode image can render (e.g. old records with Arabic). */
 function barcodeValueForCode128(value) {
   const raw = (value || "").toString().trim();
   const asciiOnly = raw.replace(/[^A-Za-z0-9-]/g, "");
@@ -26,14 +25,13 @@ export const BarcodeLabel = React.forwardRef(
 
     return (
       <div ref={ref} className="barcode-label-container">
-        {/* Top Section: Item Name */}
+
         <div className="barcode-label__top">
           <span className="barcode-label__item-name-full">{itemName}</span>
         </div>
 
-        {/* Main Content: Two Columns */}
         <div className="barcode-label__main">
-          {/* Left Column: Weight (main) & Details */}
+
           <div className="barcode-label__left-col">
             {showShopName && shopName && (
               <span className="barcode-label__shop-name">{shopName}</span>
@@ -66,7 +64,6 @@ export const BarcodeLabel = React.forwardRef(
             </div>
           </div>
 
-          {/* Right Column: Barcode */}
           <div className="barcode-label__right-col">
             <div className="barcode-label__barcode-wrapper">
               <Barcode

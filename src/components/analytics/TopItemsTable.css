@@ -102,7 +102,6 @@
   white-space: nowrap;
 }
 
-/* Right-align headers for numeric columns to match their values */
 .top-items-table th.text-right {
   text-align: right;
 }

@@ -959,5 +959,6 @@
   "login": "Login (AR)",
   "branchChanged": "BranchChanged (AR)",
   "preferred_pattern": "النقشة المفضلة",
-  "patterns": "النقشات"
+  "patterns": "النقشات",
+  "all_patterns": "كل النقشات"
 }

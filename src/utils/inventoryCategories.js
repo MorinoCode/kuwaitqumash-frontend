@@ -1,13 +1,7 @@
 import { normalizeToLatinDigits } from "./normalizeNumbers.js";
 
-/**
- * Fabric domain vocabulary for KuwaitQumash.
- * Every entry is { value, label, labelAr } so existing UI code keeps working.
- */
-
 const opt = (value, label, labelAr) => ({ value, label, labelAr });
 
-// Fabric types (the old "category" concept)
 export const FABRIC_TYPES = [
   opt("Cotton", "Cotton", "قطن"),
   opt("Silk", "Silk", "حرير"),
@@ -27,7 +21,6 @@ export const FABRIC_TYPES = [
   opt("Kashmir", "Kashmir", "كشمير"),
 ];
 
-// Patterns / designs
 export const PATTERNS = [
   opt("Plain", "Plain", "سادة"),
   opt("Floral", "Floral", "زهري"),
@@ -41,7 +34,6 @@ export const PATTERNS = [
   opt("Paisley", "Paisley", "بيسلي"),
 ];
 
-// Composition presets
 export const COMPOSITIONS = [
   opt("100% Cotton", "100% Cotton", "100% قطن"),
   opt("100% Silk", "100% Silk", "100% حرير"),
@@ -79,7 +71,6 @@ export const UNITS = [
   { value: "piece", label: "Piece", labelAr: "قطعة", short: "pc" },
 ];
 
-// Legacy names kept so existing imports keep compiling.
 export const METAL_CATEGORIES = {
   Cotton: PATTERNS,
   Silk: PATTERNS,
@@ -110,7 +101,6 @@ export const DIAMOND_SHAPES = [];
 export const DIAMOND_SETTINGS = [];
 export const STONE_TYPES = [];
 
-// Helpers used by the fabric forms
 export const formatMeters = (value) => {
   const n = parseFloat(normalizeToLatinDigits(String(value ?? "")));
   return Number.isFinite(n) ? n.toFixed(2) : "0.00";

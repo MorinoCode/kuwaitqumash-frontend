@@ -28,7 +28,6 @@ import {
   Upload,
 } from "lucide-react";
 
-// Memoized Customer Row Component for better performance
 const CustomerRow = React.memo(
   ({ customer, onRowClick, onEdit, onDelete, t }) => (
     <tr onClick={onRowClick} className="customers-table__row">
@@ -122,7 +121,6 @@ const CustomersPage = () => {
     useBranchStore();
   const activeBranchName = branchNameFromStore || t("all_branches");
 
-  // Use React Query for customers
   const customerFilters = {
     search: searchTerm.trim() || undefined,
     branch_id:
@@ -139,55 +137,38 @@ const CustomersPage = () => {
     refetch: refetchCustomers,
   } = useCustomers(customerFilters);
   const customers = useMemo(() => customersData?.data || [], [customersData?.data]);
-  const loading = customersLoading; // Use React Query's loading state directly
+  const loading = customersLoading;
 
-  // Use mutations
   const createCustomerMutation = useCreateCustomer();
   const updateCustomerMutation = useUpdateCustomer();
   const deleteCustomerMutation = useDeleteCustomer();
 
-  // Check if any mutation is in progress
   const isSaving =
     createCustomerMutation.isPending || updateCustomerMutation.isPending;
 
-  // Update pagination only
   useEffect(() => {
     if (customersData?.pagination) {
       setPagination(customersData.pagination);
     }
   }, [customersData]);
 
-  // React Query automatically handles fetching when filters change
-
-  // React Query handles errors automatically via onError in hooks
-
   const handlePageChange = (newPage) => {
     setPagination((prev) => ({ ...prev, currentPage: newPage }));
-    // React Query will automatically fetch new page if not in cache
-    // No need to manually call fetchCustomers
-    // Scroll to top on page change
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // React Query handles caching automatically
-  // No need to manually refetch on navigation - cache will be used if data is fresh
-
-  // Reset to page 1 when search or branch changes
   useEffect(() => {
     if (pagination.currentPage !== 1) {
       setPagination((prev) => ({ ...prev, currentPage: 1 }));
     }
   }, [searchTerm, activeBranchId, pagination.currentPage]);
 
-  // React Query automatically refetches when queryKey changes (filters)
-  // No need for manual refetch - React Query handles it efficiently
-
   const handleFileSelect = async (e, side) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // File validation
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       toast.error(t("file_too_large") || "File size must be less than 5MB");
       return;
@@ -237,7 +218,6 @@ const CustomersPage = () => {
   const handleSave = async (e) => {
     e.preventDefault();
 
-    // Input Validation
     if (!formData.full_name || formData.full_name.trim().length < 2) {
       return toast.error(
         t("name_required") || "Full name must be at least 2 characters",
@@ -254,7 +234,6 @@ const CustomersPage = () => {
       );
     }
 
-    // Sanitize inputs (normalize Arabic/Persian digits for phone and civil_id)
     const sanitizedData = {
       ...formData,
       full_name: formData.full_name.trim().substring(0, 255),
@@ -284,7 +263,6 @@ const CustomersPage = () => {
       if (idFiles.front) payload.append("front_image", idFiles.front);
       if (idFiles.back) payload.append("back_image", idFiles.back);
 
-      // Convert FormData to object for mutation
       const dataObj = {};
       payload.forEach((value, key) => {
         if (key === "front_image" || key === "back_image") {
@@ -337,7 +315,7 @@ const CustomersPage = () => {
       setIsConfirmModalOpen(false);
       setCustomerToDelete(null);
     } catch {
-      // Error is handled by mutation
+
       setIsConfirmModalOpen(false);
     }
   };
@@ -360,8 +338,6 @@ const CustomersPage = () => {
     setIdFiles({ front: null, back: null });
     setIsFormOpen(true);
   };
-
-
 
   return (
     <div
@@ -442,7 +418,6 @@ const CustomersPage = () => {
         </div>
       </div>
 
-      {/* Pagination */}
       {!loading && pagination.totalPages > 1 && (
         <Pagination
           currentPage={pagination.currentPage}
@@ -642,7 +617,6 @@ const CustomersPage = () => {
         </div>
       )}
 
-      {/* Confirm Delete Modal */}
       {isConfirmModalOpen && (
         <div className="customers-modal-overlay">
           <div className={`customers-modal customers-modal--${theme}`}>

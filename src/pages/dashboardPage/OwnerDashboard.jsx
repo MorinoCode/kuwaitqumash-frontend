@@ -21,45 +21,43 @@ import { useDashboardOwner } from "../../hooks/useDashboard";
 import DateRangePicker from "../../components/dashboard/DateRangePicker";
 import "./DashboardPage.css";
 
-// Better color palette with high contrast and distinct colors
 const COLORS_DARK = [
-  "#D4AF37", // Gold
-  "#10B981", // Green
-  "#3B82F6", // Blue
-  "#F59E0B", // Amber
-  "#EF4444", // Red
-  "#8B5CF6", // Purple
-  "#EC4899", // Pink
-  "#06B6D4", // Cyan
-  "#F97316", // Orange
-  "#6366F1", // Indigo
+  "#D4AF37",
+  "#10B981",
+  "#3B82F6",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#EC4899",
+  "#06B6D4",
+  "#F97316",
+  "#6366F1",
 ];
 
 const COLORS_LIGHT = [
-  "#D4AF37", // Gold
-  "#059669", // Green
-  "#2563EB", // Blue
-  "#D97706", // Amber
-  "#DC2626", // Red
-  "#7C3AED", // Purple
-  "#DB2777", // Pink
-  "#0891B2", // Cyan
-  "#EA580C", // Orange
-  "#4F46E5", // Indigo
+  "#D4AF37",
+  "#059669",
+  "#2563EB",
+  "#D97706",
+  "#DC2626",
+  "#7C3AED",
+  "#DB2777",
+  "#0891B2",
+  "#EA580C",
+  "#4F46E5",
 ];
 
 const OwnerDashboard = () => {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const [showProfit, setShowProfit] = useState(false);
-  const [topItemsMetric, setTopItemsMetric] = useState("revenue"); // 'revenue' or 'quantity'
+  const [topItemsMetric, setTopItemsMetric] = useState("revenue");
   const [dateRange, setDateRange] = useState({
     start: null,
     end: null,
     range: "today",
   });
 
-  // Use React Query hook with refresh
   const {
     data,
     isLoading: loading,
@@ -67,13 +65,12 @@ const OwnerDashboard = () => {
     isRefetching,
   } = useDashboardOwner(dateRange.start && dateRange.end ? dateRange : null);
 
-  // Format helper functions
   const formatPrice = (price) => {
     if (!price && price !== 0) return "--";
     const num = parseFloat(price);
-    return num.toLocaleString('en-US', { 
-      minimumFractionDigits: 3, 
-      maximumFractionDigits: 3 
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3
     });
   };
 
@@ -122,17 +119,14 @@ const OwnerDashboard = () => {
     }
   };
 
-  // Handle date range change
   const handleDateRangeChange = (start, end, range) => {
     setDateRange({ start, end, range });
   };
 
-  // Low Stock Badge Count
   const lowStockCount = useMemo(() => {
     return data?.alerts?.low_stock_items?.length || 0;
   }, [data]);
 
-  // Top Items sorted by selected metric
   const topItemsSorted = useMemo(() => {
     if (!data?.charts?.top_5_items_revenue) return [];
     const items = [...data.charts.top_5_items_revenue];
@@ -146,7 +140,6 @@ const OwnerDashboard = () => {
       .slice(0, 5);
   }, [data, topItemsMetric]);
 
-  // Sales by Branch (only show if >1 branch)
   const showBranchComparison = useMemo(() => {
     return data?.charts?.sales_by_branch?.length > 1;
   }, [data]);
@@ -162,7 +155,6 @@ const OwnerDashboard = () => {
       </div>
     );
 
-  // Show error state if API failed or data is empty
   if (!data || (typeof data === 'object' && Object.keys(data).length === 0)) {
     return (
       <div
@@ -191,7 +183,7 @@ const OwnerDashboard = () => {
       className={`owner-dashboard owner-dashboard--${theme}`}
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
-      {/* Header with Refresh and Last Updated */}
+
       <div className="dashboard-header">
         <div className="dashboard-header__title">
           <h1>{t("dashboard")}</h1>
@@ -212,13 +204,11 @@ const OwnerDashboard = () => {
         </button>
       </div>
 
-      {/* Date Range Picker */}
       <DateRangePicker
         onRangeChange={handleDateRangeChange}
         defaultRange="today"
       />
 
-      {/* Low Stock Alert Badge */}
       {lowStockCount > 0 && (
         <div className={`low-stock-badge low-stock-badge--${theme}`}>
           <AlertCircle size={20} />
@@ -227,7 +217,6 @@ const OwnerDashboard = () => {
         </div>
       )}
 
-      {/* KPI Cards */}
       <div className="kpi-grid">
         <div className={`kpi-card kpi-card--${theme}`}>
           <div className="kpi-card__icon-wrapper">
@@ -410,7 +399,6 @@ const OwnerDashboard = () => {
         </div>
       </div>
 
-      {/* Low Stock Alerts Table */}
       {lowStockCount > 0 && (
         <div
           className={`content-panel content-panel--${theme} content-panel--alert`}
@@ -462,9 +450,8 @@ const OwnerDashboard = () => {
         </div>
       )}
 
-      {/* Charts Grid */}
       <div className="charts-grid">
-        {/* Sales Trend (7 days) */}
+
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
             {t("sales_trend_7d")}
@@ -501,7 +488,6 @@ const OwnerDashboard = () => {
           </div>
         </div>
 
-        {/* Sales Trend (30 days) */}
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
             {t("sales_trend_30d")}
@@ -538,7 +524,6 @@ const OwnerDashboard = () => {
           </div>
         </div>
 
-        {/* Sales by Branch (only if >1 branch) */}
         {showBranchComparison && (
           <div className={`chart-box chart-box--${theme}`}>
             <h3 className="chart-box__title">{t("sales_by_branch")}</h3>
@@ -570,7 +555,7 @@ const OwnerDashboard = () => {
                         );
                       })}
                     </Pie>
-                    <Tooltip 
+                    <Tooltip
                       formatter={(value) => formatPrice(value)}
                       contentStyle={{
                         backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
@@ -579,7 +564,7 @@ const OwnerDashboard = () => {
                         color: theme === "dark" ? "#fff" : "#000",
                       }}
                     />
-                    <Legend 
+                    <Legend
                       verticalAlign="bottom"
                       height={80}
                       iconType="circle"
@@ -601,7 +586,6 @@ const OwnerDashboard = () => {
           </div>
         )}
 
-        {/* Sales by Category + Karat (Pie Chart) */}
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
             {t("sales_by_category_karat")}
@@ -634,7 +618,7 @@ const OwnerDashboard = () => {
                       );
                     })}
                   </Pie>
-                  <Tooltip 
+                  <Tooltip
                     formatter={(value) => formatPrice(value)}
                     contentStyle={{
                       backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
@@ -643,7 +627,7 @@ const OwnerDashboard = () => {
                       color: theme === "dark" ? "#fff" : "#000",
                     }}
                   />
-                  <Legend 
+                  <Legend
                     verticalAlign="bottom"
                     height={80}
                     iconType="circle"
@@ -664,7 +648,6 @@ const OwnerDashboard = () => {
           </div>
         </div>
 
-        {/* Sales by Category + Karat (Bar Chart) */}
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
             {t("sales_by_category_karat") || "Sales by Category + Karat (Bar)"}
@@ -697,7 +680,6 @@ const OwnerDashboard = () => {
           </div>
         </div>
 
-        {/* Sales by Karat */}
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
             {t("sales_by_karat") || "Sales by Karat"}
@@ -724,7 +706,6 @@ const OwnerDashboard = () => {
           </div>
         </div>
 
-        {/* Top fabrics by meters */}
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
             {t("top_fabrics") || "Top fabrics"}
@@ -755,7 +736,6 @@ const OwnerDashboard = () => {
           </div>
         </div>
 
-        {/* Top 5 Items with Toggle */}
         <div className={`chart-box chart-box--${theme}`}>
           <div className="chart-box__header">
             <h3 className="chart-box__title">
@@ -810,7 +790,6 @@ const OwnerDashboard = () => {
           </div>
         </div>
 
-        {/* Top 5 Customers */}
         <div className={`chart-box chart-box--${theme}`}>
           <h3 className="chart-box__title">
             {t("top_5_customers")}

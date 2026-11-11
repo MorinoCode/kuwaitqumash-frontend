@@ -26,7 +26,7 @@ const PaymentForm = ({
             <div className="sales-payment__list">
                 {payments.map((p, idx) => (
                     <div key={idx} className="sales-payment__row">
-                        <select 
+                        <select
                             className="sales-payment__select"
                             value={p.method}
                             onChange={e => onUpdatePayment(idx, 'method', e.target.value)}
@@ -38,8 +38,8 @@ const PaymentForm = ({
                             <option value="Link">{t('link')}</option>
                         </select>
                         <div className="sales-payment__input-wrapper">
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 step="0.001"
                                 min="0"
                                 className="sales-payment__input"
@@ -51,8 +51,8 @@ const PaymentForm = ({
                             <span className="sales-payment__suffix">{t('kwd')}</span>
                         </div>
                         {payments.length > 1 && (
-                            <button 
-                                className="sales-btn-icon" 
+                            <button
+                                className="sales-btn-icon"
                                 onClick={() => onRemovePayment(idx)}
                                 title={t('remove_payment') || 'Remove payment'}
                                 aria-label={`${t('remove_payment')} ${idx + 1}`}
@@ -64,8 +64,8 @@ const PaymentForm = ({
                 ))}
             </div>
 
-            <button 
-                className="sales-btn sales-btn--dashed" 
+            <button
+                className="sales-btn sales-btn--dashed"
                 onClick={onAddPayment}
                 aria-label={t('add_payment_method') || 'Add payment method'}
             >

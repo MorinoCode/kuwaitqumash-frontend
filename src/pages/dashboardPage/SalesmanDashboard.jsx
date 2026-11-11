@@ -106,7 +106,6 @@ const SalesmanDashboard = () => {
       </div>
     );
 
-  // Show error state if API failed or data is empty
   if (!data || (typeof data === "object" && Object.keys(data).length === 0)) {
     return (
       <div
@@ -138,7 +137,7 @@ const SalesmanDashboard = () => {
       className={`sales-dashboard sales-dashboard--${theme}`}
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
-      {/* Header with Refresh and Last Updated */}
+
       <div className="dashboard-header">
         <div className="dashboard-header__title">
           <h1>{t("dashboard")}</h1>
@@ -159,13 +158,11 @@ const SalesmanDashboard = () => {
         </button>
       </div>
 
-      {/* Date Range Picker */}
       <DateRangePicker
         onRangeChange={handleDateRangeChange}
         defaultRange="today"
       />
 
-      {/* My KPIs */}
       <div className="kpi-grid">
         <div className={`kpi-card kpi-card--${theme}`}>
           <h3 className="kpi-card__title">{t("my_sales_today")}</h3>
@@ -232,7 +229,6 @@ const SalesmanDashboard = () => {
             </div>
           )}
 
-        {/* Sales by Category + Karat */}
         {data?.charts?.sales_by_category_karat &&
           data.charts.sales_by_category_karat.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
@@ -271,7 +267,6 @@ const SalesmanDashboard = () => {
             </div>
           )}
 
-        {/* Sales by Karat */}
         {data?.charts?.sales_by_karat &&
           data.charts.sales_by_karat.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
@@ -298,7 +293,6 @@ const SalesmanDashboard = () => {
             </div>
           )}
 
-        {/* Top 5 Items I Sold */}
         {data?.charts?.top_5_items && data.charts.top_5_items.length > 0 && (
           <div className={`chart-box chart-box--${theme}`}>
             <h3 className="chart-box__title">{t("top_items_i_sold")}</h3>
@@ -326,7 +320,6 @@ const SalesmanDashboard = () => {
         )}
       </div>
 
-      {/* My Stats Footer */}
       <div className={`stats-footer stats-footer--${theme}`}>
         <div className="stats-footer__label">{t("my_sales_today")}:</div>
         <div className="stats-footer__value">

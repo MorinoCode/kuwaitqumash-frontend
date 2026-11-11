@@ -18,9 +18,7 @@ const clearAuthData = (queryClient) => {
   if (queryClient) {
     try {
       queryClient.clear();
-    } catch {
-      // ignore
-    }
+    } catch { void 0; }
   }
 
   try {
@@ -30,17 +28,13 @@ const clearAuthData = (queryClient) => {
     try {
       localStorage.removeItem("branch-storage");
       localStorage.removeItem("tenant-storage");
-    } catch {
-      // ignore
-    }
+    } catch { void 0; }
   }
 
   try {
     localStorage.removeItem("sale-draft-storage");
     useSaleDraftStore.getState().clearAllDrafts?.();
-  } catch {
-    // ignore
-  }
+  } catch { void 0; }
 
   const authKeys = [
     "user_data",
@@ -55,9 +49,7 @@ const clearAuthData = (queryClient) => {
   authKeys.forEach((key) => {
     try {
       localStorage.removeItem(key);
-    } catch {
-      // ignore
-    }
+    } catch { void 0; }
   });
 
   try {
@@ -78,21 +70,15 @@ const clearAuthData = (queryClient) => {
     keysToRemove.forEach((key) => {
       try {
         localStorage.removeItem(key);
-      } catch {
-        // ignore
-      }
+      } catch { void 0; }
     });
-  } catch {
-    // ignore
-  }
+  } catch { void 0; }
 
   try {
     localStorage.removeItem("branch-storage");
     localStorage.removeItem("tenant-storage");
     localStorage.removeItem("sale-draft-storage");
-  } catch {
-    // ignore
-  }
+  } catch { void 0; }
 };
 
 export const AuthProvider = ({ children }) => {
@@ -209,9 +195,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post("/auth/logout");
-    } catch {
-      // continue with logout even if API call fails
-    } finally {
+    } catch { void 0; } finally {
       setUser(null);
       clearAuthData(queryClient);
       navigate("/login", { replace: true });

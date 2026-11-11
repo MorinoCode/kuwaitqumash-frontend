@@ -1,6 +1,3 @@
-/**
- * Custom hook for branch queries using React Query
- */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 import { queryKeys } from "../config/queryClient";
@@ -9,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import useBranchStore from "../store/branchStore";
 
 export const useBranches = (enabled = true) => {
-  // Get cached branches from Zustand store as fallback
+
   const cachedBranches = useBranchStore((state) => state.branches);
 
   const query = useQuery({
@@ -18,31 +15,29 @@ export const useBranches = (enabled = true) => {
       const res = await api.get("/manage/branches");
       const branches = res.data.data || [];
 
-      // Update Zustand store
       useBranchStore.getState().setBranches(branches);
 
       return branches;
     },
-    enabled: enabled, // enabled is passed from parent (BranchContext checks auth)
-    staleTime: 10 * 60 * 1000, // 10 minutes (branches don't change often)
-    gcTime: 30 * 60 * 1000, // 30 minutes cache
+    enabled: enabled,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     retry: (failureCount, error) => {
-      // Don't retry on 401/403 errors (authentication errors)
+
       if (error?.response?.status === 401 || error?.response?.status === 403) {
         return false;
       }
-      // Retry other errors up to 3 times
+
       return failureCount < 3;
     },
   });
 
-  // Return query with fallback to cached branches if query is disabled and has no data
   const shouldUseCache = !enabled && !query.data && cachedBranches.length > 0;
 
   return {
     ...query,
     data: query.data ?? (shouldUseCache ? cachedBranches : undefined),
-    isLoading: enabled ? query.isLoading : false, // Only show loading if query is enabled
+    isLoading: enabled ? query.isLoading : false,
   };
 };
 
@@ -122,7 +117,7 @@ export const useDeleteBranch = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.branches() });
-      // Clear active branch if it was deleted
+
       const activeBranchId = useBranchStore.getState().activeBranchId;
       if (activeBranchId === data.deletedId) {
         useBranchStore.getState().clearBranch();

@@ -5,19 +5,18 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
   if (!data) return null;
 
   const { invoice_number, createdAt, customer, items, total_amount, payments, user } = data;
-  
+
   const totalMeters = items.reduce(
     (sum, item) => sum + (parseFloat(item.meters) || 0) * (parseInt(item.quantity, 10) || 1),
     0,
   );
-  
-  // ⭐ FIX: Ensure Image URLs are absolute for the browser to load them correctly
-  const API_URL = 'http://localhost:5000'; 
-  
+
+  const API_URL = 'http://localhost:5000';
+
   const getFullImgUrl = (url) => {
       if (!url) return null;
-      if (url.startsWith('http')) return url; // Cloudinary or absolute
-      return `${API_URL}${url.startsWith('/') ? '' : '/'}${url}`; // Localhost
+      if (url.startsWith('http')) return url;
+      return `${API_URL}${url.startsWith('/') ? '' : '/'}${url}`;
   };
 
   const idFront = getFullImgUrl(customer.id_card_front_url);
@@ -26,7 +25,7 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
   return (
     <div className="invoice-print-container" ref={ref}>
       <div className="invoice-box">
-        
+
         <div className="invoice-header">
           <h1 className="invoice-title">Sell Invoice</h1>
           <p style={{margin:0, fontSize:12}}>{user?.branch?.name || "Main Branch"}</p>
@@ -94,7 +93,6 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
             ))}
         </div>
 
-        {/* KYC Section */}
         <div className="kyc-container" dir="rtl">
           <table className="kyc-table">
             <tbody>
@@ -138,25 +136,24 @@ export const InvoiceReceipt = React.forwardRef(({ data }, ref) => {
           </div>
         </div>
 
-        {/* ID Cards Section */}
         {(idFront || idBack) && (
             <div className="id-card-section">
                 {idFront && (
-                    <img 
-                        src={idFront} 
-                        alt="ID Front" 
-                        className="customer-id-img" 
+                    <img
+                        src={idFront}
+                        alt="ID Front"
+                        className="customer-id-img"
                         loading="lazy"
-                        onError={(e) => e.target.style.display = 'none'} 
+                        onError={(e) => e.target.style.display = 'none'}
                     />
                 )}
                 {idBack && (
-                    <img 
-                        src={idBack} 
-                        alt="ID Back" 
-                        className="customer-id-img" 
+                    <img
+                        src={idBack}
+                        alt="ID Back"
+                        className="customer-id-img"
                         loading="lazy"
-                        onError={(e) => e.target.style.display = 'none'} 
+                        onError={(e) => e.target.style.display = 'none'}
                     />
                 )}
             </div>

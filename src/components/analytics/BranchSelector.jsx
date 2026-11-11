@@ -7,10 +7,9 @@ const BranchSelector = ({ branches, selectedBranches, onSelectionChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Helper function to get display name (remove "KuwaitQumash " prefix)
   const getBranchDisplayName = (branch) => {
     if (!branch || !branch.name) return "";
-    // Remove "KuwaitQumash " prefix if it exists
+
     return branch.name.replace(/^KuwaitQumash\s+/i, "");
   };
 
@@ -21,7 +20,6 @@ const BranchSelector = ({ branches, selectedBranches, onSelectionChange }) => {
       }
     };
 
-    // Use capture phase for better event handling
     document.addEventListener("mousedown", handleClickOutside, true);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside, true);

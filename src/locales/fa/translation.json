@@ -1014,5 +1014,6 @@
   "invalid_payment_amount": "مبلغ پرداخت نامعتبر است",
   "username_format": "قالب نام کاربری",
   "phone_format": "قالب شماره تلفن",
-  "branchChanged": "شعبه تغییر کرد"
+  "branchChanged": "شعبه تغییر کرد",
+  "all_patterns": "همه الگوها"
 }

@@ -22,7 +22,6 @@ const MainLayout = () => {
 
   const handleLogout = logout;
 
-  // en -> ar -> fa -> en
   const toggleLanguage = () => {
     const order = ["fa", "ar", "en"];
     const next = order[(order.indexOf(i18n.language) + 1) % order.length];

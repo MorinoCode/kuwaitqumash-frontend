@@ -18,44 +18,42 @@ import { useDashboardManager } from "../../hooks/useDashboard";
 import DateRangePicker from "../../components/dashboard/DateRangePicker";
 import "./DashboardPage.css";
 
-// Better color palette with high contrast and distinct colors
 const COLORS_DARK = [
-  "#D4AF37", // Gold
-  "#10B981", // Green
-  "#3B82F6", // Blue
-  "#F59E0B", // Amber
-  "#EF4444", // Red
-  "#8B5CF6", // Purple
-  "#EC4899", // Pink
-  "#06B6D4", // Cyan
-  "#F97316", // Orange
-  "#6366F1", // Indigo
+  "#D4AF37",
+  "#10B981",
+  "#3B82F6",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#EC4899",
+  "#06B6D4",
+  "#F97316",
+  "#6366F1",
 ];
 
 const COLORS_LIGHT = [
-  "#D4AF37", // Gold
-  "#059669", // Green
-  "#2563EB", // Blue
-  "#D97706", // Amber
-  "#DC2626", // Red
-  "#7C3AED", // Purple
-  "#DB2777", // Pink
-  "#0891B2", // Cyan
-  "#EA580C", // Orange
-  "#4F46E5", // Indigo
+  "#D4AF37",
+  "#059669",
+  "#2563EB",
+  "#D97706",
+  "#DC2626",
+  "#7C3AED",
+  "#DB2777",
+  "#0891B2",
+  "#EA580C",
+  "#4F46E5",
 ];
 
 const ManagerDashboard = () => {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
-  const [staffPerformanceRange, setStaffPerformanceRange] = useState("today"); // 'today', 'week', 'month'
+  const [staffPerformanceRange, setStaffPerformanceRange] = useState("today");
   const [dateRange, setDateRange] = useState({
     start: null,
     end: null,
     range: "today",
   });
 
-  // Use React Query hook with refresh
   const {
     data,
     isLoading: loading,
@@ -63,7 +61,6 @@ const ManagerDashboard = () => {
     isRefetching,
   } = useDashboardManager(dateRange.start && dateRange.end ? dateRange : null);
 
-  // Format helper
   const formatPrice = (price) => {
     if (!price && price !== 0) return "--";
     return parseFloat(price).toFixed(3);
@@ -98,12 +95,10 @@ const ManagerDashboard = () => {
     }
   };
 
-  // Handle date range change
   const handleDateRangeChange = (start, end, range) => {
     setDateRange({ start, end, range });
   };
 
-  // Get staff performance data based on selected range
   const staffPerformanceData = useMemo(() => {
     if (!data?.charts) return [];
 
@@ -119,7 +114,6 @@ const ManagerDashboard = () => {
     }
   }, [data, staffPerformanceRange]);
 
-  // Low Stock Count
   const lowStockCount = useMemo(() => {
     return data?.alerts?.low_stock_items?.length || 0;
   }, [data]);
@@ -135,7 +129,6 @@ const ManagerDashboard = () => {
       </div>
     );
 
-  // Show error state if API failed or data is empty
   if (!data || (typeof data === "object" && Object.keys(data).length === 0)) {
     return (
       <div
@@ -167,7 +160,7 @@ const ManagerDashboard = () => {
       className={`manager-dashboard manager-dashboard--${theme}`}
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
-      {/* Header with Refresh and Last Updated */}
+
       <div className="dashboard-header">
         <div className="dashboard-header__title">
           <h1>{t("dashboard")}</h1>
@@ -188,13 +181,11 @@ const ManagerDashboard = () => {
         </button>
       </div>
 
-      {/* Date Range Picker */}
       <DateRangePicker
         onRangeChange={handleDateRangeChange}
         defaultRange="today"
       />
 
-      {/* Low Stock Alert Badge */}
       {lowStockCount > 0 && (
         <div className={`low-stock-badge low-stock-badge--${theme}`}>
           <AlertCircle size={20} />
@@ -203,7 +194,6 @@ const ManagerDashboard = () => {
         </div>
       )}
 
-      {/* Manager KPIs */}
       <div className="kpi-grid">
         <div className={`kpi-card kpi-card--${theme} kpi-card--primary`}>
           <div className="kpi-card__icon-wrapper">
@@ -304,7 +294,7 @@ const ManagerDashboard = () => {
       </div>
 
       <div className="content-grid">
-        {/* Low Stock Table */}
+
         <div
           className={`content-panel content-panel--${theme} ${lowStockCount > 0 ? "content-panel--alert" : ""}`}
         >
@@ -359,7 +349,6 @@ const ManagerDashboard = () => {
           )}
         </div>
 
-        {/* Staff Leaderboard with Toggle */}
         <div className={`content-panel content-panel--${theme}`}>
           <div className="chart-box__header">
             <h3 className="content-panel__title">{t("staff_performance")}</h3>
@@ -411,7 +400,6 @@ const ManagerDashboard = () => {
           </div>
         </div>
 
-        {/* Sales by Category + Karat */}
         {data?.charts?.salesByCategoryKarat &&
           data.charts.salesByCategoryKarat.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
@@ -446,7 +434,7 @@ const ManagerDashboard = () => {
                         },
                       )}
                     </Pie>
-                    <Tooltip 
+                    <Tooltip
                       formatter={(value) => formatPrice(value)}
                       contentStyle={{
                         backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
@@ -455,7 +443,7 @@ const ManagerDashboard = () => {
                         color: theme === "dark" ? "#fff" : "#000",
                       }}
                     />
-                    <Legend 
+                    <Legend
                       verticalAlign="bottom"
                       height={80}
                       iconType="circle"
@@ -474,7 +462,6 @@ const ManagerDashboard = () => {
             </div>
           )}
 
-        {/* Sales by Karat */}
         {data?.charts?.salesByKarat &&
           data.charts.salesByKarat.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
@@ -496,7 +483,6 @@ const ManagerDashboard = () => {
             </div>
           )}
 
-        {/* Top 5 Items */}
         {data?.charts?.top5ItemsRevenue &&
           data.charts.top5ItemsRevenue.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>
@@ -526,7 +512,6 @@ const ManagerDashboard = () => {
             </div>
           )}
 
-        {/* Top 5 Customers */}
         {data?.charts?.top5Customers &&
           data.charts.top5Customers.length > 0 && (
             <div className={`chart-box chart-box--${theme}`}>

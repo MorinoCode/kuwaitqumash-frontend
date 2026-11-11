@@ -28,8 +28,8 @@ const WelcomePage = () => {
 
   const fadeUpVariant = {
     hidden: { y: 40, opacity: 0 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
       transition: { type: 'spring', stiffness: 60, damping: 15 }
     }
@@ -175,7 +175,7 @@ const WelcomePage = () => {
       </nav>
       <section className="hero-section">
         <div className="hero-container">
-          <motion.div 
+          <motion.div
             className="hero-content"
             variants={staggerContainer}
             initial="hidden"
@@ -185,16 +185,16 @@ const WelcomePage = () => {
               <span className="badge-dot"></span>
               {t('welcome.badge', 'The #1 Jewelry Management Platform')}
             </motion.div>
-            
+
             <motion.h1 variants={fadeUpVariant} className="hero-title">
               {t('welcome.hero_title', 'Elevate Your Jewelry')}{' '}
               <span className="text-gradient-gold">{t('welcome.hero_highlight', 'Business')}</span>
             </motion.h1>
-            
+
             <motion.p variants={fadeUpVariant} className="hero-subtitle">
               {t('welcome.hero_desc', 'A complete ecosystem to manage your gold inventory, track daily sales, and connect with your customers seamlessly.')}
             </motion.p>
-            
+
             <motion.div variants={fadeUpVariant} className="hero-actions">
               <button className="btn-gold-large" onClick={() => navigate('/signup')}>
                 {t('welcome.start_now', 'Start Your Journey')}
@@ -203,18 +203,18 @@ const WelcomePage = () => {
             </motion.div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="hero-image-container"
             variants={scaleInVariant}
             initial="hidden"
             animate="visible"
           >
             <div className="hero-image-glow"></div>
-            <motion.img 
-              src={logoImage} 
-              alt="KuwaitQumash Logo" 
+            <motion.img
+              src={logoImage}
+              alt="KuwaitQumash Logo"
               className="hero-logo-large"
-              animate={{ 
+              animate={{
                 y: [0, -15, 0]
               }}
               transition={{
@@ -227,7 +227,7 @@ const WelcomePage = () => {
         </div>
       </section>
 
-      <motion.section 
+      <motion.section
         className="stats-section"
         variants={staggerContainer}
         initial="hidden"
@@ -254,7 +254,7 @@ const WelcomePage = () => {
         </div>
 
         <div className="showcase-list">
-          <motion.div 
+          <motion.div
             className="showcase-item-bg-video full-screen-bg-video"
             variants={slideInLeft}
             initial="hidden"
@@ -274,7 +274,7 @@ const WelcomePage = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="kqirat-explainer-section"
             variants={fadeUpVariant}
             initial="hidden"
@@ -307,7 +307,7 @@ const WelcomePage = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="showcase-item-bg-video full-screen-bg-video"
             variants={slideInRight}
             initial="hidden"
@@ -329,8 +329,6 @@ const WelcomePage = () => {
         </div>
       </section>
 
-
-
       <section className="pricing-section" id="pricing">
         <div className="pricing-header">
           <h2 className="section-title">
@@ -340,7 +338,7 @@ const WelcomePage = () => {
           <p className="section-subtitle">{t('welcome.pricing.subtitle', 'Choose the plan that fits your business needs.')}</p>
         </div>
 
-        <motion.div 
+        <motion.div
           className="pricing-grid"
           variants={staggerContainer}
           initial="hidden"
@@ -348,8 +346,8 @@ const WelcomePage = () => {
           viewport={{ once: true, amount: 0.15 }}
         >
           {pricingPlans.map((plan, idx) => (
-            <motion.div 
-              key={idx} 
+            <motion.div
+              key={idx}
               className={`pricing-card ${plan.popular ? 'pricing-card-popular' : ''}`}
               variants={fadeUpVariant}
             >
@@ -369,7 +367,7 @@ const WelcomePage = () => {
                   </li>
                 ))}
               </ul>
-              <button 
+              <button
                 className={`plan-cta-btn ${plan.popular ? 'btn-gold-solid' : 'btn-outline'}`}
                 onClick={() => navigate('/signup')}
               >
@@ -389,7 +387,7 @@ const WelcomePage = () => {
           <p className="section-subtitle">{t('welcome.faq.subtitle', 'Find answers to common questions about KuwaitQumash.')}</p>
         </div>
 
-        <motion.div 
+        <motion.div
           className="faq-list"
           variants={staggerContainer}
           initial="hidden"
@@ -397,8 +395,8 @@ const WelcomePage = () => {
           viewport={{ once: true, amount: 0.15 }}
         >
           {faqs.map((faq, idx) => (
-            <motion.div 
-              key={idx} 
+            <motion.div
+              key={idx}
               className={`faq-item ${activeFaq === idx ? 'faq-item-active' : ''}`}
               onClick={() => toggleFaq(idx)}
               variants={fadeUpVariant}
@@ -416,7 +414,7 @@ const WelcomePage = () => {
       </section>
 
       <section className="cta-section">
-        <motion.div 
+        <motion.div
           className="cta-box"
           variants={scaleInVariant}
           initial="hidden"

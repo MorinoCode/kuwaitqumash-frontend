@@ -28,7 +28,6 @@ const CategoryChart = ({
   const { t } = useTranslation();
   const isDark = theme === "dark";
 
-  // Normalize data: Convert value strings to numbers for Recharts
   const chartData =
     data?.map((d) => {
       const dataKey = viewType === "quantity" ? "quantity" : metricType;
@@ -45,7 +44,6 @@ const CategoryChart = ({
       return item;
     }) || [];
 
-  // Get chart title
   const getChartTitle = () => {
     if (viewType === "quantity") {
       return t("quantity_items") + " - " + t("category_distribution");
@@ -64,12 +62,12 @@ const CategoryChart = ({
     innerRadius,
     outerRadius,
     percent,
-    // index not used in label body
+
   }) => {
-    if (percent < 0.05) return null; // Hide if less than 5%
+    if (percent < 0.05) return null;
 
     const RADIAN = Math.PI / 180;
-    // Position label in the middle of the donut ring
+
     const radius = (innerRadius + outerRadius) / 2;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);

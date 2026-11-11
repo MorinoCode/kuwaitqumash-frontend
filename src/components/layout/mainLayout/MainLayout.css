@@ -8,7 +8,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* Theme Support for Layout */
 .main-layout--light {
   background-color: #f8f9fa;
 }
@@ -17,7 +16,6 @@
   background-color: #050505;
 }
 
-/* --- SIDEBAR CONTAINER --- */
 .layout-sidebar {
   position: fixed;
   top: 0;
@@ -27,7 +25,6 @@
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
 
-  /* Default LTR Configuration */
   left: 0;
   transform: translateX(-100%);
 }
@@ -36,7 +33,6 @@
   transform: translateX(0);
 }
 
-/* --- RTL OVERRIDES FOR SIDEBAR -- */
 html[dir="rtl"] .layout-sidebar {
   left: auto;
   right: 0;
@@ -48,7 +44,6 @@ html[dir="rtl"] .layout-sidebar.open {
   transform: translateX(0);
 }
 
-/* --- OVERLAY --- */
 .sidebar-overlay {
   position: fixed;
   top: 0;
@@ -68,7 +63,6 @@ html[dir="rtl"] .layout-sidebar.open {
   visibility: visible;
 }
 
-/* --- CONTENT AREA --- */
 .layout-content {
   flex: 1;
   display: flex;
@@ -81,7 +75,6 @@ html[dir="rtl"] .layout-sidebar.open {
   transition: background-color 0.3s ease;
 }
 
-/* Theme Support for Content */
 .main-layout--light .layout-content {
   background-color: #f8f9fa;
 }
@@ -90,7 +83,6 @@ html[dir="rtl"] .layout-sidebar.open {
   background-color: #050505;
 }
 
-/* --- MAIN HEADER --- */
 .main-header {
   display: grid;
   grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
@@ -139,8 +131,8 @@ html[dir="rtl"] .layout-sidebar.open {
   flex: 1;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: thin; /* Firefox */
-  -ms-overflow-style: auto; /* IE and Edge */
+  scrollbar-width: thin;
+  -ms-overflow-style: auto;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -247,7 +239,6 @@ html[dir="rtl"] .layout-sidebar.open {
   position: relative;
 }
 
-/* Remove artificial flex growing/shrinking to prevent squishing */
 .main-header__prices-group:first-of-type {
   flex: 0 0 auto;
 }
@@ -517,11 +508,9 @@ html[dir="rtl"] .layout-sidebar.open {
   color: #d4af37;
   transition: transform 0.2s;
 
-  /* LTR Margin */
   margin-right: 20px;
 }
 
-/* RTL Margin for Hamburger */
 html[dir="rtl"] .hamburger-btn {
   margin-right: 0;
   margin-left: 20px;
@@ -570,7 +559,6 @@ html[dir="rtl"] .hamburger-btn {
   line-height: 0;
 }
 
-/* Header Buttons */
 .header-btn {
   display: flex;
   align-items: center;
@@ -628,12 +616,10 @@ html[dir="rtl"] .hamburger-btn {
   font-size: 0.85rem;
 }
 
-/* RTL Support */
 html[dir="rtl"] .rtl-flip {
   transform: scaleX(-1);
 }
 
-/* Responsive Design - Tablet */
 @media (max-width: 1024px) {
   .layout-sidebar {
     width: 260px;
@@ -661,7 +647,6 @@ html[dir="rtl"] .rtl-flip {
     padding: 3px;
   }
 
-  /* RTL: Fix prices icon margin in tablet */
   html[dir="rtl"] .main-header__prices-icon {
     margin-right: 0;
     margin-left: 6px;
@@ -708,7 +693,6 @@ html[dir="rtl"] .rtl-flip {
     flex-shrink: 0;
   }
 
-  /* --- Prices bar scroll (standard, light/dark, responsive, larger size) --- */
   .main-header__prices {
     overflow-x: auto;
     overflow-y: hidden;
@@ -716,7 +700,6 @@ html[dir="rtl"] .rtl-flip {
     -ms-overflow-style: auto;
   }
 
-  /* Firefox: thumb and track colors */
   .main-header__prices--dark {
     scrollbar-color: rgba(212, 175, 55, 0.55) rgba(212, 175, 55, 0.1);
   }
@@ -725,7 +708,6 @@ html[dir="rtl"] .rtl-flip {
     scrollbar-color: rgba(184, 134, 11, 0.5) rgba(184, 134, 11, 0.1);
   }
 
-  /* WebKit: scrollbar size and track */
   .main-header__prices::-webkit-scrollbar {
     display: block;
     height: 10px;
@@ -742,7 +724,6 @@ html[dir="rtl"] .rtl-flip {
     background: rgba(184, 134, 11, 0.08);
   }
 
-  /* WebKit: thumb — dark theme */
   .main-header__prices--dark::-webkit-scrollbar-thumb {
     background: rgba(212, 175, 55, 0.45);
     border-radius: 10px;
@@ -765,7 +746,6 @@ html[dir="rtl"] .rtl-flip {
     background-clip: padding-box;
   }
 
-  /* WebKit: thumb — light theme */
   .main-header__prices--light::-webkit-scrollbar-thumb {
     background: rgba(184, 134, 11, 0.45);
     border-radius: 10px;
@@ -789,7 +769,6 @@ html[dir="rtl"] .rtl-flip {
   }
 }
 
-/* Responsive Design - Tablet Portrait */
 @media (max-width: 900px) {
   .main-header__prices {
     padding: 3px 8px;
@@ -804,7 +783,6 @@ html[dir="rtl"] .rtl-flip {
     padding: 3px;
   }
 
-  /* RTL: Fix prices icon margin in tablet portrait */
   html[dir="rtl"] .main-header__prices-icon {
     margin-right: 0;
     margin-left: 5px;
@@ -819,7 +797,6 @@ html[dir="rtl"] .rtl-flip {
     height: 45%;
   }
 
-  /* Prevent overlap: gold group doesn't grow, bar scrolls horizontally */
   .main-header__prices-group:first-of-type {
     flex: 0 0 auto;
     min-width: 0;
@@ -866,7 +843,6 @@ html[dir="rtl"] .rtl-flip {
     flex-shrink: 0;
   }
 
-  /* RTL: Fix prices unit in tablet portrait */
   html[dir="rtl"] .main-header__prices-unit {
     margin-left: 0;
     margin-right: 5px;
@@ -876,19 +852,16 @@ html[dir="rtl"] .rtl-flip {
     border-right: 1px solid;
   }
 
-  /* Hide date on tablet */
   .main-header__date {
     display: none;
   }
 
-  /* Scroll: use styles from 1024px; optionally smaller height for space */
   .main-header__prices::-webkit-scrollbar {
     height: 8px;
     width: 8px;
   }
 }
 
-/* Responsive Design - Mobile Large */
 @media (max-width: 768px) {
   .layout-sidebar {
     width: 280px;
@@ -943,7 +916,6 @@ html[dir="rtl"] .rtl-flip {
     border-radius: 8px;
   }
 
-  /* Prevent overlap: gold group doesn't grow, bar scrolls horizontally */
   .main-header__prices-group:first-of-type {
     flex: 0 0 auto;
     min-width: 0;
@@ -963,13 +935,11 @@ html[dir="rtl"] .rtl-flip {
     flex-shrink: 0;
   }
 
-  /* Scroll: same theme styles, slightly smaller height on mobile */
   .main-header__prices::-webkit-scrollbar {
     height: 8px;
     width: 8px;
   }
 
-  /* Hide date on mobile */
   .main-header__date {
     display: none;
   }
@@ -981,7 +951,6 @@ html[dir="rtl"] .rtl-flip {
     padding: 2px;
   }
 
-  /* RTL: Fix prices icon margin in mobile */
   html[dir="rtl"] .main-header__prices-icon {
     margin-right: 0;
     margin-left: 4px;
@@ -993,12 +962,12 @@ html[dir="rtl"] .rtl-flip {
   }
 
   .main-header__prices-group:not(:first-of-type)::before {
-    display: none; /* Hide separators on very small screens */
+    display: none;
   }
 
   .main-header__prices-group-label {
     font-size: 0.5rem;
-    display: none; /* Hide labels on mobile to save space */
+    display: none;
   }
 
   .main-header__prices-list {
@@ -1027,7 +996,6 @@ html[dir="rtl"] .rtl-flip {
     padding-left: 4px;
   }
 
-  /* RTL: Fix prices unit in mobile */
   html[dir="rtl"] .main-header__prices-unit {
     margin-left: 0;
     margin-right: 4px;
@@ -1037,7 +1005,6 @@ html[dir="rtl"] .rtl-flip {
     border-right: 1px solid;
   }
 
-  /* Hide date on mobile */
   .main-header__date {
     display: none;
   }
@@ -1068,7 +1035,6 @@ html[dir="rtl"] .rtl-flip {
   }
 }
 
-/* Responsive Design - Small Mobile */
 @media (max-width: 480px) {
   .layout-sidebar {
     width: 100%;
@@ -1106,7 +1072,6 @@ html[dir="rtl"] .rtl-flip {
     overflow-x: auto;
   }
 
-  /* Scroll: same theme, compact height on small mobile */
   .main-header__prices::-webkit-scrollbar {
     height: 8px;
     width: 8px;
@@ -1120,13 +1085,11 @@ html[dir="rtl"] .rtl-flip {
     display: none;
   }
 
-  /* Show only 21K for gold on small mobile */
   .main-header__prices-group:first-of-type
     .main-header__price-item:not(.main-header__price-item--highlight) {
     display: none;
   }
 
-  /* Hide silver and platinum on very small screens */
   .main-header__prices-group:nth-of-type(2),
   .main-header__prices-group:nth-of-type(3) {
     display: none;
@@ -1152,7 +1115,6 @@ html[dir="rtl"] .rtl-flip {
     margin-left: 2px;
   }
 
-  /* RTL: Fix prices unit in small mobile */
   html[dir="rtl"] .main-header__prices-unit {
     margin-left: 0;
     margin-right: 2px;
@@ -1187,7 +1149,6 @@ html[dir="rtl"] .rtl-flip {
   }
 }
 
-/* RTL Support Improvements */
 html[dir="rtl"] .main-header {
   direction: rtl;
   grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
@@ -1199,7 +1160,7 @@ html[dir="rtl"] .main-header__left {
 
 html[dir="rtl"] .main-header__prices {
   grid-column: 2;
-  direction: ltr; /* Keep prices in LTR for numbers */
+  direction: ltr;
   justify-content: flex-start;
 }
 
@@ -1212,13 +1173,11 @@ html[dir="rtl"] .brand-title {
   text-align: right;
 }
 
-/* RTL: Fix prices icon margin */
 html[dir="rtl"] .main-header__prices-icon {
   margin-right: 0;
   margin-left: 8px;
 }
 
-/* RTL: Fix prices unit border and margin */
 html[dir="rtl"] .main-header__prices-unit {
   margin-left: 0;
   margin-right: 8px;
@@ -1236,19 +1195,16 @@ html[dir="rtl"] .main-header__prices--dark .main-header__prices-unit {
   border-right-color: rgba(212, 175, 55, 0.25);
 }
 
-/* RTL: Fix prices group separator */
 html[dir="rtl"] .main-header__prices-group:not(:first-of-type)::before {
   left: auto;
   right: 0;
 }
 
-/* RTL: Fix prices group label padding */
 html[dir="rtl"] .main-header__prices-group-label {
   padding-right: 0;
   padding-left: 2px;
 }
 
-/* RTL: Ensure header buttons don't overlap */
 html[dir="rtl"] .header-btn {
   white-space: nowrap;
   min-width: fit-content;
@@ -1265,7 +1221,6 @@ html[dir="rtl"] .header-btn--logout {
   max-width: 100%;
 }
 
-/* Modern Animations & Transitions */
 @keyframes slideInDown {
   from {
     opacity: 0;
@@ -1296,7 +1251,6 @@ html[dir="rtl"] .header-btn--logout {
   animation: fadeInScale 0.5s ease-out 0.1s both;
 }
 
-/* Enhanced Mobile Experience */
 @media (max-width: 600px) {
   .main-header {
     padding: 8px 10px;
@@ -1318,7 +1272,6 @@ html[dir="rtl"] .header-btn--logout {
     border-radius: 6px;
   }
 
-  /* Improved touch targets */
   .header-btn {
     min-height: 44px;
     min-width: 44px;
@@ -1330,7 +1283,6 @@ html[dir="rtl"] .header-btn--logout {
   }
 }
 
-/* Portrait Orientation - Further Optimizations */
 @media (max-height: 500px) and (orientation: landscape) {
   .main-header {
     padding: 6px 12px;

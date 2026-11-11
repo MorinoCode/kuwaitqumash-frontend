@@ -6,7 +6,10 @@ import React, {
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { FABRIC_TYPES } from "../../utils/inventoryCategories";
+import {
+  FABRIC_TYPES,
+  PATTERNS,
+} from "../../utils/inventoryCategories";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 
@@ -57,13 +60,10 @@ const InventoryPage = () => {
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
 
-  // Tab: In Stock (default) | Sold out | Old Gold
   const [inventoryTab, setInventoryTab] = useState("in_stock");
 
-  // Multi-branch selection
   const [selectedBranchIds, setSelectedBranchIds] = useState([]);
 
-  // Use Zustand for branch (sync sidebar with page branch selection)
   const {
     activeBranchId,
     activeBranchName: branchNameFromStore,
@@ -74,15 +74,10 @@ const InventoryPage = () => {
     "",
   );
 
-  // Check user role
   const isOwner = user?.role === "store_owner";
 
-  // Use React Query hooks
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
 
-  // Fetch custom options for filters
-
-  // Use React Query for inventory
   const inventoryFilters = {
     branch_ids:
       isOwner && selectedBranchIds.length > 0
@@ -102,9 +97,6 @@ const InventoryPage = () => {
     useInventory(inventoryFilters);
   const items = useMemo(() => inventoryData?.data || [], [inventoryData?.data]);
 
-
-  // Get unique categories from inventory items (includes both default and custom categories)
-  // This ensures we show all categories that exist in the current tenant's inventory
   const uniquePatterns = useMemo(() => {
     const patterns = new Set();
     items.forEach((item) => {
@@ -113,14 +105,12 @@ const InventoryPage = () => {
     return Array.from(patterns).sort();
   }, [items]);
 
-  // Update pagination from API response
   useEffect(() => {
     if (inventoryData?.pagination) {
       setPagination(inventoryData.pagination);
     }
   }, [inventoryData]);
 
-  // Use mutation for delete
   const deleteItemMutation = useDeleteInventoryItem();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -136,7 +126,7 @@ const InventoryPage = () => {
   const handlePrintConfirm = useReactToPrint({
     contentRef: printRef,
     onBeforeGetContent: () => {
-      // Ensure printItem is loaded before printing
+
       if (!printItem) {
         toast.error(t("print_error") || "Print failed. Please try again.");
         return Promise.resolve();
@@ -154,12 +144,12 @@ const InventoryPage = () => {
       toast.error(t("print_error") || "Print failed. Please try again.");
     },
     pageStyle: `
-            @page { 
-                size: 55mm 18mm; 
-                margin: 0; 
+            @page {
+                size: 55mm 18mm;
+                margin: 0;
             }
-            body { 
-                margin: 0; 
+            body {
+                margin: 0;
                 padding: 0;
             }
             @media print {
@@ -181,10 +171,6 @@ const InventoryPage = () => {
 
   const searchInputRef = useRef(null);
 
-  // activeBranchId and activeBranchName are now from Zustand store (defined above)
-  // isOwner is defined above (before inventoryFilters)
-
-  // When owner changes branch selection on this page, sync sidebar so Items tab shows same branch
   const handleBranchSelectionChange = useCallback(
     (newIds) => {
       setSelectedBranchIds(newIds);
@@ -196,18 +182,16 @@ const InventoryPage = () => {
     [branches, setActiveBranch],
   );
 
-  // Initialize branches selection - only active branch on first load
   useEffect(() => {
-    // Wait for branches to load before initializing
+
     if (!user || branchesLoading || branches.length === 0) return;
 
-    // Only initialize once when selectedBranchIds is empty (first load)
     if (selectedBranchIds.length === 0) {
-      // Always start with active branch, even for owners
+
       if (activeBranchId) {
         setSelectedBranchIds([parseInt(activeBranchId)]);
       } else if (branches.length > 0) {
-        // Fallback: select first branch if no activeBranchId
+
         setSelectedBranchIds([branches[0].id]);
       }
     }
@@ -218,9 +202,6 @@ const InventoryPage = () => {
       searchInputRef.current.focus();
     }
   }, []);
-
-
-  // Inventory is now fetched via React Query hook - no need for fetchInventory function
 
   const handlePageChange = (newPage) => {
     setPagination((prev) => ({ ...prev, currentPage: newPage }));
@@ -238,16 +219,14 @@ const InventoryPage = () => {
   };
 
   const handleAddItemSuccess = () => {
-    // No need to manually refetch - optimistic update handles it
-    // React Query will automatically update the UI
+
     setItemToEdit(null);
   };
 
   const handleEditItem = async (item) => {
-    // Fetch full item details if needed (to get all fields like stones, etc.)
+
     try {
-      // Use the item from the list, or fetch full details if needed
-      // For now, use the item directly as it should have all necessary fields
+
       setItemToEdit(item);
       setIsAddModalOpen(true);
     } catch {
@@ -260,7 +239,6 @@ const InventoryPage = () => {
     setIsDeleteModalOpen(true);
   };
 
-
   const confirmDeleteItem = () => {
     if (itemToDelete) {
       deleteItemMutation.mutate(itemToDelete);
@@ -269,7 +247,6 @@ const InventoryPage = () => {
     }
   };
 
-  // Line value: billable meters x price per meter x rolls
   const calculateLivePrice = useCallback((item) => {
     const meters = parseFloat(item.length_m ?? item.meters) || 0;
     const price = parseFloat(item.price_per_meter) || 0;
@@ -285,8 +262,6 @@ const InventoryPage = () => {
     return ((sell - cost) * meters * quantity).toFixed(3);
   }, []);
 
-  // Memoize filtered items to avoid recalculating on every render
-  // Filter items by price (frontend filtering for price is needed because it requires live rates)
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
       const itemValue = parseFloat(calculateLivePrice(item)) || 0;
@@ -298,7 +273,6 @@ const InventoryPage = () => {
     });
   }, [items, priceMin, priceMax, calculateLivePrice]);
 
-  // Memoize total meters in stock
   const totalMeters = useMemo(() => {
     return filteredItems
       .reduce((acc, item) => {
@@ -309,7 +283,6 @@ const InventoryPage = () => {
       .toFixed(3);
   }, [filteredItems]);
 
-  // Memoize total value calculation
   const totalValue = useMemo(() => {
     return filteredItems
       .reduce((acc, item) => {
@@ -318,8 +291,6 @@ const InventoryPage = () => {
       }, 0)
       .toFixed(3);
   }, [filteredItems, calculateLivePrice]);
-
-  // Old Gold stats (when Old Gold tab is active)
 
   const displayStats = {
     items: pagination.totalItems || filteredItems.length,
@@ -375,7 +346,6 @@ const InventoryPage = () => {
         </div>
       </header>
 
-      {/* Tabs: Items (In Stock) | Sold out */}
       <div className={`inventory-tabs inventory-tabs--${theme}`}>
         <button
           type="button"
@@ -391,7 +361,7 @@ const InventoryPage = () => {
         >
           {t("sold_out_items")}
         </button>
-        
+
       </div>
 
       {(
@@ -457,33 +427,14 @@ const InventoryPage = () => {
                   onChange={(e) => setFilterPattern(e.target.value)}
                   value={filterPattern}
                 >
-                  <option value="All">{t("all_categories")}</option>
-                  <option value="Ring">{t("rings")}</option>
-                  <option value="Necklace">{t("necklaces")}</option>
-                  <option value="Bracelet">{t("bracelets")}</option>
-                  <option value="Set">{t("sets")}</option>
-                  <option value="Earring">{t("earrings")}</option>
-                  <option value="Bangle">{t("bangles")}</option>
-                  <option value="Pendant">{t("pendants")}</option>
-                  {/* Custom categories from inventory items */}
-                  {uniqueCategories
-                    .filter(
-                      (cat) =>
-                        ![
-                          "Ring",
-                          "Necklace",
-                          "Bracelet",
-                          "Set",
-                          "Earring",
-                          "Bangle",
-                          "Pendant",
-                        ].includes(cat),
-                    )
-                    .map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
+                  <option value="All">
+                    {t("all_patterns") || "All patterns"}
+                  </option>
+                  {PATTERNS.map((pattern) => (
+                    <option key={pattern.value} value={pattern.value}>
+                      {i18n.language === "ar" ? pattern.labelAr : pattern.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="inventory-select-box">
@@ -508,7 +459,7 @@ const InventoryPage = () => {
           </div>
 
           <div className="inventory-table-container">
-            {/* Desktop Table View */}
+
             <div className="inventory-table-wrapper">
               <table className="inventory-table">
                 <thead className="inventory-table__head">
@@ -546,7 +497,6 @@ const InventoryPage = () => {
               )}
             </div>
 
-            {/* Mobile Card View */}
             <div className="inventory-mobile-list">
               {filteredItems.length === 0 && !loading ? (
                 <div className="inventory-empty-state">
@@ -670,7 +620,6 @@ const InventoryPage = () => {
         </>
       )}
 
-      {/* Pagination - only for inventory tabs */}
       {!loading && pagination.totalPages > 1 && (
         <Pagination
           currentPage={pagination.currentPage}
@@ -714,7 +663,7 @@ const InventoryPage = () => {
                   showShopName={false}
                 />
               </div>
-              {/* Hidden Component for ReactToPrint - Must always render when modal is open */}
+
               <div
                 style={{
                   position: "absolute",
@@ -759,7 +708,6 @@ const InventoryPage = () => {
         </div>
       )}
 
-            {/* Delete Confirmation Modal (Items) */}
       {isDeleteModalOpen && (
         <div className="inventory-modal-overlay">
           <div className={`inventory-modal inventory-modal--${theme}`}>

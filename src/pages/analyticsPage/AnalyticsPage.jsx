@@ -34,17 +34,16 @@ const AnalyticsPage = () => {
   const [data, setData] = useState({});
   const [selectedBranches, setSelectedBranches] = useState([]);
 
-  // Use React Query for branches
   const { data: branches = [] } = useBranches();
   const { activeBranchId } = useBranch();
   const [dateRange, setDateRange] = useState("30days");
   const [customStart, setCustomStart] = useState("");
   const [customEnd, setCustomEnd] = useState("");
-  const [metricType, setMetricType] = useState("revenue"); // 'revenue' | 'profit'
-  const [viewType, setViewType] = useState("value"); // 'value' | 'quantity'
+  const [metricType, setMetricType] = useState("revenue");
+  const [viewType, setViewType] = useState("value");
   const [compare, setCompare] = useState(false);
-  const [compareType, setCompareType] = useState("previous_period"); // 'previous_period' | 'previous_month' | 'same_month_last_year' | 'previous_year' | 'previous_week' | 'previous_quarter'
-  const [dataSource, setDataSource] = useState(null); // 'cache' | 'live' | null
+  const [compareType, setCompareType] = useState("previous_period");
+  const [dataSource, setDataSource] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [nextUpdate, setNextUpdate] = useState(null);
 
@@ -61,19 +60,18 @@ const AnalyticsPage = () => {
     return startDate.toISOString();
   };
 
-  // Auto-select active branch when branches are loaded
   useEffect(() => {
     if (
       branches.length > 0 &&
       activeBranchId &&
       selectedBranches.length === 0
     ) {
-      // Check if active branch exists in branches list
+
       const activeBranch = branches.find((b) => b.id === activeBranchId);
       if (activeBranch) {
         setSelectedBranches([activeBranchId]);
       } else if (branches.length > 0) {
-        // If active branch not found, select first branch
+
         setSelectedBranches([branches[0].id]);
       }
     } else if (
@@ -81,21 +79,17 @@ const AnalyticsPage = () => {
       !activeBranchId &&
       selectedBranches.length === 0
     ) {
-      // If no active branch, select first branch
+
       setSelectedBranches([branches[0].id]);
     }
   }, [branches, activeBranchId, selectedBranches.length]);
 
-  // Branches are now loaded via React Query hook - no need for fetchBranches
-
   useEffect(() => {
-    // Only fetch analytics after branches are loaded
+
     if (branches.length > 0 && selectedBranches.length > 0) {
       fetchAnalytics();
     }
   }, [branches.length, selectedBranches.length, fetchAnalytics]);
-
-  // Branches are now loaded via React Query hook - no need for fetchBranches
 
   const fetchAnalytics = useCallback(async () => {
     try {
@@ -133,7 +127,6 @@ const AnalyticsPage = () => {
         compareType: compareType,
       };
 
-      // Only add branchIds if branches are selected
       if (selectedBranches.length > 0) {
         params.branchIds = selectedBranches.join(",");
       }
@@ -143,13 +136,12 @@ const AnalyticsPage = () => {
       if (response.data.success) {
         const result = response.data.data;
 
-        // Use optional chaining and logical OR for safety
         const transformedData = {
           kpi: result?.current?.kpi || result?.kpi || null,
           charts: result?.current?.charts || result?.charts || null,
           comparison: result?.comparison || null,
           changes: result?.changes || null,
-          data_source: result?.data_source || null, // 'cache' or 'live'
+          data_source: result?.data_source || null,
           last_updated: result?.last_updated || null,
           next_update: result?.next_update || null,
         };
@@ -159,14 +151,11 @@ const AnalyticsPage = () => {
         setLastUpdated(transformedData.last_updated);
         setNextUpdate(transformedData.next_update);
       }
-    } catch {
-      // Silently ignore fetch errors - loading state is cleared in finally
-    } finally {
+    } catch { void 0; } finally {
       setLoading(false);
     }
   }, [dateRange, customStart, customEnd, compare, compareType, selectedBranches]);
 
-  // Format time helper
   const formatTime = (dateStr) => {
     if (!dateStr) return "--";
     try {
@@ -218,7 +207,7 @@ const AnalyticsPage = () => {
       className={`analytics-page analytics-page--${theme}`}
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
-      {/* AI-Powered Header */}
+
       <div className="ai-header">
         <div className="ai-header__content">
           <div className="ai-header__icon">
@@ -249,7 +238,6 @@ const AnalyticsPage = () => {
         </div>
       </div>
 
-      {/* Update Status Bar */}
       {(lastUpdated || nextUpdate) && (
         <div className="update-status-bar">
           <div className="update-status-item">
@@ -276,7 +264,7 @@ const AnalyticsPage = () => {
           <h1 className="analytics-title">{t("dashboard")}</h1>
         </div>
         <div className="filter-group">
-          {/* Hide BranchSelector for branch_manager and sales_man - they can only see their own branch */}
+
           {user?.role === "store_owner" && (
             <BranchSelector
               branches={branches}
@@ -352,7 +340,6 @@ const AnalyticsPage = () => {
         </div>
       </header>
 
-      {/* Toggle Controls - Simplified for Non-Technical Users */}
       <div className="analytics-controls">
         <div className="toggle-group">
           <div className="toggle-group__header">

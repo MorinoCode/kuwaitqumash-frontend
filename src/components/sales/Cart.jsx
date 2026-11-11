@@ -40,7 +40,6 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
         {t("shopping_cart")} ({cart.length})
       </h3>
 
-      {/* Desktop Table View */}
       <div className="sales-cart__table-wrapper">
         <table className="sales-cart__table">
           <thead>
@@ -191,7 +190,6 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
         </table>
       </div>
 
-      {/* Mobile Card View */}
       <div className="sales-cart__mobile-list">
         {cart.length === 0 ? (
           <div className="sales-cart__empty">{t("cart_is_empty")}</div>
