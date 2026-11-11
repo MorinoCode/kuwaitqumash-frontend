@@ -78,7 +78,7 @@ const RevenueChart = ({
       ...d,
       revenue: parseFloat(d.revenue) || 0,
       profit: parseFloat(d.profit) || 0,
-      weight: parseFloat(d.weight) || 0,
+      weight: parseFloat(d.meters ?? d.weight) || 0,
       quantity: parseInt(d.quantity) || 0,
     };
 

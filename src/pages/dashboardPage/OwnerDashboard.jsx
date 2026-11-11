@@ -281,13 +281,17 @@ const OwnerDashboard = () => {
             <Scale className="kpi-card__icon" />
           </div>
           <div className="kpi-card__content">
-            <h3 className="kpi-card__title">{t("totalWeightSold")}</h3>
-            <div className="kpi-card__subtitle">{t("totalWeightSoldDesc")}</div>
+            <h3 className="kpi-card__title">
+              {t("total_meters_sold") || "Meters sold"}
+            </h3>
+            <div className="kpi-card__subtitle">
+              {t("total_meters_sold_desc") || "Fabric meters sold today"}
+            </div>
             <div className="kpi-card__value-wrapper">
               <span className="kpi-card__value">
-                {formatPrice(data?.kpi?.total_weight)}
+                {formatPrice(data?.kpi?.total_meters)}
               </span>
-              <span className="kpi-card__unit">{t("g") || "g"}</span>
+              <span className="kpi-card__unit">{t("m") || "m"}</span>
             </div>
           </div>
         </div>
@@ -306,6 +310,55 @@ const OwnerDashboard = () => {
                 {formatPrice(data?.kpi?.avg_sale_value)}
               </span>
               <span className="kpi-card__unit">{t("kwd")}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={`kpi-card kpi-card--${theme}`}>
+          <div className="kpi-card__icon-wrapper">
+            <ShoppingCart className="kpi-card__icon" />
+          </div>
+          <div className="kpi-card__content">
+            <h3 className="kpi-card__title">
+              {t("invoices_today") || "Invoices today"}
+            </h3>
+            <div className="kpi-card__subtitle">
+              {t("invoices_today_desc") || "Paid invoices issued today"}
+            </div>
+            <div className="kpi-card__value-wrapper">
+              <span className="kpi-card__value">
+                {data?.kpi?.invoice_count || 0}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className={`kpi-card kpi-card--${theme}`}>
+          <div className="kpi-card__icon-wrapper">
+            <TrendingUp className="kpi-card__icon" />
+          </div>
+          <div className="kpi-card__content">
+            <h3 className="kpi-card__title">
+              {t("last_30_days") || "Last 30 days"}
+            </h3>
+            <div className="kpi-card__subtitle">
+              {t("last_30_days_desc") || "Sales and meters in the last 30 days"}
+            </div>
+            <div className="kpi-card__value-wrapper">
+              <span className="kpi-card__value">
+                {formatPrice(data?.kpi?.month_sales)}
+              </span>
+              <span className="kpi-card__unit">{t("kwd")}</span>
+              <span
+                className="kpi-card__value"
+                style={{ marginInlineStart: "0.75rem" }}
+              >
+                {formatPrice(data?.kpi?.month_meters)}
+              </span>
+              <span className="kpi-card__unit">{t("m") || "m"}</span>
+            </div>
+            <div className="kpi-card__subtitle">
+              {data?.kpi?.month_invoices || 0} {t("invoices") || "invoices"}
             </div>
           </div>
         </div>
@@ -663,6 +716,37 @@ const OwnerDashboard = () => {
                   <YAxis style={{ fontSize: 10 }} />
                   <Tooltip formatter={(value) => formatPrice(value)} />
                   <Bar dataKey="revenue" fill="#D4AF37" radius={[5, 5, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="chart-box__empty">{t("no_data_available")}</div>
+            )}
+          </div>
+        </div>
+
+        {/* Top fabrics by meters */}
+        <div className={`chart-box chart-box--${theme}`}>
+          <h3 className="chart-box__title">
+            {t("top_fabrics") || "Top fabrics"}
+          </h3>
+          <div className="chart-box__container">
+            {data?.charts?.top_fabrics && data.charts.top_fabrics.length > 0 ? (
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={data.charts.top_fabrics} layout="vertical">
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={theme === "dark" ? "#444" : "#ddd"}
+                    opacity={0.3}
+                  />
+                  <XAxis type="number" style={{ fontSize: 10 }} />
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    width={120}
+                    style={{ fontSize: 10 }}
+                  />
+                  <Tooltip formatter={(value) => `${value} m`} />
+                  <Bar dataKey="meters" fill="#3B82F6" radius={[0, 5, 5, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (

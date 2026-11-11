@@ -244,12 +244,12 @@ const ManagerDashboard = () => {
             </div>
           </div>
           <div className="kpi-card__content">
-            <div className="kpi-card__title">{t("totalWeightSold")}</div>
+            <div className="kpi-card__title">{t("total_meters_sold") || "Meters sold"}</div>
             <div className="kpi-card__value-wrapper">
               <span className="kpi-card__value">
-                {formatPrice(data?.kpi?.total_weight)}
+                {formatPrice(data?.kpi?.total_meters)}
               </span>
-              <span className="kpi-card__unit">{t("g") || "g"}</span>
+              <span className="kpi-card__unit">{t("m") || "m"}</span>
             </div>
           </div>
         </div>

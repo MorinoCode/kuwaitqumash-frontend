@@ -107,9 +107,9 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
                   {sortColumn === "category" &&
                     (sortDirection === "asc" ? "↑" : "↓")}
                 </th>
-                <th onClick={() => handleSort("karat")} className="sortable">
-                  {t("karat")}{" "}
-                  {sortColumn === "karat" &&
+                <th onClick={() => handleSort("fabric_type")} className="sortable">
+                  {t("fabric_type")}{" "}
+                  {sortColumn === "fabric_type" &&
                     (sortDirection === "asc" ? "↑" : "↓")}
                 </th>
                 <th
@@ -157,7 +157,7 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
                   </td>
                   <td>{item.category}</td>
                   <td>
-                    <span className="karat-badge">{item.karat}</span>
+                    <span className="karat-badge">{item.fabric_type || item.karat || "-"}</span>
                   </td>
                   <td className="currency">
                     {formatValue(item.revenue, "currency")}
@@ -169,7 +169,7 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
                     {formatValue(item.quantity, "number")}
                   </td>
                   <td className="weight">
-                    {formatValue(item.weight, "weight")}
+                    {formatValue(item.meters ?? item.weight, "weight")}
                   </td>
                 </tr>
               ))}

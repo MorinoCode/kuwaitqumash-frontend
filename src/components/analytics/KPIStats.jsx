@@ -26,12 +26,12 @@ const KPIStats = ({ data, changes, theme }) => {
       change: changes?.profit,
     },
     {
-      title: t("weight_sold"),
-      value: `${parseFloat(data.weight_sold).toFixed(2)}`,
-      unit: "g",
+      title: t("meters_sold") || "Meters sold",
+      value: `${parseFloat(data.meters_sold ?? data.weight_sold ?? 0).toFixed(2)}`,
+      unit: "m",
       icon: <Scale size={32} style={{ color: "#2196f3" }} />,
       color: "blue",
-      change: changes?.weight_sold,
+      change: changes?.meters_sold,
     },
     {
       title: t("transactions"),
@@ -76,7 +76,7 @@ const KPIStats = ({ data, changes, theme }) => {
               {card.color === "green" &&
                 (t("gross_profit_desc") || "Profit after costs")}
               {card.color === "blue" &&
-                (t("weight_sold_desc") || "Weight of gold sold")}
+                (t("meters_sold_desc") || "Fabric meters sold")}
               {card.color === "purple" &&
                 (t("transactions_desc") || "Number of invoices")}
             </div>
