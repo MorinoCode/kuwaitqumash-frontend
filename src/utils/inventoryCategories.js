@@ -56,7 +56,7 @@ export const COLORS = [
   opt("Green", "Green", "أخضر"),
   opt("Olive", "Olive", "زيتي"),
   opt("Yellow", "Yellow", "أصفر"),
-  opt("Golden", "Golden", "ذهبي"),
+  opt("Mustard", "Mustard", "خردلي"),
   opt("Silver", "Silver", "فضي"),
   opt("Pink", "Pink", "وردي"),
   opt("Purple", "Purple", "بنفسجي"),
