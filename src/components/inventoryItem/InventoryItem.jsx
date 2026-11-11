@@ -55,26 +55,22 @@ const InventoryItem = memo(
             <div className="inventory-item__meta">
               <span className="inventory-item__barcode">{item.barcode}</span>
               <span className="inventory-item__separator">•</span>
-              <span className="inventory-item__category">{item.category}</span>
+              <span className="inventory-item__category">{item.composition || item.pattern || "-"}</span>
             </div>
           </div>
         </td>
         <td className="inventory-item__cell" data-label={t("fabric_type")}>
-          {item.fabric_type}
-        </td>
-        <td className="inventory-item__cell" data-label={t("fabric_type")}>
           {item.fabric_type ? (
-            <span
-              className={`inventory-item__badge inventory-item__badge--${item.fabric_type}k`}
-            >
-              {item.fabric_type}K
-            </span>
+            <span className="inventory-item__badge">{item.fabric_type}</span>
           ) : (
             <span className="inventory-item__badge">-</span>
           )}
         </td>
-        <td className="inventory-item__cell" data-label={t("meters")}>
-          {item.length_m} <small>g</small>
+        <td className="inventory-item__cell" data-label={t("pattern") || "Pattern"}>
+          {[item.pattern, item.color].filter(Boolean).join(" / ") || "-"}
+        </td>
+        <td className="inventory-item__cell" data-label={t("length_m") || "Length"}>
+          {item.length_m ?? 0} <small>{t("m") || "m"}</small>
         </td>
         <td className="inventory-item__cell" data-label={t("quantity")}>
           {item.quantity}

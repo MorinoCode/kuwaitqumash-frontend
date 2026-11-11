@@ -447,149 +447,87 @@ const ItemDetailsPage = () => {
           )}
 
           <div className="item-info__grid">
-            {/* Metal Type */}
             <div className="item-info__group">
               <label>{t("fabric_type")}</label>
-              <p className="item-info__value">{item.fabric_type}</p>
+              <p className="item-info__value">{item.fabric_type || "-"}</p>
             </div>
-
-            {/* Category - Dynamic based on Metal Type */}
             <div className="item-info__group">
-              <label>{t("category")}</label>
-              <p className="item-info__value">{item.category}</p>
+              <label>{t("pattern") || "Pattern"}</label>
+              <p className="item-info__value">{item.pattern || "-"}</p>
             </div>
-
-            {/* Country */}
+            <div className="item-info__group">
+              <label>{t("color") || "Color"}</label>
+              <p className="item-info__value">{item.color || "-"}</p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("composition") || "Composition"}</label>
+              <p className="item-info__value">{item.composition || "-"}</p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("width_cm") || "Width (cm)"}</label>
+              <p className="item-info__value">
+                {item.width_cm ? `${item.width_cm} cm` : "-"}
+              </p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("unit") || "Sale unit"}</label>
+              <p className="item-info__value">{item.unit || "meter"}</p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("length_m") || "Length (m)"}</label>
+              <p className="item-info__value">
+                {item.length_m ?? 0} {t("m") || "m"}
+              </p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("roll_length_m") || "Roll length (m)"}</label>
+              <p className="item-info__value">
+                {item.roll_length_m ? `${item.roll_length_m} m` : "-"}
+              </p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("quantity")}</label>
+              <p className="item-info__value">{item.quantity || 1}</p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("min_stock")}</label>
+              <p className="item-info__value">{item.min_stock_level || 0}</p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("cost_per_meter")}</label>
+              <p className="item-info__value">
+                {(parseFloat(item.cost_per_meter) || 0).toFixed(3)} {currency}
+              </p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("price_per_meter") || "Price per meter"}</label>
+              <p className="item-info__value">
+                {(parseFloat(item.price_per_meter) || 0).toFixed(3)} {currency}
+              </p>
+            </div>
+            <div className="item-info__group">
+              <label>{t("supplier_name") || "Supplier"}</label>
+              <p className="item-info__value">{item.supplier_name || "-"}</p>
+            </div>
             <div className="item-info__group">
               <label>{t("country")}</label>
               <p className="item-info__value">
                 {item.country_of_origin || t("na")}
               </p>
             </div>
-
-            {/* Karat - Only for Gold/Silver/Platinum */}
-            {item.fabric_type !== "Diamond" && (
-              <div className="item-info__group">
-                <label>{t("fabric_type")}</label>
-                <p className="item-info__value">
-                  {item.fabric_type ? `${item.fabric_type}K` : "-"}
-                </p>
-              </div>
-            )}
-
-            {/* Weight */}
             <div className="item-info__group">
-              <label>{t("meters")}</label>
-              <p className="item-info__value">
-                {item.length_m} {t("g")}
-              </p>
+              <label>{t("barcode")}</label>
+              <p className="item-info__value">{item.barcode || "-"}</p>
             </div>
-
-            {/* Quantity */}
-            <div className="item-info__group">
-              <label>{t("quantity")}</label>
-              <p className="item-info__value">{item.quantity || 1}</p>
-            </div>
-
-            {/* Min Stock Level */}
-            <div className="item-info__group">
-              <label>{t("min_stock")}</label>
-              <p className="item-info__value">{item.min_stock_level || 2}</p>
-            </div>
-
-            {/* Buy Price */}
-            <div className="item-info__group">
-              <label>{t("cost_per_meter")}</label>
-              <p className="item-info__value">
-                {item.cost_per_meter} {currency}
-              </p>
-            </div>
-
-            {/* Status */}
             <div className="item-info__group">
               <label>{t("status")}</label>
               <p className="item-info__value">
                 {t(item.status?.toLowerCase().replace(" ", "_") || "in_stock")}
               </p>
             </div>
-          </div>
-
-          {/* Diamond Specifications */}
-          {item.fabric_type === "Diamond" && (
-            <div className="item-info__section">
-              <h3 className="item-info__section-title">
-                {t("diamond_specifications")}
-              </h3>
-              <div className="item-info__grid">
-                <div className="item-info__group">
-                  <label>{t("carat")}</label>
-                  <p className="item-info__value">
-                    {item.diamond_carat ? `${item.diamond_carat}ct` : "-"}
-                  </p>
-                </div>
-                <div className="item-info__group">
-                  <label>{t("cut")}</label>
-                  <p className="item-info__value">{item.diamond_cut || "-"}</p>
-                </div>
-                <div className="item-info__group">
-                  <label>{t("color")}</label>
-                  <p className="item-info__value">
-                    {item.diamond_color || "-"}
-                  </p>
-                </div>
-                <div className="item-info__group">
-                  <label>{t("clarity")}</label>
-                  <p className="item-info__value">
-                    {item.diamond_clarity || "-"}
-                  </p>
-                </div>
-                <div className="item-info__group">
-                  <label>{t("shape")}</label>
-                  <p className="item-info__value">
-                    {item.diamond_shape || "-"}
-                  </p>
-                </div>
-                <div className="item-info__group">
-                  <label>{t("setting")}</label>
-                  <p className="item-info__value">
-                    {item.diamond_setting || "-"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Stones Section - For Gold, Silver, Platinum */}
-          {["Gold", "Silver", "Platinum"].includes(item.fabric_type) && (
-            <div className="item-info__section">
-              <h3 className="item-info__section-title">{t("stones")}</h3>
-              {item.stones &&
-              Array.isArray(item.stones) &&
-              item.stones.length > 0 ? (
-                <div className="item-info__stones-list">
-                  {item.stones.map((stone, index) => (
-                    <div key={index} className="item-info__stone-item">
-                      <Gem size={16} />
-                      <span>
-                        <strong>{stone.type}</strong> - {stone.meters}
-                        {stone.unit === "ct" ? "ct" : "g"}
-                      </span>
-                      {stone.has_value && (
-                        <span className="item-info__badge">
-                          {t("has_value")}{" "}
-                          {stone.value ? `(${stone.value} KD)` : ""}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="item-info__empty-state">{t("no_stones")}</p>
-              )}
-            </div>
-          )}
 
           {/* Descriptions */}
+          </div>
           <div className="item-info__desc">
             <label>{t("description_en")}</label>
             <p className="item-info__text-box">
