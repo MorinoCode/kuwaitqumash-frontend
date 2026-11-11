@@ -9,10 +9,8 @@ import useBranchStore from "../../store/branchStore";
 import { useInvoices, useSendInvoiceWhatsApp } from "../../hooks/useInvoices";
 import { useBranches } from "../../hooks/useBranches";
 import BranchSelector from "../../components/analytics/BranchSelector";
-import OldInvoicesTab from "../../components/oldInvoices/OldInvoicesTab";
 import Pagination from "../../components/pagination/Pagination";
 import "./InvoicesPage.css";
-import "../../components/oldInvoices/OldInvoicesTab.css";
 import {
   FileText,
   Search,
@@ -666,11 +664,7 @@ const InvoicesPage = () => {
           )}
         </>
       ) : (
-        <OldInvoicesTab
-          branches={branches}
-          selectedBranchIds={selectedBranchIds}
-          onBranchChange={setSelectedBranchIds}
-        />
+        null
       )}
 
       {/* Export Excel Modal */}

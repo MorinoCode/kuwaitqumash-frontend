@@ -10,7 +10,6 @@ import {
   ShoppingCart,
   Users,
   Package,
-  RefreshCw,
   BarChart2,
   Store,
   Calculator,
@@ -79,13 +78,6 @@ const MainPage = () => {
           color: "success",
           desc: "new_stock",
           isModal: true,
-        },
-        {
-          title: "old_gold",
-          icon: RefreshCw,
-          link: "/old-gold",
-          color: "gold",
-          desc: "exchange_buy",
         },
         {
           title: "invoices",

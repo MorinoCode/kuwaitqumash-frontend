@@ -6,7 +6,6 @@ import React, {
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 
@@ -41,7 +40,6 @@ const InventoryPage = () => {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
-  const location = useLocation();
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -225,12 +223,6 @@ const InventoryPage = () => {
     }
   }, []);
 
-  // When navigating back from Old Gold edit, switch to Old Gold tab
-  useEffect(() => {
-    if (location.state?.tab === "old_gold") {
-      setInventoryTab("old_gold");
-    }
-  }, [location.state?.tab]);
 
   // Inventory is now fetched via React Query hook - no need for fetchInventory function
 
@@ -688,11 +680,8 @@ const InventoryPage = () => {
         </>
       )}
 
-      {/* Old Gold list - when old_gold tab */}
-      
-
       {/* Pagination - only for inventory tabs */}
-      {inventoryTab !== "old_gold" && !loading && pagination.totalPages > 1 && (
+      {!loading && pagination.totalPages > 1 && (
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
