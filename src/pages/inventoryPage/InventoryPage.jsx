@@ -435,6 +435,16 @@ const InventoryPage = () => {
                       {i18n.language === "ar" ? pattern.labelAr : pattern.label}
                     </option>
                   ))}
+                  {uniquePatterns
+                    .filter(
+                      (value) =>
+                        !PATTERNS.some((pattern) => pattern.value === value),
+                    )
+                    .map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="inventory-select-box">

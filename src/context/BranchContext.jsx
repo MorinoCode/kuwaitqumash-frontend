@@ -45,7 +45,7 @@ export const BranchProvider = ({ children }) => {
       if (e.key === "branch-storage" && e.newValue) {
         try {
           const newState = JSON.parse(e.newValue);
-          if (newState.state) {
+          if (newState.state) { void 0; 
 
           }
         } catch { void 0; }

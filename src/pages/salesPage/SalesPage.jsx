@@ -962,7 +962,7 @@ const SalesPage = () => {
         onClose={() => setIsAddItemModalOpen(false)}
         onSuccess={() => {
 
-          if (itemSearch.length > 1) {
+          if (itemSearch.length > 1) { void 0; 
 
           }
         }}
