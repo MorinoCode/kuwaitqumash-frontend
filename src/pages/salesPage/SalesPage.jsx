@@ -89,8 +89,6 @@ const SalesPage = () => {
   const [waCustomPhone, setWaCustomPhone] = useState("");
   const [waSending, setWaSending] = useState(false);
 
-  const frontInputRef = useRef(null);
-  const backInputRef = useRef(null);
   const itemInputRef = useRef(null);
   const paymentAmountInitialized = useRef(false);
   const lastGrandTotal = useRef(0);
@@ -98,24 +96,17 @@ const SalesPage = () => {
   const createSaleMutation = useCreateSale();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
-  const [idFiles, setIdFiles] = useState({ front: null, back: null });
-  const newCustFrontRef = useRef(null);
-  const newCustBackRef = useRef(null);
+  const [isSavingCustomer, setIsSavingCustomer] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
-    civil_id: "",
-    type: "Regular",
-    notes: "",
-    nationality: "Kuwaiti",
     gender: "M",
     address: "",
-    birth_date: "",
-    expiry_date: "",
+    type: "Regular",
+    notes: "",
   });
 
   useEffect(() => {
@@ -732,54 +723,13 @@ const SalesPage = () => {
     }
   };
 
-  const handleNewFileSelect = async (e, side) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setIdFiles((prev) => ({ ...prev, [side]: file }));
-    await processOCR(file);
-  };
-
-  const processOCR = async (file) => {
-    setIsScanning(true);
-    const ocrFormData = new FormData();
-    ocrFormData.append("image", file);
-
-    try {
-      const res = await api.post("/customers/scan", ocrFormData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      if (res.data.success) {
-        const data = res.data.data;
-        setFormData((prev) => ({
-          ...prev,
-          civil_id: data.civil_id || prev.civil_id,
-          full_name: data.full_name || prev.full_name,
-          nationality: data.nationality || prev.nationality,
-          gender: data.gender ? (data.gender === "F" ? "F" : "M") : prev.gender,
-          birth_date: data.birth_date || prev.birth_date,
-          expiry_date: data.expiry_date || prev.expiry_date,
-          address: data.address || prev.address,
-          notes: prev.notes + (prev.notes ? "\n" : "") + "[AI Scanned]",
-        }));
-        toast.success(t("id_scanned_success"));
-      }
-    } catch {
-      toast.error(t("scan_failed"));
-    } finally {
-      setIsScanning(false);
-    }
-  };
-
   const handleSaveNewCustomer = async (e) => {
     e.preventDefault();
     try {
+      setIsSavingCustomer(true);
       const customerData = {
         ...formData,
         branch_id: activeBranchId,
-        front_image: idFiles.front,
-        back_image: idFiles.back,
       };
 
       const res = await createCustomerMutation.mutateAsync(customerData);
@@ -791,17 +741,14 @@ const SalesPage = () => {
       setFormData({
         full_name: "",
         phone: "",
-        civil_id: "",
-        type: "Regular",
-        notes: "",
-        nationality: "Kuwaiti",
         gender: "M",
         address: "",
-        birth_date: "",
-        expiry_date: "",
+        type: "Regular",
+        notes: "",
       });
-      setIdFiles({ front: null, back: null });
-    } catch { void 0; }
+    } catch { void 0; } finally {
+      setIsSavingCustomer(false);
+    }
   };
 
   const formatPrice = useCallback((price) => {
@@ -866,10 +813,6 @@ const SalesPage = () => {
             }}
             onClearCustomer={() => setSelectedCustomer(null)}
             onAddCustomer={() => setIsFormOpen(true)}
-            onIdUpload={handleIdUpload}
-            frontInputRef={frontInputRef}
-            backInputRef={backInputRef}
-            theme={theme}
           />
 
           <PaymentForm
@@ -940,12 +883,8 @@ const SalesPage = () => {
         isOpen={isFormOpen}
         formData={formData}
         setFormData={setFormData}
-        idFiles={idFiles}
-        isScanning={isScanning}
-        newCustFrontRef={newCustFrontRef}
-        newCustBackRef={newCustBackRef}
+        isSaving={isSavingCustomer}
         onClose={() => setIsFormOpen(false)}
-        onFileSelect={handleNewFileSelect}
         onSubmit={handleSaveNewCustomer}
         theme={theme}
       />

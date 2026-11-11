@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { User, Search, Plus, X, Upload, CheckCircle } from 'lucide-react';
+import { User, Search, Plus, X } from 'lucide-react';
 
 const CustomerSelector = ({
     selectedCustomer,
@@ -12,10 +12,7 @@ const CustomerSelector = ({
     onSearchBlur,
     onSelectCustomer,
     onClearCustomer,
-    onAddCustomer,
-    onIdUpload,
-    frontInputRef,
-    backInputRef
+    onAddCustomer
 }) => {
     const { t } = useTranslation();
 
@@ -65,7 +62,7 @@ const CustomerSelector = ({
                                     role="option"
                                 >
                                     <div className="sales-dropdown__main">{cust.full_name}</div>
-                                    <div className="sales-dropdown__sub">{cust.phone} | {cust.civil_id}</div>
+                                    <div className="sales-dropdown__sub">{cust.phone} | {cust.type}</div>
                                 </li>
                             ))}
                         </ul>
@@ -92,50 +89,31 @@ const CustomerSelector = ({
                         />
                     </div>
                     <div className="sales-customer__group">
-                        <label>{t('civil_id')}</label>
+                        <label>{t('gender')}</label>
                         <input
                             className="sales-customer__input"
-                            value={selectedCustomer.civil_id}
+                            value={selectedCustomer.gender === 'F' ? t('female') : t('male')}
                             readOnly
-                            aria-label={t('customer_civil_id') || 'Customer civil ID'}
+                            aria-label={t('gender') || 'Gender'}
                         />
                     </div>
-
+                    <div className="sales-customer__group">
+                        <label>{t('type')}</label>
+                        <input
+                            className="sales-customer__input"
+                            value={selectedCustomer.type || 'Regular'}
+                            readOnly
+                            aria-label={t('customer_type') || 'Customer type'}
+                        />
+                    </div>
                     <div className="sales-customer__group sales-customer__group--full">
-                        <label>{t('id_cards')}</label>
-                        <div className="sales-customer__uploads">
-                            <input
-                                type="file"
-                                ref={frontInputRef}
-                                hidden
-                                onChange={e => onIdUpload(e, 'front')}
-                                accept="image/*"
-                                aria-label={t('upload_front_id') || 'Upload front ID'}
-                            />
-                            <button
-                                className={`sales-upload-btn ${selectedCustomer.id_card_front_url ? 'sales-upload-btn--done' : ''}`}
-                                onClick={() => frontInputRef.current?.click()}
-                                aria-label={t('upload_front_id') || 'Upload front ID'}
-                            >
-                                {selectedCustomer.id_card_front_url ? <CheckCircle size={14}/> : <Upload size={14}/>} {t('front_id')}
-                            </button>
-
-                            <input
-                                type="file"
-                                ref={backInputRef}
-                                hidden
-                                onChange={e => onIdUpload(e, 'back')}
-                                accept="image/*"
-                                aria-label={t('upload_back_id') || 'Upload back ID'}
-                            />
-                            <button
-                                className={`sales-upload-btn ${selectedCustomer.id_card_back_url ? 'sales-upload-btn--done' : ''}`}
-                                onClick={() => backInputRef.current?.click()}
-                                aria-label={t('upload_back_id') || 'Upload back ID'}
-                            >
-                                {selectedCustomer.id_card_back_url ? <CheckCircle size={14}/> : <Upload size={14}/>} {t('back_id')}
-                            </button>
-                        </div>
+                        <label>{t('address')}</label>
+                        <input
+                            className="sales-customer__input"
+                            value={selectedCustomer.address || '-'}
+                            readOnly
+                            aria-label={t('address') || 'Address'}
+                        />
                     </div>
                 </div>
             )}

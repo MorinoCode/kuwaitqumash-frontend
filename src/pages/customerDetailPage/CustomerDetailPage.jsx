@@ -18,20 +18,24 @@ import {
   MapPin,
   TrendingUp,
   ShoppingBag,
-  CreditCard,
   Download,
-  Calendar,
   Phone,
-  Globe,
-  Shield,
   Edit,
   Trash2,
   X,
   Loader2,
-  Camera,
-  Upload,
   Sparkles,
+  StickyNote,
 } from "lucide-react";
+
+const emptyForm = {
+  full_name: "",
+  phone: "",
+  gender: "M",
+  address: "",
+  type: "Regular",
+  notes: "",
+};
 
 const CustomerDetailsPage = () => {
   const { id } = useParams();
@@ -48,25 +52,9 @@ const CustomerDetailsPage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [pdfLoadingId, setPdfLoadingId] = useState(null);
-  const [isScanning, setIsScanning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [idFiles, setIdFiles] = useState({ front: null, back: null });
-  const [formData, setFormData] = useState({
-    full_name: "",
-    phone: "",
-    civil_id: "",
-    type: "Regular",
-    notes: "",
-    nationality: "Kuwaiti",
-    gender: "M",
-    address: "",
-    birth_date: "",
-    expiry_date: "",
-  });
-  const frontInputRef = React.useRef(null);
-  const backInputRef = React.useRef(null);
+  const [formData, setFormData] = useState(emptyForm);
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const { activeBranchId } = useBranchStore();
 
   useEffect(() => {
@@ -107,75 +95,13 @@ const CustomerDetailsPage = () => {
       setFormData({
         full_name: data.customer.full_name || "",
         phone: data.customer.phone || "",
-        civil_id: data.customer.civil_id || "",
-        type: data.customer.type || "Regular",
-        notes: data.customer.notes || "",
-        nationality: data.customer.nationality || "Kuwaiti",
         gender: data.customer.gender || "M",
         address: data.customer.address || "",
-        birth_date: data.customer.birth_date || "",
-        expiry_date: data.customer.expiry_date || "",
+        type: data.customer.type || "Regular",
+        notes: data.customer.notes || "",
       });
     }
   }, [data]);
-
-  const getImageUrl = (url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const cleanUrl = url.startsWith("/") ? url : `/${url}`;
-    return `${API_BASE_URL}${cleanUrl}`;
-  };
-
-  const handleFileSelect = async (e, side) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      toast.error(t("file_too_large") || "File size must be less than 5MB");
-      return;
-    }
-
-    if (!file.type.startsWith("image/")) {
-      toast.error(t("invalid_file_type") || "Please select an image file");
-      return;
-    }
-
-    setIdFiles((prev) => ({ ...prev, [side]: file }));
-    await processOCR(file);
-  };
-
-  const processOCR = async (file) => {
-    setIsScanning(true);
-    const ocrFormData = new FormData();
-    ocrFormData.append("image", file);
-
-    try {
-      const res = await api.post("/customers/scan", ocrFormData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      if (res.data.success) {
-        const data = res.data.data;
-        setFormData((prev) => ({
-          ...prev,
-          civil_id: data.civil_id || prev.civil_id,
-          full_name: data.full_name || prev.full_name,
-          nationality: data.nationality || prev.nationality,
-          gender: data.gender ? (data.gender === "F" ? "F" : "M") : prev.gender,
-          birth_date: data.birth_date || prev.birth_date,
-          expiry_date: data.expiry_date || prev.expiry_date,
-          address: data.address || prev.address,
-          notes: prev.notes + (prev.notes ? "\n" : "") + "[AI Scanned]",
-        }));
-        toast.success(t("id_scanned_success"));
-      }
-    } catch {
-      toast.error(t("scan_failed"));
-    } finally {
-      setIsScanning(false);
-    }
-  };
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -196,49 +122,22 @@ const CustomerDetailsPage = () => {
       );
     }
 
-    const sanitizedData = {
-      ...formData,
+    const payload = {
       full_name: formData.full_name.trim().substring(0, 255),
-      phone: normalizeToLatinDigits(formData.phone || "")
-        .trim()
-        .substring(0, 50),
-      civil_id: formData.civil_id
-        ? normalizeToLatinDigits(formData.civil_id).trim().substring(0, 50)
-        : "",
-      nationality: formData.nationality
-        ? formData.nationality.trim().substring(0, 100)
-        : "",
-      address: formData.address
-        ? formData.address.trim().substring(0, 500)
-        : "",
+      phone: normalizeToLatinDigits(formData.phone || "").trim().substring(0, 50),
+      gender: formData.gender || "M",
+      type: formData.type || "Regular",
+      address: formData.address ? formData.address.trim().substring(0, 500) : "",
       notes: formData.notes ? formData.notes.trim().substring(0, 2000) : "",
     };
 
+    if (activeBranchId) payload.branch_id = activeBranchId;
+
     try {
       setIsSubmitting(true);
-      const payload = new FormData();
-      Object.keys(sanitizedData).forEach((key) =>
-        payload.append(key, sanitizedData[key]),
-      );
-
-      if (activeBranchId) payload.append("branch_id", activeBranchId);
-
-      if (idFiles.front) payload.append("front_image", idFiles.front);
-      if (idFiles.back) payload.append("back_image", idFiles.back);
-
-      const dataObj = {};
-      payload.forEach((value, key) => {
-        if (key === "front_image" || key === "back_image") {
-          dataObj[key] = value;
-        } else {
-          dataObj[key] = value;
-        }
-      });
-
-      await updateCustomerMutation.mutateAsync({ id, data: dataObj });
+      await updateCustomerMutation.mutateAsync({ id, data: payload });
       refetch();
       setIsEditModalOpen(false);
-      setIdFiles({ front: null, back: null });
     } catch { void 0; } finally {
       setIsSubmitting(false);
     }
@@ -253,7 +152,6 @@ const CustomerDetailsPage = () => {
       await deleteCustomerMutation.mutateAsync(id);
       navigate("/customers");
     } catch {
-
       setIsDeleteModalOpen(false);
     }
   };
@@ -378,9 +276,7 @@ const CustomerDetailsPage = () => {
             </div>
 
             <div className="customer-profile__content">
-              <h3 className="customer-profile__civil-id">
-                {customer.civil_id || t("no_civil_id")}
-              </h3>
+              <h3 className="customer-profile__civil-id">{customer.type}</h3>
 
               <div className="customer-profile__info-list">
                 <div className="customer-profile__info-item">
@@ -391,37 +287,12 @@ const CustomerDetailsPage = () => {
                   </span>
                 </div>
                 <div className="customer-profile__info-item">
-                  <Globe size={14} className="customer-profile__icon" />
-                  <span className="customer-profile__label">
-                    {t("nationality")}:
-                  </span>
-                  <span className="customer-profile__value">
-                    {customer.nationality}
-                  </span>
-                </div>
-                <div className="customer-profile__info-item">
                   <User size={14} className="customer-profile__icon" />
                   <span className="customer-profile__label">
                     {t("gender")}:
                   </span>
                   <span className="customer-profile__value">
                     {customer.gender === "M" ? t("male") : t("female")}
-                  </span>
-                </div>
-                <div className="customer-profile__info-item">
-                  <Calendar size={14} className="customer-profile__icon" />
-                  <span className="customer-profile__label">{t("dob")}:</span>
-                  <span className="customer-profile__value">
-                    {customer.birth_date || "-"}
-                  </span>
-                </div>
-                <div className="customer-profile__info-item">
-                  <Shield size={14} className="customer-profile__icon" />
-                  <span className="customer-profile__label">
-                    {t("expiry")}:
-                  </span>
-                  <span className="customer-profile__value">
-                    {customer.expiry_date || "-"}
                   </span>
                 </div>
               </div>
@@ -435,57 +306,12 @@ const CustomerDetailsPage = () => {
 
           <div className="customer-card customer-ids">
             <div className="customer-card__header">
-              <CreditCard size={18} />
-              <h3>{t("stored_id_cards")}</h3>
+              <StickyNote size={18} />
+              <h3>{t("notes")}</h3>
             </div>
-
-            <div className="customer-ids__grid">
-              <div className="customer-ids__item">
-                <span className="customer-ids__label">{t("front_id")}</span>
-                {customer.id_card_front_url ? (
-                  <div className="customer-ids__image-container">
-                    <img
-                      src={getImageUrl(customer.id_card_front_url)}
-                      alt="Front ID"
-                      className="customer-ids__img"
-                      loading="lazy"
-                      onError={(e) => {
-                        const placeholder =
-                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2RkZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RXJyb3I8L3RleHQ+PC9zdmc+";
-                        e.target.src = placeholder;
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="customer-ids__placeholder">
-                    {t("no_front_image")}
-                  </div>
-                )}
-              </div>
-
-              <div className="customer-ids__item">
-                <span className="customer-ids__label">{t("back_id")}</span>
-                {customer.id_card_back_url ? (
-                  <div className="customer-ids__image-container">
-                    <img
-                      src={getImageUrl(customer.id_card_back_url)}
-                      alt="Back ID"
-                      className="customer-ids__img"
-                      loading="lazy"
-                      onError={(e) => {
-                        const placeholder =
-                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2RkZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RXJyb3I8L3RleHQ+PC9zdmc+";
-                        e.target.src = placeholder;
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="customer-ids__placeholder">
-                    {t("no_back_image")}
-                  </div>
-                )}
-              </div>
-            </div>
+            <p className="customer-profile__value">
+              {customer.notes || "-"}
+            </p>
           </div>
         </aside>
 
@@ -678,64 +504,10 @@ const CustomerDetailsPage = () => {
               <h3 className="customers-modal__title">{t("edit_customer")}</h3>
               <button
                 className="customers-modal__close"
-                onClick={() => {
-                  setIsEditModalOpen(false);
-                  setIdFiles({ front: null, back: null });
-                }}
+                onClick={() => setIsEditModalOpen(false)}
               >
                 <X size={20} />
               </button>
-            </div>
-
-            <div className="customers-scan">
-              <p className="customers-scan__label">{t("upload_civil_id")}</p>
-              <div className="customers-scan__buttons">
-                <input
-                  type="file"
-                  ref={frontInputRef}
-                  style={{ display: "none" }}
-                  accept="image/*"
-                  onChange={(e) => handleFileSelect(e, "front")}
-                />
-                <button
-                  type="button"
-                  className={`customers-scan__btn ${
-                    idFiles.front ? "customers-scan__btn--done" : ""
-                  }`}
-                  onClick={() => frontInputRef.current.click()}
-                  disabled={isScanning}
-                >
-                  {isScanning ? (
-                    <Loader2 className="customers-spin" size={18} />
-                  ) : (
-                    <Camera size={18} />
-                  )}
-                  {idFiles.front ? t("front_uploaded") : t("scan_front")}
-                </button>
-
-                <input
-                  type="file"
-                  ref={backInputRef}
-                  style={{ display: "none" }}
-                  accept="image/*"
-                  onChange={(e) => handleFileSelect(e, "back")}
-                />
-                <button
-                  type="button"
-                  className={`customers-scan__btn ${
-                    idFiles.back ? "customers-scan__btn--done" : ""
-                  }`}
-                  onClick={() => backInputRef.current.click()}
-                  disabled={isScanning}
-                >
-                  {isScanning ? (
-                    <Loader2 className="customers-spin" size={18} />
-                  ) : (
-                    <Upload size={18} />
-                  )}
-                  {idFiles.back ? t("back_uploaded") : t("scan_back")}
-                </button>
-              </div>
             </div>
 
             <form onSubmit={handleSave} className="customers-form">
@@ -759,17 +531,6 @@ const CustomerDetailsPage = () => {
                     setFormData({ ...formData, phone: e.target.value })
                   }
                 />
-                <input
-                  className="customers-form__input"
-                  placeholder={t("civil_id")}
-                  value={formData.civil_id}
-                  onChange={(e) =>
-                    setFormData({ ...formData, civil_id: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="customers-form__row">
                 <select
                   className="customers-form__input"
                   value={formData.gender}
@@ -780,33 +541,6 @@ const CustomerDetailsPage = () => {
                   <option value="M">{t("male")}</option>
                   <option value="F">{t("female")}</option>
                 </select>
-                <input
-                  className="customers-form__input"
-                  placeholder={t("nationality")}
-                  value={formData.nationality}
-                  onChange={(e) =>
-                    setFormData({ ...formData, nationality: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="customers-form__row">
-                <input
-                  className="customers-form__input"
-                  placeholder={t("birth_date")}
-                  value={formData.birth_date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, birth_date: e.target.value })
-                  }
-                />
-                <input
-                  className="customers-form__input"
-                  placeholder={t("expiry_date")}
-                  value={formData.expiry_date}
-                  onChange={(e) =>
-                    setFormData({ ...formData, expiry_date: e.target.value })
-                  }
-                />
               </div>
 
               <input
@@ -825,9 +559,11 @@ const CustomerDetailsPage = () => {
                   setFormData({ ...formData, type: e.target.value })
                 }
               >
-                <option value="Regular">Regular</option>
+                <option value="Regular">{t("regular_customer", "Regular")}</option>
                 <option value="VIP">VIP</option>
-                <option value="Wholesaler">Wholesaler</option>
+                <option value="Wholesaler">
+                  {t("wholesaler_customer", "Wholesaler")}
+                </option>
               </select>
 
               <textarea
@@ -843,13 +579,9 @@ const CustomerDetailsPage = () => {
               <button
                 type="submit"
                 className="customers-page__btn customers-page__btn--submit"
-                disabled={isScanning || isSubmitting}
+                disabled={isSubmitting}
               >
-                {isSubmitting
-                  ? t("saving") || "Saving..."
-                  : isScanning
-                    ? t("wait_ai")
-                    : t("save_customer")}
+                {isSubmitting ? t("saving") || "Saving..." : t("save_customer")}
               </button>
             </form>
           </div>
