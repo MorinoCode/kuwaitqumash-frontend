@@ -16,8 +16,7 @@ export const BarcodeLabel = React.forwardRef(
 
     if (!item) return null;
 
-    const weight = parseFloat(item.weight || 0).toFixed(3);
-    const isDiamond = item.metal_type === "Diamond";
+    const lengthMeters = parseFloat(item.length_m || 0).toFixed(3);
     const itemName =
       i18n.language === "ar" && item.item_name_ar
         ? item.item_name_ar
@@ -40,17 +39,12 @@ export const BarcodeLabel = React.forwardRef(
               <span className="barcode-label__shop-name">{shopName}</span>
             )}
             <span className="barcode-label__price barcode-label__weight">
-              {weight} {t("g") || "g"}
+              {lengthMeters} {t("m") || "m"}
             </span>
             <div className="barcode-label__details">
-              {!isDiamond && item.karat && (
+              {item.pattern && (
                 <span className="barcode-label__detail-item">
-                  {item.karat}K
-                </span>
-              )}
-              {isDiamond && item.diamond_carat && (
-                <span className="barcode-label__detail-item">
-                  {parseFloat(item.diamond_carat).toFixed(2)}ct
+                  {item.pattern}K
                 </span>
               )}
               {item.country_of_origin && (
@@ -61,11 +55,13 @@ export const BarcodeLabel = React.forwardRef(
             </div>
             <div className="barcode-label__meta">
               <span className="barcode-label__type">
-                {item.metal_type}{" "}
-                {!isDiamond && item.karat ? `${item.karat}K` : ""}
+                {item.fabric_type}{" "}
+                {item.color ? `· ${item.color}` : ""}
               </span>
-              {item.category && (
-                <span className="barcode-label__category">{item.category}</span>
+              {(item.composition || item.pattern) && (
+                <span className="barcode-label__category">
+                  {item.composition || item.pattern}
+                </span>
               )}
             </div>
           </div>

@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useTranslation } from "react-i18next";
+import { FABRIC_TYPES } from "../../utils/inventoryCategories";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 
@@ -20,7 +21,6 @@ import useTenantStore from "../../store/tenantStore";
 import {
   useInventory,
   useDeleteInventoryItem,
-  useCustomOptions,
 } from "../../hooks/useInventory";
 import { useBranches } from "../../hooks/useBranches";
 import "./InventoryPage.css";
@@ -81,8 +81,6 @@ const InventoryPage = () => {
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
 
   // Fetch custom options for filters
-  const { data: customMetalsData = [] } = useCustomOptions({ type: "metal" });
-  const customMetals = Array.isArray(customMetalsData) ? customMetalsData : [];
 
   // Use React Query for inventory
   const inventoryFilters = {
@@ -354,7 +352,7 @@ const InventoryPage = () => {
             <span>{t("items")}:</span> <strong>{displayStats.items}</strong>
           </div>
           <div className="inventory-stat">
-            <span>{t("total_weight")}:</span>{" "}
+            <span>{t("total_meters") || "Total meters"}:</span>{" "}
             <strong>
               {displayStats.meters} {t("g")}
             </strong>
@@ -445,18 +443,12 @@ const InventoryPage = () => {
                   onChange={(e) => setFilterMetal(e.target.value)}
                   value={filterMetal}
                 >
-                  <option value="All">{t("all_metals")}</option>
-                  <option value="Gold">{t("gold")}</option>
-                  <option value="Silver">{t("silver")}</option>
-                  <option value="Platinum">{t("platinum")}</option>
-                  <option value="Diamond">{t("diamond")}</option>
-                  <option value="Watch">{t("watch") || "Watch"}</option>
-                  {/* Custom metals from database */}
-                  {customMetals.map((metal) => (
-                    <option key={metal.id} value={metal.name}>
-                      {i18n.language === "ar" && metal.name_ar
-                        ? metal.name_ar
-                        : metal.name}
+                  <option value="All">
+                    {t("all_fabrics") || "All fabrics"}
+                  </option>
+                  {FABRIC_TYPES.map((fabric) => (
+                    <option key={fabric.value} value={fabric.value}>
+                      {i18n.language === "ar" ? fabric.labelAr : fabric.label}
                     </option>
                   ))}
                 </select>

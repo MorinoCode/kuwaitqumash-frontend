@@ -116,8 +116,8 @@ export const useCreateInventoryItem = () => {
         // Add other required fields with defaults
         images: newItem.images || [],
         quantity: newItem.quantity || 1,
-        weight: parseFloat(newItem.weight) || 0,
-        buy_price_per_gram: parseFloat(newItem.buy_price_per_gram) || 0,
+        length_m: parseFloat(newItem.length_m) || 0,
+        cost_per_meter: parseFloat(newItem.cost_per_meter) || 0,
       };
 
       // Optimistically update inventory queries that match the item's branch

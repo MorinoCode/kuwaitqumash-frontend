@@ -30,15 +30,17 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
 
   // Merge and sort data
   const chartData = [...data]
-    .sort((a, b) => {
-      const karatA = parseInt(a.karat);
-      const karatB = parseInt(b.karat);
-      return karatB - karatA;
-    })
+    .sort((a, b) =>
+      String(a.fabric_type || a.karat || "").localeCompare(
+        String(b.fabric_type || b.karat || ""),
+      ),
+    )
     .map((d) => {
       const item = { ...d };
       if (comparisonData) {
-        const compItem = comparisonData.find((c) => c.karat === d.karat);
+        const compItem = comparisonData.find(
+          (c) => (c.fabric_type || c.karat) === (d.fabric_type || d.karat),
+        );
         item.compare_value = compItem ? parseFloat(compItem[dataKey]) : 0;
       }
       return item;
@@ -47,12 +49,12 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
   // Get chart title
   const getChartTitle = () => {
     if (viewType === "quantity") {
-      return t("quantity_items") + " - " + t("karat_distribution");
+      return t("quantity_items") + " - " + (t("fabric_distribution") || "Fabric Distribution");
     }
     return (
       (metricType === "profit" ? t("profit") : t("revenue")) +
       " - " +
-      t("karat_distribution")
+      (t("fabric_distribution") || "Fabric Distribution")
     );
   };
 
@@ -74,7 +76,7 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
               strokeDasharray="3 3"
               stroke={isDark ? "#333" : "#eee"}
             />
-            <XAxis dataKey="karat" stroke={isDark ? "#888" : "#666"} />
+            <XAxis dataKey="fabric_type" stroke={isDark ? "#888" : "#666"} />
             <YAxis
               stroke={isDark ? "#888" : "#666"}
               label={{
@@ -125,7 +127,12 @@ const KaratChart = ({ data, comparisonData, theme, metricType, viewType }) => {
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={KARAT_COLORS[entry.karat] || "#B8860B"}
+                  fill={
+                    KARAT_COLORS[entry.fabric_type || entry.karat] ||
+                    ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444"][
+                      index % 5
+                    ]
+                  }
                 />
               ))}
             </Bar>

@@ -460,8 +460,8 @@ const AnalyticsPage = () => {
             <div className="analytics-row">
               <div className="analytics-row__item">
                 <KaratChart
-                  data={data.charts?.karat_distribution}
-                  comparisonData={data.comparison?.charts?.karat_distribution}
+                  data={data.charts?.fabric_distribution}
+                  comparisonData={data.comparison?.charts?.fabric_distribution}
                   theme={theme}
                   metricType={metricType}
                   viewType={viewType}
