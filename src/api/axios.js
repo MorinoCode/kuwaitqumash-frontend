@@ -2,7 +2,7 @@ import axios from 'axios';
 import useTenantStore from '../store/tenantStore';
 
 const instance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:8000/api',
+    baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : 'http://localhost:5000/api',
     withCredentials: true,
     timeout: 30000, // 30 seconds timeout
     headers: {
@@ -56,5 +56,5 @@ instance.interceptors.response.use(
     }
 );
 
-export const apiBaseURL = instance.defaults.baseURL || 'http://localhost:8000/api';
+export const apiBaseURL = instance.defaults.baseURL || 'http://localhost:5000/api';
 export default instance;
