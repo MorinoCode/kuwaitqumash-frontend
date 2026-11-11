@@ -10,7 +10,7 @@ function ErrorFallback({ error, resetErrorBoundary }) {
   const [isReporting, setIsReporting] = useState(false);
   const [reported, setReported] = useState(false);
   const theme = typeof localStorage !== 'undefined' ? (localStorage.getItem('app_theme') || 'dark') : 'dark';
-  const dir = i18n?.language === 'ar' ? 'rtl' : 'ltr';
+  const dir = i18n?.language === 'ar' || i18n?.language === 'fa' ? 'rtl' : 'ltr';
 
   const handleGoHome = () => {
     resetErrorBoundary();

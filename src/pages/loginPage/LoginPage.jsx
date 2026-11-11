@@ -103,8 +103,8 @@ const LoginPage = () => {
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
-    document.dir = lng === "ar" ? "rtl" : "ltr";
-    document.body.dir = lng === "ar" ? "rtl" : "ltr";
+    document.dir = lng === "ar" || lng === "fa" ? "rtl" : "ltr";
+    document.body.dir = lng === "ar" || lng === "fa" ? "rtl" : "ltr";
     document.body.classList.remove("font-arabic", "font-english");
     document.body.classList.add(lng === "ar" ? "font-arabic" : "font-english");
   };
