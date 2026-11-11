@@ -84,10 +84,16 @@ const MainLayout = () => {
 
       <div className="layout-content">
         <header className={`main-header main-header--${theme}`}>
+          <button
+            className="hamburger-btn"
+            onClick={toggleSidebar}
+            aria-label={t("menu") || "Menu"}
+            title={t("menu") || "Menu"}
+          >
+            <Menu size={28} />
+          </button>
+
           <div className="main-header__left">
-            <button className="hamburger-btn" onClick={toggleSidebar}>
-              <Menu size={28} />
-            </button>
             <div
               className="brand-logo-wrapper"
               onClick={() => navigate("/home")}

@@ -84,8 +84,7 @@ html[dir="rtl"] .layout-sidebar.open {
 }
 
 .main-header {
-  display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
+  display: flex;
   align-items: center;
   gap: 12px;
   padding: 8px 25px;
@@ -113,8 +112,8 @@ html[dir="rtl"] .layout-sidebar.open {
 .main-header__left {
   display: flex;
   align-items: center;
-  grid-column: 1;
   min-width: 0;
+  order: 2;
 }
 
 .main-header__prices {
@@ -494,8 +493,9 @@ html[dir="rtl"] .layout-sidebar.open {
   display: flex;
   align-items: center;
   gap: 10px;
-  grid-column: 3;
   min-width: 0;
+  order: 3;
+  margin-inline-start: auto;
 }
 
 .hamburger-btn {
@@ -1376,4 +1376,21 @@ html[dir="rtl"] .header-btn--logout {
   .brand-logo {
     height: 32px;
   }
+}
+
+.hamburger-btn,
+html[dir="rtl"] .hamburger-btn {
+  order: 1;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+html[dir="rtl"] .main-header__right {
+  order: 2;
+  margin-inline-start: 0;
+}
+
+html[dir="rtl"] .main-header__left {
+  order: 3;
+  margin-inline-start: auto;
 }

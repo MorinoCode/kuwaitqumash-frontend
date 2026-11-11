@@ -1012,5 +1012,6 @@
   "meters_sold": "متر فروش‌رفته",
   "meters_sold_desc": "متراژ پارچه فروش‌رفته",
   "preferred_fabric_type": "نوع پارچه ترجیحی",
-  "price_per_meter_required": "قیمت هر متر الزامی است"
+  "price_per_meter_required": "قیمت هر متر الزامی است",
+  "menu": "منو"
 }
