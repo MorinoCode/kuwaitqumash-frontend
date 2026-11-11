@@ -15,7 +15,8 @@ html, body, #root {
   -webkit-font-smoothing: antialiased;
 }
 
-.font-arabic {
+.font-arabic,
+.font-persian {
   font-family: 'Cairo', 'Tajawal', 'Arial', sans-serif;
 }
 
