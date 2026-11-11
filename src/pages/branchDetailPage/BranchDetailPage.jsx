@@ -174,10 +174,14 @@ export default function BranchDetailPage() {
     setConnecting(true);
     setQrDataUrl(null);
     const tenantId = useTenantStore.getState().tenantId;
+    const token = localStorage.getItem("token");
     const headers = {
       "x-tenant-id": tenantId || "",
       Accept: "text/event-stream",
     };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
 
     const abort = new AbortController();
     const timeoutId = setTimeout(() => {
