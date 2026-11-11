@@ -63,6 +63,7 @@ function App() {
 
   useEffect(() => {
     const isRtl = i18n.language === "ar" || i18n.language === "fa";
+    document.documentElement.lang = i18n.language;
     document.dir = isRtl ? "rtl" : "ltr";
     document.body.dir = isRtl ? "rtl" : "ltr";
 
