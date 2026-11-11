@@ -130,7 +130,6 @@
   "ai_insight_profitable_customer": "Profitable customer",
   "ai_insight_consistent_buyer": "Consistent buyer",
   "ai_insight_holiday_shopper": "Likely to buy during holidays",
-  "preferred_category": "Preferred Category",
   "best_buying_day": "Best Buying Day",
   "day_sunday": "Sunday",
   "day_monday": "Monday",
@@ -963,5 +962,7 @@
   "username_format": "Username Format",
   "phone_format": "Phone Format",
   "login": "Login",
-  "branchChanged": "BranchChanged"
+  "branchChanged": "BranchChanged",
+  "preferred_pattern": "Preferred Pattern",
+  "patterns": "Patterns"
 }

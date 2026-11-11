@@ -573,13 +573,13 @@ const CustomerDetailsPage = () => {
                         </span>
                       </div>
                     )}
-                    {analytics.preferences?.preferred_category && (
+                    {analytics.preferences?.preferred_pattern && (
                       <div className="customer-insights__preference">
                         <span className="customer-insights__preference-label">
-                          {t("preferred_category")}:
+                          {t("preferred_pattern") || "Preferred pattern"}:
                         </span>
                         <span className="customer-insights__preference-value">
-                          {analytics.preferences.preferred_category}
+                          {analytics.preferences.preferred_pattern}
                         </span>
                       </div>
                     )}

@@ -128,5 +128,7 @@
   "karat": "پارچه",
   "karat_distribution": "توزیع نوع پارچه",
   "sales_by_category_karat": "فروش بر اساس نوع پارچه",
-  "sales_by_karat": "فروش بر اساس پارچه"
+  "sales_by_karat": "فروش بر اساس پارچه",
+  "preferred_pattern": "الگوی محبوب",
+  "patterns": "الگوها"
 }

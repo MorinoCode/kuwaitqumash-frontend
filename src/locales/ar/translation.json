@@ -130,7 +130,6 @@
   "ai_insight_profitable_customer": "عميل مربح",
   "ai_insight_consistent_buyer": "عميل منتظم",
   "ai_insight_holiday_shopper": "يميل للشراء في العطلات",
-  "preferred_category": "الفئة المفضلة",
   "best_buying_day": "أفضل يوم للشراء",
   "day_sunday": "الأحد",
   "day_monday": "الإثنين",
@@ -958,5 +957,7 @@
   "username_format": "Username Format (AR)",
   "phone_format": "Phone Format (AR)",
   "login": "Login (AR)",
-  "branchChanged": "BranchChanged (AR)"
+  "branchChanged": "BranchChanged (AR)",
+  "preferred_pattern": "النقشة المفضلة",
+  "patterns": "النقشات"
 }
