@@ -173,4 +173,39 @@ export const answerQuestion = (question, uiLanguage = "fa") => {
   };
 };
 
+export const QUICK_QUESTIONS = {
+  fa: [
+    "چطور فروش ثبت کنم؟",
+    "چطور واتساپ را به فروشگاه اضافه کنم؟",
+    "چطور مرجوعی ثبت کنم؟",
+    "چطور مشتری جدید اضافه کنم؟",
+    "چطور پارچه جدید اضافه کنم؟",
+    "چطور فاکتور PDF بگیرم؟",
+    "چطور کارمند اضافه کنم؟",
+    "چطور شعبه جدید بسازم؟",
+  ],
+  en: [
+    "How do I record a sale?",
+    "How do I add WhatsApp to the store?",
+    "How do I refund an invoice?",
+    "How do I add a customer?",
+    "How do I add a new fabric?",
+    "How do I get the invoice PDF?",
+    "How do I add a staff member?",
+    "How do I create a new branch?",
+  ],
+  ar: [
+    "كيف أسجل عملية بيع؟",
+    "كيف أضيف واتساب إلى المتجر؟",
+    "كيف أعمل مرتجع؟",
+    "كيف أضيف عميلًا جديدًا؟",
+    "كيف أضيف قماشًا جديدًا؟",
+    "كيف أحصل على الفاتورة PDF؟",
+    "كيف أضيف موظفًا؟",
+    "كيف أنشئ فرعًا جديدًا؟",
+  ],
+};
+
+export const getQuickQuestions = (language) => QUICK_QUESTIONS[language] || QUICK_QUESTIONS.en;
+
 export const getUiStrings = (language) => HELP_UI[language] || HELP_UI.en;

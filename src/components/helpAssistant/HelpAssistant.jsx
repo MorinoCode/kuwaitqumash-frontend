@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Send, X, RotateCcw } from "lucide-react";
-import { answerQuestion, getUiStrings } from "../../utils/helpAssistant.js";
+import { Send, X, RotateCcw, ListChecks } from "lucide-react";
+import { answerQuestion, getQuickQuestions, getUiStrings } from "../../utils/helpAssistant.js";
 import "./HelpAssistant.css";
 
 const Mascot = ({ speaking = false }) => (
@@ -41,9 +41,11 @@ const HelpAssistant = ({ isOpen, onClose }) => {
   const { t, i18n } = useTranslation();
   const uiLanguage = i18n.language || "fa";
   const ui = useMemo(() => getUiStrings(uiLanguage), [uiLanguage]);
+  const quickQuestions = useMemo(() => getQuickQuestions(uiLanguage), [uiLanguage]);
   const isRtl = uiLanguage === "ar" || uiLanguage === "fa";
 
   const [messages, setMessages] = useState([]);
+  const [showQuickQuestions, setShowQuickQuestions] = useState(false);
   const [draft, setDraft] = useState("");
   const [thinking, setThinking] = useState(false);
   const bodyRef = useRef(null);
@@ -137,6 +139,16 @@ const HelpAssistant = ({ isOpen, onClose }) => {
         <div className="help-assistant__tools">
           <button
             type="button"
+            className={`help-assistant__tool ${showQuickQuestions ? "help-assistant__tool--active" : ""}`}
+            onClick={() => setShowQuickQuestions((shown) => !shown)}
+            title={ui.quickQuestions}
+            aria-label={ui.quickQuestions}
+            aria-pressed={showQuickQuestions}
+          >
+            <ListChecks size={16} />
+          </button>
+          <button
+            type="button"
             className="help-assistant__tool"
             onClick={startNewChat}
             title={ui.clear}
@@ -183,9 +195,14 @@ const HelpAssistant = ({ isOpen, onClose }) => {
           </div>
         )}
 
-        {showSuggestions && (
+        {(showSuggestions || showQuickQuestions) && (
           <div className="help-assistant__suggestions">
-            {ui.suggestions.map((suggestion) => (
+            {showQuickQuestions && (
+              <span className="help-assistant__suggestions-title">
+                {ui.quickQuestions}
+              </span>
+            )}
+            {(showQuickQuestions ? quickQuestions : ui.suggestions).map((suggestion) => (
               <button
                 key={suggestion}
                 type="button"
