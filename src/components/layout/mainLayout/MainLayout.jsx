@@ -4,9 +4,11 @@ import { useTheme } from "../../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/AuthContext";
 import Sidebar from "../../sidebar/Sidebar";
-import { Menu, Sun, Moon, Languages, LogOut, Check } from "lucide-react";
+import { Menu, Sun, Moon, Languages, LogOut, Check, Sparkles } from "lucide-react";
 import logoImage from "../../../assets/logo-kuwaitqumash.svg";
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
+import HelpAssistant from "../../helpAssistant/HelpAssistant";
+import { getUiStrings } from "../../../utils/helpAssistant.js";
 import "./MainLayout.css";
 
 const LANGUAGES = [
@@ -18,6 +20,7 @@ const LANGUAGES = [
 const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [isLangOpen, setIsLangOpen] = React.useState(false);
+  const [isHelpOpen, setIsHelpOpen] = React.useState(false);
   const langMenuRef = React.useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,6 +32,7 @@ const MainLayout = () => {
   const closeSidebar = () => setIsSidebarOpen(false);
 
   const handleLogout = logout;
+  const helpUi = getUiStrings(i18n.language || "fa");
 
   React.useEffect(() => {
     if (!isLangOpen) return undefined;
@@ -107,6 +111,18 @@ const MainLayout = () => {
           </div>
 
           <div className={`main-header__right main-header__right--${theme}`}>
+            <button
+              type="button"
+              className={`header-btn header-btn--${theme} header-btn--help ${isHelpOpen ? "header-btn--active" : ""}`}
+              onClick={() => setIsHelpOpen((open) => !open)}
+              aria-haspopup="dialog"
+              aria-expanded={isHelpOpen}
+              aria-label={helpUi.open}
+              title={helpUi.open}
+            >
+              <Sparkles size={20} />
+            </button>
+
             <div className={`lang-menu lang-menu--${theme}`} ref={langMenuRef}>
               <button
                 type="button"
@@ -172,6 +188,8 @@ const MainLayout = () => {
           </ErrorBoundary>
         </main>
       </div>
+
+      <HelpAssistant isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </div>
   );
 };
