@@ -76,6 +76,21 @@ export const UNITS = [
   { value: "piece", label: "Piece", labelAr: "قطعة", labelFa: "عدد", short: "pc" },
 ];
 
+export const COUNTRIES = [
+  opt("Kuwait", "Kuwait", "الكويت", "کویت"),
+  opt("Saudi Arabia", "Saudi Arabia", "السعودية", "عربستان"),
+  opt("UAE", "UAE", "الإمارات", "امارات"),
+  opt("Bahrain", "Bahrain", "البحرين", "بحرین"),
+  opt("Qatar", "Qatar", "قطر", "قطر"),
+  opt("Oman", "Oman", "عمان", "عمان"),
+  opt("China", "China", "الصين", "چین"),
+  opt("India", "India", "الهند", "هند"),
+  opt("Turkey", "Turkey", "تركيا", "ترکیه"),
+  opt("Italy", "Italy", "إيطاليا", "ایتالیا"),
+  opt("Korea", "South Korea", "كوريا الجنوبية", "کره جنوبی"),
+  opt("Other", "Other", "أخرى", "سایر"),
+];
+
 export const optionLabel = (option, language) => {
   if (!option) return "";
   if (language === "fa") return option.labelFa || option.label;

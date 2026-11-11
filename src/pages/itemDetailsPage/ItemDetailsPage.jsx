@@ -5,6 +5,8 @@ import {
   FABRIC_TYPES,
   PATTERNS,
   COLORS,
+  UNITS,
+  COUNTRIES,
   localizedOption,
   localizeWords,
   localizeItemName,
@@ -466,12 +468,14 @@ const ItemDetailsPage = () => {
             <div className="item-info__group">
               <label>{t("width_cm") || "Width (cm)"}</label>
               <p className="item-info__value">
-                {item.width_cm ? `${item.width_cm} cm` : "-"}
+                {item.width_cm ? `${item.width_cm} ${t("cm") || "cm"}` : "-"}
               </p>
             </div>
             <div className="item-info__group">
               <label>{t("unit") || "Sale unit"}</label>
-              <p className="item-info__value">{item.unit || "meter"}</p>
+              <p className="item-info__value">
+                {localizedOption(UNITS, item.unit || "meter", i18n.language)}
+              </p>
             </div>
             <div className="item-info__group">
               <label>{t("length_m") || "Length (m)"}</label>
@@ -482,7 +486,7 @@ const ItemDetailsPage = () => {
             <div className="item-info__group">
               <label>{t("roll_length_m") || "Roll length (m)"}</label>
               <p className="item-info__value">
-                {item.roll_length_m ? `${item.roll_length_m} m` : "-"}
+                {item.roll_length_m ? `${item.roll_length_m} ${t("m") || "m"}` : "-"}
               </p>
             </div>
             <div className="item-info__group">
@@ -512,7 +516,9 @@ const ItemDetailsPage = () => {
             <div className="item-info__group">
               <label>{t("country")}</label>
               <p className="item-info__value">
-                {item.country_of_origin || t("na")}
+                {item.country_of_origin
+                  ? localizedOption(COUNTRIES, item.country_of_origin, i18n.language)
+                  : t("na")}
               </p>
             </div>
             <div className="item-info__group">

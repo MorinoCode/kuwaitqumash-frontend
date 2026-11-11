@@ -994,5 +994,6 @@
   "menu": "Menu",
   "pattern_placeholder": "e.g. Plain, Floral",
   "color_placeholder": "e.g. White, Navy",
-  "composition_placeholder": "e.g. 100% Cotton"
+  "composition_placeholder": "e.g. 100% Cotton",
+  "cm": "cm"
 }

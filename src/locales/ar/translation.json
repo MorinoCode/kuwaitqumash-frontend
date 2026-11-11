@@ -989,5 +989,6 @@
   "menu": "القائمة",
   "pattern_placeholder": "مثال: سادة، زهري",
   "color_placeholder": "مثال: أبيض، كحلي",
-  "composition_placeholder": "مثال: 100% قطن"
+  "composition_placeholder": "مثال: 100% قطن",
+  "cm": "سم"
 }

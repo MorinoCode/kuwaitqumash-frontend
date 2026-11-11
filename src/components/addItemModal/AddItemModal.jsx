@@ -10,6 +10,7 @@ import {
 import {
   optionValue,
   optionLabel,
+  COUNTRIES,
   FABRIC_TYPES,
   PATTERNS,
   COMPOSITIONS,
@@ -21,20 +22,6 @@ import { Plus, X, Loader2 } from "lucide-react";
 import "./AddItemModal.css";
 import "../../pages/inventoryPage/InventoryPage.css";
 
-const GCC_COUNTRIES = [
-  { value: "Kuwait", label: "Kuwait", labelAr: "الكويت", labelFa: "کویت" },
-  { value: "Saudi Arabia", label: "Saudi Arabia", labelAr: "السعودية", labelFa: "عربستان" },
-  { value: "UAE", label: "UAE", labelAr: "الإمارات", labelFa: "امارات" },
-  { value: "Bahrain", label: "Bahrain", labelAr: "البحرين", labelFa: "بحرین" },
-  { value: "Qatar", label: "Qatar", labelAr: "قطر", labelFa: "قطر" },
-  { value: "Oman", label: "Oman", labelAr: "عمان", labelFa: "عمان" },
-  { value: "China", label: "China", labelAr: "الصين", labelFa: "چین" },
-  { value: "India", label: "India", labelAr: "الهند", labelFa: "هند" },
-  { value: "Turkey", label: "Turkey", labelAr: "تركيا", labelFa: "ترکیه" },
-  { value: "Italy", label: "Italy", labelAr: "إيطاليا", labelFa: "ایتالیا" },
-  { value: "Korea", label: "South Korea", labelAr: "كوريا الجنوبية", labelFa: "کره جنوبی" },
-  { value: "Other", label: "Other", labelAr: "أخرى", labelFa: "سایر" },
-];
 
 const EMPTY_ITEM = {
   item_name: "",
@@ -459,7 +446,7 @@ const AddItemModal = ({
                 value={form.country_of_origin}
                 onChange={update("country_of_origin")}
               >
-                {GCC_COUNTRIES.map((country) => (
+                {COUNTRIES.map((country) => (
                   <option key={country.value} value={country.value}>
                     {optionLabel(country, i18n.language)}
                   </option>
