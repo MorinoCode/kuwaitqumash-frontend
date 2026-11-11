@@ -115,7 +115,18 @@
   "max_images_alert": "حداکثر ۵ تصویر مجاز است",
   "footer": {
     "tagline": "سیستم مدیریت فروشگاه پارچه برای فروش متری، طاقه و حساب مشتریان.",
-    "rights": "تمام حقوق محفوظ است."
+    "rights": "تمام حقوق محفوظ است.",
+    "about": "درباره ما",
+    "careers": "فرصت‌های شغلی",
+    "company": "شرکت",
+    "contact": "تماس با ما",
+    "features": "امکانات",
+    "legal": "حقوقی",
+    "pricing": "تعرفه‌ها",
+    "privacy": "حریم خصوصی",
+    "product": "محصول",
+    "security": "امنیت",
+    "terms": "شرایط استفاده"
   },
   "preferred_pattern": "الگوی محبوب",
   "patterns": "الگوها",
@@ -989,5 +1000,17 @@
   "cards.fabric_title": "کنترل موجودی پارچه",
   "cards.fabric_desc": "موجودی متری، تعداد طاقه و ارزش لحظه‌ای هر نوع پارچه را پویا پایش کنید.",
   "cards.fabricprice_title": "نرخ‌های لحظه‌ای",
-  "cards.fabricprice_desc": "نرخ لحظه‌ای بازار پارچه کویت را فوری دریافت کنید."
+  "cards.fabricprice_desc": "نرخ لحظه‌ای بازار پارچه کویت را فوری دریافت کنید.",
+  "all_fabrics": "همه پارچه‌ها",
+  "barcode_optional_hint": "اختیاری",
+  "fabric_type_placeholder": "مثلاً ساتن",
+  "fabric_type_required": "نوع پارچه الزامی است",
+  "invalid_item_length": "متراژ وارد‌شده معتبر نیست",
+  "invalid_item_price": "قیمت وارد‌شده معتبر نیست",
+  "line_discount_hint": "تخفیف این ردیف",
+  "m": "متر",
+  "meters_sold": "متر فروش‌رفته",
+  "meters_sold_desc": "متراژ پارچه فروش‌رفته",
+  "preferred_fabric_type": "نوع پارچه ترجیحی",
+  "price_per_meter_required": "قیمت هر متر الزامی است"
 }
