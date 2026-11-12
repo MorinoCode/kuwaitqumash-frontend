@@ -19,15 +19,28 @@
   isolation: isolate;
 }
 
-.landing::before {
-  content: "";
+/* The particle sphere is the page backdrop on every screen size, not a hero-only
+   decoration, so it is pinned to the viewport and scaled from its smaller side. */
+.landing__backdrop {
   position: fixed;
   inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background:
     radial-gradient(circle at 50% 40%, rgba(45, 212, 191, 0.09), transparent 55%),
-    radial-gradient(circle at 15% 85%, rgba(45, 212, 191, 0.05), transparent 45%);
-  pointer-events: none;
-  z-index: -1;
+    radial-gradient(circle at 15% 85%, rgba(45, 212, 191, 0.05), transparent 45%),
+    var(--ink);
+}
+
+.landing__backdrop .particle-sphere {
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+
+.landing > :not(.landing__backdrop) {
+  position: relative;
+  z-index: 1;
 }
 
 .accent-text {
@@ -215,15 +228,6 @@
   justify-content: center;
   padding: 8rem clamp(1rem, 5vw, 4rem) 6rem;
   overflow: hidden;
-}
-
-.hero__sphere {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.95;
 }
 
 .particle-sphere {
@@ -872,6 +876,10 @@
 @media (max-width: 768px) {
   .hero {
     padding-top: 7rem;
+  }
+
+  .landing__backdrop .particle-sphere {
+    opacity: 0.65;
   }
 
   .hero__wordmark {

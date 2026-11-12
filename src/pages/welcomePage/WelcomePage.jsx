@@ -149,6 +149,10 @@ const WelcomePage = () => {
 
   return (
     <div className="landing" dir={isRtl ? "rtl" : "ltr"}>
+      <div className="landing__backdrop" aria-hidden="true">
+        <ParticleSphere />
+      </div>
+
       <nav className="landing-nav">
         <button
           type="button"
@@ -235,9 +239,6 @@ const WelcomePage = () => {
       </nav>
 
       <header className="hero">
-        <div className="hero__sphere">
-          <ParticleSphere />
-        </div>
         <div className="hero__vignette" aria-hidden="true" />
 
         <div className="hero__content">
