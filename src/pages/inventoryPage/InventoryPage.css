@@ -410,8 +410,19 @@ html[dir="rtl"] .inventory-table {
     border-bottom: 1px solid;
     color: inherit;
     max-width: 200px;
+    overflow: visible;
+}
+
+/* Only the text columns are allowed to truncate; cutting a price in the middle
+   of its digits made amounts unreadable on narrow screens. */
+.inventory-table__cell:first-child,
+.inventory-table__cell:nth-child(2) {
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.inventory-table__cell:nth-child(n + 4):not(:last-child) {
+    white-space: nowrap;
 }
 
 .inventory-page--dark .inventory-table__cell {
@@ -807,7 +818,7 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
     .inventory-page {
         padding: 1rem;
     }
@@ -1151,7 +1162,7 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1101px) {
     .inventory-mobile-list {
         display: none;
     }
@@ -1161,12 +1172,32 @@ html[dir="rtl"] .inventory-form__remove-thumb {
     }
 }
 
-@media (max-width: 768px) {
+/* The nine-column table needs roughly 1100px to stay legible, so everything
+   narrower gets the card list instead of a horizontally clipped table. */
+@media (max-width: 1100px) {
     .inventory-table-wrapper {
         display: none;
     }
 
     .inventory-mobile-list {
         display: flex;
+    }
+
+    .inventory-mobile-card {
+        max-width: 720px;
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 1101px) and (max-width: 1400px) {
+    .inventory-table {
+        min-width: 820px;
+    }
+
+    .inventory-table__head th,
+    .inventory-table__cell {
+        padding: 0.85rem 0.75rem;
+        font-size: 0.82rem;
     }
 }
