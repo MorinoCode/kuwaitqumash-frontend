@@ -24,6 +24,20 @@ export const FABRIC_TYPES = [
   opt("Organza", "Organza", "أورجانزا", "ارگانزا"),
   opt("Tulle", "Tulle", "تول", "تول"),
   opt("Kashmir", "Kashmir", "كشمير", "کشمیر"),
+  opt("Brocade", "Brocade", "البروكار", "بروکاد"),
+  opt("Charmeuse", "Charmeuse", "شارموز", "شارمز"),
+  opt("Georgette", "Georgette", "جورجيت", "ژرژت"),
+  opt("Muslin", "Muslin", "موسلين", "موسلین"),
+  opt("Rayon", "Rayon", "رايون", "ریون"),
+  opt("Nylon", "Nylon", "نايلون", "نایلون"),
+  opt("Acrylic", "Acrylic", "أكريليك", "اکریلیک"),
+  opt("Bamboo", "Bamboo", "بامبو", "بامبو"),
+  opt("Modal", "Modal", "مودال", "مدال"),
+  opt("Suede", "Suede", "شامواه", "جیر"),
+  opt("Felt", "Felt", "لباد", "نمد"),
+  opt("Net", "Net", "شبك", "تور"),
+  opt("Terry", "Terry", "تيري", "حوله‌ای"),
+  opt("Fleece", "Fleece", "فليس", "کرکی"),
 ];
 
 export const PATTERNS = [
@@ -37,6 +51,15 @@ export const PATTERNS = [
   opt("Printed", "Printed", "مطبوع", "چاپی"),
   opt("Jacquard", "Jacquard", "جاكار", "ژاکارد"),
   opt("Paisley", "Paisley", "بيسلي", "بته‌جقه"),
+  opt("Plaid", "Plaid", "كاروه", "چهارخانه"),
+  opt("Herringbone", "Herringbone", "عظم السمكة", "جناغی"),
+  opt("Damask", "Damask", "دمشقي", "دمشقی"),
+  opt("Animal Print", "Animal Print", "طبعة حيوانية", "طرح حیوانی"),
+  opt("Abstract", "Abstract", "تجريدي", "انتزاعی"),
+  opt("Tie-dye", "Tie-dye", "تايداي", "تای‌دای"),
+  opt("Camouflage", "Camouflage", "تمويه", "استتاری"),
+  opt("Sequined", "Sequined", "مطرز بالترتر", "پولک‌دوزی"),
+  opt("Textured", "Textured", "محبب", "بافت‌دار"),
 ];
 
 export const COMPOSITIONS = [
@@ -47,6 +70,15 @@ export const COMPOSITIONS = [
   opt("50% Cotton 50% Polyester", "50% Cotton 50% Polyester", "50% قطن 50% بوليستر", "50% پنبه 50% پلی‌استر"),
   opt("70% Polyester 30% Viscose", "70% Polyester 30% Viscose", "70% بوليستر 30% فيسكوز", "70% پلی‌استر 30% ویسکوز"),
   opt("95% Cotton 5% Elastane", "95% Cotton 5% Elastane", "95% قطن 5% إيلاستين", "95% پنبه 5% الاستان"),
+  opt("100% Linen", "100% Linen", "100% كتان", "100% کتان"),
+  opt("100% Viscose", "100% Viscose", "100% فيسكوز", "100% ویسکوز"),
+  opt("100% Rayon", "100% Rayon", "100% رايون", "100% ریون"),
+  opt("100% Acrylic", "100% Acrylic", "100% أكريليك", "100% اکریلیک"),
+  opt("100% Nylon", "100% Nylon", "100% نايلون", "100% نایلون"),
+  opt("60% Cotton 40% Polyester", "60% Cotton 40% Polyester", "60% قطن 40% بوليستر", "60% پنبه 40% پلی‌استر"),
+  opt("55% Linen 45% Cotton", "55% Linen 45% Cotton", "55% كتان 45% قطن", "55% کتان 45% پنبه"),
+  opt("97% Cotton 3% Elastane", "97% Cotton 3% Elastane", "97% قطن 3% إيلاستين", "97% پنبه 3% الاستان"),
+  opt("80% Polyester 20% Cotton", "80% Polyester 20% Cotton", "80% بوليستر 20% قطن", "80% پلی‌استر 20% پنبه"),
 ];
 
 export const COLORS = [
@@ -68,6 +100,21 @@ export const COLORS = [
   opt("Brown", "Brown", "بني", "قهوه‌ای"),
   opt("Grey", "Grey", "رمادي", "خاکستری"),
   opt("Multi", "Multi Color", "متعدد الألوان", "چندرنگ"),
+  opt("Orange", "Orange", "برتقالي", "نارنجی"),
+  opt("Gold", "Gold", "ذهبي", "طلایی"),
+  opt("Turquoise", "Turquoise", "فيروزي", "فیروزه‌ای"),
+  opt("Teal", "Teal", "أزرق مخضر", "سبزآبی"),
+  opt("Sky Blue", "Sky Blue", "أزرق سماوي", "آبی آسمانی"),
+  opt("Baby Pink", "Baby Pink", "وردي فاتح", "صورتی روشن"),
+  opt("Lavender", "Lavender", "لافندر", "یاسی"),
+  opt("Magenta", "Magenta", "أرجواني", "سرخابی"),
+  opt("Coral", "Coral", "مرجاني", "مرجانی"),
+  opt("Ivory", "Ivory", "عاجي", "استخوانی"),
+  opt("Burgundy", "Burgundy", "نبيذي داكن", "بوردو"),
+  opt("Bronze", "Bronze", "برونزي", "برنزی"),
+  opt("Khaki", "Khaki", "كاكي", "خاکی"),
+  opt("Peach", "Peach", "خوخي", "هلویی"),
+  opt("Mint", "Mint", "نعناعي", "نعنایی"),
 ];
 
 export const UNITS = [

@@ -32,8 +32,6 @@ const EMPTY_ITEM = {
   color: "",
   unit: "meter",
   length_m: "",
-  roll_length_m: "",
-  width_cm: "",
   quantity: 1,
   min_stock_level: 5,
   cost_per_meter: "",
@@ -103,8 +101,6 @@ const AddItemModal = ({
         color: itemToEdit.color || "",
         unit: itemToEdit.unit || "meter",
         length_m: itemToEdit.length_m ?? "",
-        roll_length_m: itemToEdit.roll_length_m ?? "",
-        width_cm: itemToEdit.width_cm ?? "",
         quantity: itemToEdit.quantity ?? 1,
         min_stock_level: itemToEdit.min_stock_level ?? 5,
         cost_per_meter: itemToEdit.cost_per_meter ?? "",
@@ -153,10 +149,8 @@ const AddItemModal = ({
       composition: optionValue(COMPOSITIONS, form.composition) || undefined,
       pattern: optionValue(PATTERNS, form.pattern) || undefined,
       color: optionValue(COLORS, form.color) || undefined,
-      width_cm: num(form.width_cm),
       unit: form.unit || "meter",
       length_m: num(form.length_m) ?? 0,
-      roll_length_m: num(form.roll_length_m),
       quantity: num(form.quantity) ?? 1,
       min_stock_level: num(form.min_stock_level) ?? 5,
       cost_per_meter: num(form.cost_per_meter) ?? 0,
@@ -290,20 +284,6 @@ const AddItemModal = ({
           <div className="inventory-form__row">
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
-                {t("width_cm") || "Width (cm)"}
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                className="inventory-form__input"
-                value={form.width_cm}
-                onChange={update("width_cm")}
-              />
-            </div>
-
-            <div className="inventory-form__section">
-              <label className="inventory-form__section-label">
                 {t("unit") || "Sale unit"} *
               </label>
               <select
@@ -318,9 +298,7 @@ const AddItemModal = ({
                 ))}
               </select>
             </div>
-          </div>
 
-          <div className="inventory-form__row">
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
                 {t("length_m") || "Length (m)"} *
@@ -333,20 +311,6 @@ const AddItemModal = ({
                 value={form.length_m}
                 onChange={update("length_m")}
                 required
-              />
-            </div>
-
-            <div className="inventory-form__section">
-              <label className="inventory-form__section-label">
-                {t("roll_length_m") || "Roll length (m)"}
-              </label>
-              <input
-                type="number"
-                step="0.001"
-                min="0"
-                className="inventory-form__input"
-                value={form.roll_length_m}
-                onChange={update("roll_length_m")}
               />
             </div>
           </div>

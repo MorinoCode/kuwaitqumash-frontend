@@ -19,7 +19,7 @@ const SuggestionInput = ({
   required,
   id,
   className = "inventory-form__input",
-  maxVisible = 8,
+  maxVisible = Infinity,
 }) => {
   const { theme = "dark" } = useTheme() || {};
   const inputRef = useRef(null);

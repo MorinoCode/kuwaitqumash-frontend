@@ -466,12 +466,6 @@ const ItemDetailsPage = () => {
               </p>
             </div>
             <div className="item-info__group">
-              <label>{t("width_cm") || "Width (cm)"}</label>
-              <p className="item-info__value">
-                {item.width_cm ? `${item.width_cm} ${t("cm") || "cm"}` : "-"}
-              </p>
-            </div>
-            <div className="item-info__group">
               <label>{t("unit") || "Sale unit"}</label>
               <p className="item-info__value">
                 {localizedOption(UNITS, item.unit || "meter", i18n.language)}
@@ -481,12 +475,6 @@ const ItemDetailsPage = () => {
               <label>{t("length_m") || "Length (m)"}</label>
               <p className="item-info__value">
                 {item.length_m ?? 0} {t("m") || "m"}
-              </p>
-            </div>
-            <div className="item-info__group">
-              <label>{t("roll_length_m") || "Roll length (m)"}</label>
-              <p className="item-info__value">
-                {item.roll_length_m ? `${item.roll_length_m} ${t("m") || "m"}` : "-"}
               </p>
             </div>
             <div className="item-info__group">
