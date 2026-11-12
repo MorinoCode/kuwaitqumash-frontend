@@ -14,6 +14,10 @@ vi.mock("../../components/addItemModal/AddItemModal", () => ({
   default: ({ isOpen }) => <div data-testid="add-item-modal">{String(isOpen)}</div>,
 }));
 
+vi.mock("../../components/particleSphere/ParticleSphere", () => ({
+  default: () => <div data-testid="home-sphere" />,
+}));
+
 const LocationProbe = () => {
   const location = useLocation();
   return <span data-testid="path">{location.pathname}</span>;
@@ -67,5 +71,18 @@ describe("MainPage", () => {
   it("shows the manage card to the owner", () => {
     const { container } = setup();
     expect(container.querySelectorAll(".dashboard-card").length).toBe(7);
+  });
+
+  it("renders the sphere backdrop behind the cards in dark mode", () => {
+    const { container, getByTestId } = setup();
+    const backdrop = container.querySelector(".main-dashboard__backdrop");
+    expect(backdrop).toBeInTheDocument();
+    expect(backdrop).toContainElement(getByTestId("home-sphere"));
+  });
+
+  it("skips the backdrop in light mode", () => {
+    localStorage.setItem("app_theme", "light");
+    const { container } = setup();
+    expect(container.querySelector(".main-dashboard__backdrop")).toBeNull();
   });
 });

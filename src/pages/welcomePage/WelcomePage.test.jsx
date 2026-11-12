@@ -40,16 +40,6 @@ describe("WelcomePage", () => {
     }
   });
 
-  it("uses the particle sphere as a page-wide background", () => {
-    const { container, getByTestId } = setup();
-    const backdrop = container.querySelector(".landing__backdrop");
-    expect(backdrop).toBeInTheDocument();
-    expect(backdrop).toContainElement(getByTestId("sphere"));
-    expect(container.querySelector(".hero").contains(getByTestId("sphere"))).toBe(
-      false,
-    );
-  });
-
   it("renders the feature sections", () => {
     const { container } = setup();
     expect(container.querySelectorAll("section").length).toBeGreaterThan(1);

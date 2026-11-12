@@ -5,6 +5,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import useBranchStore from "../../store/branchStore";
 import AddItemModal from "../../components/addItemModal/AddItemModal";
+import ParticleSphere from "../../components/particleSphere/ParticleSphere";
 import "./MainPage.css";
 import {
   ShoppingCart,
@@ -123,6 +124,14 @@ const MainPage = () => {
       className={`main-dashboard main-dashboard--${theme}`}
       dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
+      {theme === "dark" && (
+        <div className="main-dashboard__backdrop" aria-hidden="true">
+          <div className="main-dashboard__glow">
+            <ParticleSphere />
+          </div>
+        </div>
+      )}
+
       <div className="main-dashboard__content">
 
         {filteredMenuItems.map((section, idx) => (
