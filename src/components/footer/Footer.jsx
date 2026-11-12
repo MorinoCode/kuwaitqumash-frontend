@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import logoImage from '../../assets/logo-kuwaitqumash.svg';
 import './Footer.css';
@@ -27,15 +28,14 @@ const Footer = () => {
               <h4>{t('footer.company', 'Company')}</h4>
               <ul>
                 <li><a href="#about">{t('footer.about', 'About Us')}</a></li>
-                <li><a href="#careers">{t('footer.careers', 'Careers')}</a></li>
-                <li><a href="#contact">{t('footer.contact', 'Contact')}</a></li>
+                <li><Link to="/contact">{t('footer.contact', 'Contact')}</Link></li>
               </ul>
             </div>
             <div className="footer-links-col">
               <h4>{t('footer.legal', 'Legal')}</h4>
               <ul>
-                <li><a href="#privacy">{t('footer.privacy', 'Privacy Policy')}</a></li>
-                <li><a href="#terms">{t('footer.terms', 'Terms of Service')}</a></li>
+                <li><Link to="/privacy">{t('footer.privacy', 'Privacy Policy')}</Link></li>
+                <li><Link to="/terms">{t('footer.terms', 'Terms of Service')}</Link></li>
               </ul>
             </div>
           </div>

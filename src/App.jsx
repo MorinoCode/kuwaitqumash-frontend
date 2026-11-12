@@ -40,6 +40,11 @@ const CustomerDetailsPage = lazy(
 const InvoicesPage = lazy(() => import("./pages/invoicesPage/InvoicesPage"));
 const RefundPage = lazy(() => import("./pages/refundPage/RefundPage"));
 const RefundsPage = lazy(() => import("./pages/refundsPage/RefundsPage"));
+const ContactPage = lazy(() => import("./pages/contactPage/ContactPage"));
+const LegalPage = lazy(() => import("./pages/legalPage/LegalPage"));
+const ContactInboxPage = lazy(
+  () => import("./pages/contactInboxPage/ContactInboxPage"),
+);
 
 function RouteFallback() {
   return (
@@ -226,6 +231,14 @@ function App() {
                       </ErrorBoundary>
                     }
                   />
+                  <Route
+                    path="/admin/messages"
+                    element={
+                      <ErrorBoundary>
+                        <ContactInboxPage />
+                      </ErrorBoundary>
+                    }
+                  />
                 </Route>
 
                 <Route
@@ -233,6 +246,30 @@ function App() {
                   element={
                     <ErrorBoundary>
                       <WelcomePage />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/contact"
+                  element={
+                    <ErrorBoundary>
+                      <ContactPage />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/privacy"
+                  element={
+                    <ErrorBoundary>
+                      <LegalPage doc="privacy" />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/terms"
+                  element={
+                    <ErrorBoundary>
+                      <LegalPage doc="terms" />
                     </ErrorBoundary>
                   }
                 />

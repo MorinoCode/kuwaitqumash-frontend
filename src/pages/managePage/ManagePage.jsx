@@ -28,6 +28,7 @@ import {
   Edit,
   Search,
   ShieldAlert,
+  MessageSquare,
 } from "lucide-react";
 
 const ManagePage = () => {
@@ -318,6 +319,14 @@ const ManagePage = () => {
           >
             <Users size={18} /> {t("staff")}
           </button>
+          {user?.role === "store_owner" && (
+            <button
+              className="manage-tab"
+              onClick={() => navigate("/admin/messages")}
+            >
+              <MessageSquare size={18} /> {t("contact_inbox.title")}
+            </button>
+          )}
         </div>
       </header>
 

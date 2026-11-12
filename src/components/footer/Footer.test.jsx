@@ -1,24 +1,36 @@
 import { describe, it, expect } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 import Footer from "./Footer";
 import { renderWithProviders } from "../../test/renderWithProviders";
 
+const setup = () =>
+  renderWithProviders(
+    <MemoryRouter>
+      <Footer />
+    </MemoryRouter>,
+  );
+
 describe("Footer", () => {
-  it("renders the brand logo", () => {
-    const { getByAltText } = renderWithProviders(<Footer />);
-    expect(getByAltText("KuwaitQumash")).toBeInTheDocument();
-  });
-
-  it("shows the current year in the copyright line", () => {
-    const { container } = renderWithProviders(<Footer />);
-    expect(container.textContent).toContain(String(new Date().getFullYear()));
-  });
-
-  it("links to the pricing and privacy sections", () => {
-    const { container } = renderWithProviders(<Footer />);
-    const anchors = [...container.querySelectorAll("a")].map((a) =>
+  it("links the legal and contact pages", () => {
+    const { container } = setup();
+    const hrefs = [...container.querySelectorAll("a")].map((a) =>
       a.getAttribute("href"),
     );
-    expect(anchors).toContain("#pricing");
-    expect(anchors).toContain("#privacy");
+    expect(hrefs).toContain("/contact");
+    expect(hrefs).toContain("/privacy");
+    expect(hrefs).toContain("/terms");
+  });
+
+  it("no longer offers careers", () => {
+    const { container } = setup();
+    expect(container.textContent).not.toContain("فرصت‌های شغلی");
+    expect(container.querySelector('a[href="#careers"]')).toBeNull();
+  });
+
+  it("shows the brand and copyright", () => {
+    const { container } = setup();
+    expect(container.querySelector(".footer-copyright").textContent).toContain(
+      "KuwaitQumash",
+    );
   });
 });
