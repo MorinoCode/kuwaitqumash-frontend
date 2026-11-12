@@ -976,6 +976,7 @@
   },
   "sales_by_fabric": "فروش بر اساس نوع پارچه",
   "sales_by_category_fabric": "فروش بر اساس دسته پارچه",
+  "other_categories": "سایر دسته‌ها",
   "fabric_distribution": "توزیع پارچه",
   "cards.fabric_title": "کنترل موجودی پارچه",
   "cards.fabric_desc": "موجودی متری، تعداد طاقه و ارزش لحظه‌ای هر نوع پارچه را پویا پایش کنید.",

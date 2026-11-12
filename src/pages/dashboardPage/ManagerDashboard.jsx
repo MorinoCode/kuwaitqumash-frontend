@@ -419,6 +419,7 @@ const ManagerDashboard = () => {
                       paddingAngle={3}
                       dataKey="revenue"
                       label={false}
+                      isAnimationActive={false}
                     >
                       {data.charts.sales_by_category_fabric.map(
                         (entry, index) => {

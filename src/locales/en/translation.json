@@ -938,6 +938,7 @@
   },
   "sales_by_fabric": "Sales by fabric type",
   "sales_by_category_fabric": "Sales by fabric category",
+  "other_categories": "Other categories",
   "fabric_type": "Fabric type",
   "fabric_distribution": "Fabric distribution",
   "cards.fabric_title": "Fabric inventory control",

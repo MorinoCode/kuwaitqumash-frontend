@@ -102,6 +102,7 @@ const CategoryChart = ({
               dataKey="value"
               label={renderCustomLabel}
               labelLine={false}
+              isAnimationActive={false}
             >
               {chartData.map((entry, index) => (
                 <Cell

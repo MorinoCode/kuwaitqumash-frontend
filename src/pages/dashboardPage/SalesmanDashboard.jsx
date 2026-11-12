@@ -250,6 +250,7 @@ const SalesmanDashboard = () => {
                       label={({ name, value }) =>
                         `${name}: ${formatPrice(value)}`
                       }
+                      isAnimationActive={false}
                     >
                       {data.charts.sales_by_category_fabric.map(
                         (entry, index) => (

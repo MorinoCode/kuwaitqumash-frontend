@@ -127,6 +127,37 @@ const OwnerDashboard = () => {
     return data?.alerts?.low_stock_items?.length || 0;
   }, [data]);
 
+  // A fabric shop has dozens of fabric/colour combinations; showing every one turns
+  // the donut into unreadable slivers, so only the biggest ones get their own slice.
+  const categoryChartData = useMemo(() => {
+    const rows = data?.charts?.sales_by_category_fabric;
+    if (!rows || rows.length === 0) return [];
+    const maxSlices = 8;
+    const sorted = [...rows].sort(
+      (a, b) => (b.revenue || 0) - (a.revenue || 0),
+    );
+    if (sorted.length <= maxSlices) return sorted;
+
+    const head = sorted.slice(0, maxSlices - 1);
+    const rest = sorted.slice(maxSlices - 1);
+    const other = rest.reduce(
+      (acc, row) => ({
+        ...acc,
+        revenue: acc.revenue + (row.revenue || 0),
+        profit: acc.profit + (row.profit || 0),
+        quantity: acc.quantity + (row.quantity || 0),
+      }),
+      {
+        name: t("other_categories"),
+        revenue: 0,
+        profit: 0,
+        quantity: 0,
+        is_other: true,
+      },
+    );
+    return [...head, other];
+  }, [data, t]);
+
   const topItemsSorted = useMemo(() => {
     if (!data?.charts?.top_5_items_revenue) return [];
     const items = [...data.charts.top_5_items_revenue];
@@ -542,6 +573,7 @@ const OwnerDashboard = () => {
                       paddingAngle={3}
                       dataKey="revenue"
                       label={false}
+                      isAnimationActive={false}
                     >
                       {data.charts.sales_by_branch.map((entry, index) => {
                         const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
@@ -566,7 +598,6 @@ const OwnerDashboard = () => {
                     />
                     <Legend
                       verticalAlign="bottom"
-                      height={80}
                       iconType="circle"
                       wrapperStyle={{
                         paddingTop: "20px",
@@ -591,12 +622,11 @@ const OwnerDashboard = () => {
             {t("sales_by_category_fabric")}
           </h3>
           <div className="chart-box__container">
-            {data?.charts?.sales_by_category_fabric &&
-            data.charts.sales_by_category_fabric.length > 0 ? (
+            {categoryChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={data.charts.sales_by_category_fabric}
+                    data={categoryChartData}
                     cx="50%"
                     cy="45%"
                     innerRadius={70}
@@ -605,8 +635,9 @@ const OwnerDashboard = () => {
                     paddingAngle={3}
                     dataKey="revenue"
                     label={false}
+                    isAnimationActive={false}
                   >
-                    {data.charts.sales_by_category_fabric.map((entry, index) => {
+                    {categoryChartData.map((entry, index) => {
                       const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
                       return (
                         <Cell
@@ -636,7 +667,7 @@ const OwnerDashboard = () => {
                       fontSize: "12px",
                     }}
                     formatter={(value) => {
-                      const item = data.charts.sales_by_category_fabric.find(d => d.name === value);
+                      const item = categoryChartData.find(d => d.name === value);
                       return item ? `${value} (${formatPrice(item.revenue)})` : value;
                     }}
                   />
