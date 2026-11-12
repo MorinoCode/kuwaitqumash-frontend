@@ -50,24 +50,24 @@ export const useCustomerHistory = (id) => {
   });
 };
 
+// The customer API only parses JSON: posting multipart left req.body empty and
+// the backend rejected every request with "full_name: Required".
+const toCustomerPayload = (data) => {
+  const payload = {};
+  Object.keys(data).forEach((key) => {
+    if (key === "front_image" || key === "back_image") return;
+    if (data[key] !== null && data[key] !== undefined) payload[key] = data[key];
+  });
+  return payload;
+};
+
 export const useCreateCustomer = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async (data) => {
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => {
-        if (key === "front_image" || key === "back_image") {
-          if (data[key]) formData.append(key, data[key]);
-        } else if (data[key] !== null && data[key] !== undefined) {
-          formData.append(key, data[key]);
-        }
-      });
-
-      const res = await api.post("/customers", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await api.post("/customers", toCustomerPayload(data));
       return res.data;
     },
     onSuccess: (data) => {
@@ -113,18 +113,7 @@ export const useUpdateCustomer = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }) => {
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => {
-        if (key === "front_image" || key === "back_image") {
-          if (data[key]) formData.append(key, data[key]);
-        } else if (data[key] !== null && data[key] !== undefined) {
-          formData.append(key, data[key]);
-        }
-      });
-
-      const res = await api.put(`/customers/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await api.put(`/customers/${id}`, toCustomerPayload(data));
       return res.data;
     },
     onSuccess: (data, variables) => {

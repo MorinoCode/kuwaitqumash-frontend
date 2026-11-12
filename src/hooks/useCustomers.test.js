@@ -66,7 +66,7 @@ describe("useCustomer and useCustomerHistory", () => {
 });
 
 describe("customer mutations", () => {
-  it("posts multipart form data and skips empty values", async () => {
+  it("posts a JSON body and skips empty values", async () => {
     api.post.mockResolvedValue({ data: { data: { id: 7, full_name: "Sara" } } });
     const { result } = renderHookWithQuery(() => useCreateCustomer());
 
@@ -80,10 +80,9 @@ describe("customer mutations", () => {
 
     const [url, body, config] = api.post.mock.calls[0];
     expect(url).toBe("/customers");
-    expect(body instanceof FormData).toBe(true);
-    expect(body.get("full_name")).toBe("Sara");
-    expect(body.has("phone")).toBe(false);
-    expect(config.headers["Content-Type"]).toBe("multipart/form-data");
+    expect(body).toEqual({ full_name: "Sara" });
+    expect("phone" in body).toBe(false);
+    expect(config).toBeUndefined();
     expect(toast.success).toHaveBeenCalled();
   });
 
@@ -96,6 +95,7 @@ describe("customer mutations", () => {
     });
 
     expect(api.put.mock.calls[0][0]).toBe("/customers/7");
+    expect(api.put.mock.calls[0][1]).toEqual({ full_name: "Noura" });
     expect(toast.success).toHaveBeenCalled();
   });
 
