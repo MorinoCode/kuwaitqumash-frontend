@@ -937,6 +937,8 @@
   "invalid_item_length": "Entered length is invalid",
   "invalid_item_price": "Entered price is invalid",
   "length_m": "Length (m)",
+  "length_per_roll_m": "Length per roll (m)",
+  "length_per_piece_m": "Length per piece (m)",
   "line_discount_hint": "Discount for this line",
   "m": "m",
   "meter": "meter",

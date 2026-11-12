@@ -472,7 +472,13 @@ const ItemDetailsPage = () => {
               </p>
             </div>
             <div className="item-info__group">
-              <label>{t("length_m") || "Length (m)"}</label>
+              <label>
+                {item.unit === "roll"
+                  ? t("length_per_roll_m") || "Length per roll (m)"
+                  : item.unit === "piece"
+                    ? t("length_per_piece_m") || "Length per piece (m)"
+                    : t("length_m") || "Length (m)"}
+              </label>
               <p className="item-info__value">
                 {item.length_m ?? 0} {t("m") || "m"}
               </p>

@@ -932,6 +932,8 @@
   "invalid_item_length": "الطول المدخل غير صالح",
   "invalid_item_price": "السعر المدخل غير صالح",
   "length_m": "الطول (م)",
+  "length_per_roll_m": "طول كل لفة (م)",
+  "length_per_piece_m": "طول كل قطعة (م)",
   "line_discount_hint": "خصم هذا البند",
   "m": "م",
   "meter": "متر",

@@ -51,6 +51,16 @@ describe("AddItemModal", () => {
     expect(input.value).toBe("Cotton");
   });
 
+  it("labels the length field by the selected sale unit", () => {
+    const { container } = setup();
+    const unitSelect = container.querySelector("select.inventory-form__input");
+    fireEvent.change(unitSelect, { target: { value: "roll" } });
+    expect(container.textContent).toMatch(/Length per roll|طول هر طاقه/);
+
+    fireEvent.change(unitSelect, { target: { value: "piece" } });
+    expect(container.textContent).toMatch(/Length per piece|طول هر عدد/);
+  });
+
   it("requires the mandatory fields before saving", () => {
     const { container } = setup();
     const submit = container.querySelector('button[type="submit"]');

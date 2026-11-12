@@ -82,6 +82,15 @@ const AddItemModal = ({
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  // length_m is the length of one roll/piece (stock math multiplies it by
+  // quantity), so the label follows the selected sale unit.
+  const lengthFieldLabel =
+    form.unit === "roll"
+      ? t("length_per_roll_m") || "Length per roll (m)"
+      : form.unit === "piece"
+        ? t("length_per_piece_m") || "Length per piece (m)"
+        : t("length_m") || "Length (m)";
+
   // Suggestions keep the same label-based values the datalists produced.
   const suggestionOptions = (list) =>
     list.map((option) => {
@@ -301,7 +310,7 @@ const AddItemModal = ({
 
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
-                {t("length_m") || "Length (m)"} *
+                {lengthFieldLabel} *
               </label>
               <input
                 type="number"

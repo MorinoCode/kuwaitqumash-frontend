@@ -68,6 +68,8 @@
   "color": "رنگ",
   "width_cm": "عرض (سانتی‌متر)",
   "length_m": "طول (متر)",
+  "length_per_roll_m": "طول هر طاقه (متر)",
+  "length_per_piece_m": "طول هر عدد (متر)",
   "roll_length_m": "طول طاقه (متر)",
   "supplier": "تأمین‌کننده",
   "supplier_name": "نام تأمین‌کننده",
