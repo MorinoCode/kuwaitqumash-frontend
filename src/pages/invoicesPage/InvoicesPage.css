@@ -355,10 +355,96 @@ html[dir="rtl"] .invoices-table { text-align: right; }
 
 .invoices-empty { text-align: center; padding: 40px; opacity: 0.6; }
 
+@media (max-width: 1100px) {
+    .invoices-page {
+        padding: 20px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .invoices-table {
+        min-width: 620px;
+    }
+
+    .invoices-table__head th {
+        padding: 12px 14px;
+        font-size: 0.78rem;
+    }
+
+    .invoices-row__cell {
+        padding: 12px 14px;
+        font-size: 0.85rem;
+    }
+}
+
 @media (max-width: 768px) {
+    .invoices-page { padding: 16px; }
     .invoices-header { flex-direction: column; align-items: flex-start; }
-    .invoices-stats { width: 100%; overflow-x: auto; }
-    .invoices-controls { flex-direction: column; }
+    .invoices-header__titles { width: 100%; }
+    .invoices-title { font-size: 1.45rem; }
+    .invoices-branch-select { width: 100%; }
+    .invoices-branch-select .invoices-filter__select { width: 100%; min-width: 0; }
+
+    .invoices-tabs { flex-wrap: wrap; gap: 4px; }
+    .invoices-tab { padding: 10px 16px; font-size: 0.9rem; }
+
+    .invoices-stats {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 10px;
+        overflow-x: visible;
+    }
+    .invoices-stat-box { min-width: 0; flex: 1 1 140px; }
+
+    .invoices-controls {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+    .invoices-search { min-width: 100%; }
+
+    .invoices-filter {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+    .invoices-filter__input {
+        min-width: 0;
+        max-width: 38vw;
+        font-size: 0.85rem;
+    }
+
+    .invoices-table {
+        min-width: 560px;
+    }
+    .invoices-table-container { border-radius: 12px; }
+}
+
+@media (max-width: 480px) {
+    .invoices-page { padding: 12px; }
+    .invoices-branch-select { flex-direction: column; align-items: stretch; }
+
+    .invoices-filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .invoices-filter__input { max-width: 100%; width: 100%; }
+    .invoices-filter__clear { align-self: flex-end; }
+
+    .invoices-excel-controls { flex-direction: column; align-items: stretch; }
+    .invoices-excel-label,
+    .invoices-excel-input { width: 100%; }
+    .invoices-btn--excel { width: 100%; justify-content: center; }
+
+    .invoices-table { min-width: 520px; }
+    .invoices-table__head th { padding: 10px 10px; }
+    .invoices-row__cell { padding: 10px 10px; }
+}
+
+@media (min-width: 1101px) {
+    .invoices-table { min-width: 800px; }
 }
 
 /* ===== Excel export modal ===== */
