@@ -26,7 +26,7 @@ import {
 const InvoicesPage = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -254,6 +254,7 @@ const InvoicesPage = () => {
     try {
       setExcelLoading(true);
       const params = new URLSearchParams();
+      params.append("lang", i18n.language || "fa");
 
       if (exportStartDate) {
         params.append("start_date", exportStartDate);
