@@ -45,6 +45,44 @@ describe("WelcomePage", () => {
     expect(container.querySelectorAll("section").length).toBeGreaterThan(1);
   });
 
+  it("shows the requested hero copy in Persian", () => {
+    const { container } = setup();
+    expect(container.querySelector(".hero__tagline").textContent.trim()).toBe(
+      "موجودی طاقه و متراژ، فروش متری با تخفیف، فاکتور رسمی و حساب مشتری — و هرچه نیاز دارید در یک پنل",
+    );
+  });
+
+  it("advertises the AI assistant instead of the credit-card note", () => {
+    const { container } = setup();
+    expect(container.querySelector(".hero__note").textContent).toContain(
+      "به همراه دستیار هوش مصنوعی",
+    );
+    expect(container.textContent).not.toContain("بدون کارت بانکی");
+  });
+
+  it("drops the sold-meters statistic", () => {
+    const { container } = setup();
+    expect(container.querySelectorAll(".stat-band__item").length).toBe(3);
+    expect(container.textContent).not.toContain("۱٬۲۵۰٬۰۰۰");
+    expect(container.textContent).not.toContain("پارچه فروخته‌شده");
+  });
+
+  it("offers a single contact card without prices", () => {
+    const { container } = setup();
+    expect(container.querySelectorAll(".plan-card").length).toBe(1);
+    expect(container.querySelector(".plan-card__price")).toBeNull();
+    const card = container.querySelector(".plan-card");
+    expect(card.textContent).toContain("با ما تماس بگیرید");
+    expect(card.textContent).not.toContain("دینار");
+    expect(card.textContent).not.toContain("رایگان");
+  });
+
+  it("removes the no-install note from the final call to action", () => {
+    const { container } = setup();
+    expect(container.textContent).not.toContain("بدون نصب");
+    expect(container.querySelector(".final-cta__note")).toBeNull();
+  });
+
   describe("language menu", () => {
     it("keeps the language choices hidden until the button is clicked", () => {
       const { container } = setup();

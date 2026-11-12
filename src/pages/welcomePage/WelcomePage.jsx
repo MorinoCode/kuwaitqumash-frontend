@@ -76,7 +76,6 @@ const WelcomePage = () => {
   };
 
   const stats = [
-    { value: t("landing.stat1_value"), label: t("landing.stat1_label") },
     { value: t("landing.stat2_value"), label: t("landing.stat2_label") },
     { value: t("landing.stat3_value"), label: t("landing.stat3_label") },
     { value: t("landing.stat4_value"), label: t("landing.stat4_label") },
@@ -129,49 +128,17 @@ const WelcomePage = () => {
     },
   ];
 
-  const pricingPlans = [
-    {
-      name: t("landing.plan1_name"),
-      price: t("landing.plan1_price"),
-      period: t("landing.plan1_period"),
-      desc: t("landing.plan1_desc"),
-      features: [
-        t("landing.plan1_f1"),
-        t("landing.plan1_f2"),
-        t("landing.plan1_f3"),
-      ],
-      cta: t("landing.plan1_cta"),
-      popular: false,
-    },
-    {
-      name: t("landing.plan2_name"),
-      price: t("landing.plan2_price"),
-      period: t("landing.plan2_period"),
-      desc: t("landing.plan2_desc"),
-      features: [
-        t("landing.plan2_f1"),
-        t("landing.plan2_f2"),
-        t("landing.plan2_f3"),
-        t("landing.plan2_f4"),
-        t("landing.plan2_f5"),
-      ],
-      cta: t("landing.plan2_cta"),
-      popular: true,
-    },
-    {
-      name: t("landing.plan3_name"),
-      price: t("landing.plan3_price"),
-      period: t("landing.plan3_period"),
-      desc: t("landing.plan3_desc"),
-      features: [
-        t("landing.plan3_f1"),
-        t("landing.plan3_f2"),
-        t("landing.plan3_f3"),
-      ],
-      cta: t("landing.plan3_cta"),
-      popular: false,
-    },
-  ];
+  const contactPlan = {
+    name: t("landing.contact_plan_name"),
+    desc: t("landing.contact_plan_desc"),
+    features: [
+      t("landing.contact_plan_f1"),
+      t("landing.contact_plan_f2"),
+      t("landing.contact_plan_f3"),
+      t("landing.contact_plan_f4"),
+    ],
+    cta: t("landing.contact_plan_cta"),
+  };
 
   const faqs = [
     { q: t("landing.q1"), a: t("landing.a1") },
@@ -412,38 +379,27 @@ const WelcomePage = () => {
           <p>{t("landing.pricing_desc")}</p>
         </header>
 
-        <div className="plan-grid">
-          {pricingPlans.map((plan, index) => (
-            <article
-              className={`plan-card ${plan.popular ? "plan-card--popular" : ""}`}
-              key={index}
+                <div className="plan-grid plan-grid--single">
+          <article className="plan-card plan-card--popular">
+            <h3>{contactPlan.name}</h3>
+            <p className="plan-card__desc">{contactPlan.desc}</p>
+
+            <ul>
+              {contactPlan.features.map((feature, index) => (
+                <li key={index}>
+                  <Check size={15} />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              className="btn-pill btn-pill--solid btn-pill--block"
+              onClick={() => navigate("/signup")}
             >
-              {plan.popular && (
-                <span className="plan-card__badge">{t("landing.popular")}</span>
-              )}
-              <h3>{plan.name}</h3>
-              <p className="plan-card__price">
-                {plan.price}
-                <small>{plan.period}</small>
-              </p>
-              <p className="plan-card__desc">{plan.desc}</p>
-              <ul>
-                {plan.features.map((feature, fIndex) => (
-                  <li key={fIndex}>
-                    <Check size={15} />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                type="button"
-                className={`btn-pill ${plan.popular ? "btn-pill--solid" : "btn-pill--ghost"} btn-pill--block`}
-                onClick={() => navigate("/signup")}
-              >
-                {plan.cta}
-              </button>
-            </article>
-          ))}
+              {contactPlan.cta}
+            </button>
+          </article>
         </div>
       </section>
 
@@ -493,7 +449,6 @@ const WelcomePage = () => {
           {t("landing.cta_btn")}
           <ArrowRight size={18} className={isRtl ? "flip-x" : ""} />
         </button>
-        <p className="final-cta__note">{t("landing.cta_note")}</p>
       </section>
 
       <Footer />

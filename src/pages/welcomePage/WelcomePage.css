@@ -404,7 +404,7 @@
 
 .stat-band {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   max-width: 1180px;
   margin: 0 auto;
@@ -657,6 +657,11 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.1rem;
   align-items: stretch;
+}
+
+.plan-grid--single {
+  grid-template-columns: minmax(0, 26rem);
+  justify-content: center;
 }
 
 .plan-card {
