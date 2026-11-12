@@ -330,12 +330,12 @@ html[dir="rtl"] .customers-table {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
+  /* No backdrop-filter: it re-anchors native <select> popups in Chromium. */
+  background-color: rgba(0, 0, 0, 0.82);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
+  z-index: 1200;
   padding: 1rem;
 }
 

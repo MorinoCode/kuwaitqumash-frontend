@@ -492,12 +492,14 @@ html[dir="rtl"] .inventory-table {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
+    /* No backdrop-filter here: Chromium anchors native <select> popups to the
+       nearest filtered ancestor, which made the dropdowns open far away from
+       the field they belong to. */
+    background-color: rgba(0, 0, 0, 0.82);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 50;
+    z-index: 1200;
     padding: 1rem;
 }
 
