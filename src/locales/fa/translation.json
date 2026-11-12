@@ -996,5 +996,13 @@
   "pattern_placeholder": "مثلاً ساده، گلدار",
   "color_placeholder": "مثلاً سفید، سرمه‌ای",
   "composition_placeholder": "مثلاً 100% پنبه",
-  "cm": "سانتی‌متر"
+  "cm": "سانتی‌متر",
+  "kpi_period_sales": "فروش بازه انتخابی",
+  "kpi_period_sales_desc": "جمع فروش فاکتورهای پرداخت‌شده در این بازه",
+  "kpi_period_profit": "سود بازه انتخابی",
+  "kpi_period_profit_desc": "فروش منهای بهای تمام‌شده پارچه",
+  "kpi_period_meters": "متراژ فروخته‌شده",
+  "kpi_period_meters_desc": "مجموع متر فروش‌رفته در این بازه",
+  "kpi_period_invoices": "فاکتورهای بازه",
+  "kpi_period_invoices_desc": "تعداد فاکتورهای پرداخت‌شده در این بازه"
 }

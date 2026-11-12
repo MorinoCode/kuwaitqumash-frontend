@@ -969,5 +969,13 @@
   "pattern_placeholder": "مثال: سادة، زهري",
   "color_placeholder": "مثال: أبيض، كحلي",
   "composition_placeholder": "مثال: 100% قطن",
-  "cm": "سم"
+  "cm": "سم",
+  "kpi_period_sales": "مبيعات الفترة",
+  "kpi_period_sales_desc": "إجمالي الفواتير المدفوعة في الفترة المحددة",
+  "kpi_period_profit": "ربح الفترة",
+  "kpi_period_profit_desc": "المبيعات ناقص تكلفة القماش",
+  "kpi_period_meters": "الأمتار المبيعة",
+  "kpi_period_meters_desc": "إجمالي أمتار القماش المبيعة في الفترة",
+  "kpi_period_invoices": "فواتير الفترة",
+  "kpi_period_invoices_desc": "الفواتير المدفوعة في الفترة"
 }

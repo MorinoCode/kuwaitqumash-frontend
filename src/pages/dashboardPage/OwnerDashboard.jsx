@@ -206,7 +206,7 @@ const OwnerDashboard = () => {
 
       <DateRangePicker
         onRangeChange={handleDateRangeChange}
-        defaultRange="today"
+        defaultRange="last_7_days"
       />
 
       {lowStockCount > 0 && (
@@ -223,8 +223,8 @@ const OwnerDashboard = () => {
             <DollarSign className="kpi-card__icon" />
           </div>
           <div className="kpi-card__content">
-            <h3 className="kpi-card__title">{t("totalSalesToday")}</h3>
-            <div className="kpi-card__subtitle">{t("totalSalesTodayDesc")}</div>
+            <h3 className="kpi-card__title">{t("kpi_period_sales")}</h3>
+            <div className="kpi-card__subtitle">{t("kpi_period_sales_desc")}</div>
             <div className="kpi-card__value-wrapper">
               <span className="kpi-card__value" style={{ color: 'var(--brand)' }}>
                 {formatPrice(data?.kpi?.total_sales)}
@@ -239,8 +239,8 @@ const OwnerDashboard = () => {
             <TrendingUp className="kpi-card__icon" />
           </div>
           <div className="kpi-card__content">
-            <h3 className="kpi-card__title">{t("netProfit")}</h3>
-            <div className="kpi-card__subtitle">{t("netProfitDesc")}</div>
+            <h3 className="kpi-card__title">{t("kpi_period_profit")}</h3>
+            <div className="kpi-card__subtitle">{t("kpi_period_profit_desc")}</div>
             <div className="kpi-card__action-row">
               <div className="kpi-card__value-wrapper kpi-card__value-wrapper--profit">
                 {showProfit ? (
@@ -271,10 +271,10 @@ const OwnerDashboard = () => {
           </div>
           <div className="kpi-card__content">
             <h3 className="kpi-card__title">
-              {t("total_meters_sold") || "Meters sold"}
+              {t("kpi_period_meters")}
             </h3>
             <div className="kpi-card__subtitle">
-              {t("total_meters_sold_desc") || "Fabric meters sold today"}
+              {t("kpi_period_meters_desc")}
             </div>
             <div className="kpi-card__value-wrapper">
               <span className="kpi-card__value">
@@ -309,10 +309,10 @@ const OwnerDashboard = () => {
           </div>
           <div className="kpi-card__content">
             <h3 className="kpi-card__title">
-              {t("invoices_today") || "Invoices today"}
+              {t("kpi_period_invoices")}
             </h3>
             <div className="kpi-card__subtitle">
-              {t("invoices_today_desc") || "Paid invoices issued today"}
+              {t("kpi_period_invoices_desc")}
             </div>
             <div className="kpi-card__value-wrapper">
               <span className="kpi-card__value">

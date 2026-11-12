@@ -160,7 +160,7 @@ const SalesmanDashboard = () => {
 
       <DateRangePicker
         onRangeChange={handleDateRangeChange}
-        defaultRange="today"
+        defaultRange="last_7_days"
       />
 
       <div className="kpi-grid">

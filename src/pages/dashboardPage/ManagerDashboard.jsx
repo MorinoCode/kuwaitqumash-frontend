@@ -183,7 +183,7 @@ const ManagerDashboard = () => {
 
       <DateRangePicker
         onRangeChange={handleDateRangeChange}
-        defaultRange="today"
+        defaultRange="last_7_days"
       />
 
       {lowStockCount > 0 && (

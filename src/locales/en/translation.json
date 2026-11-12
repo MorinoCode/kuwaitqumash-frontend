@@ -974,5 +974,13 @@
   "pattern_placeholder": "e.g. Plain, Floral",
   "color_placeholder": "e.g. White, Navy",
   "composition_placeholder": "e.g. 100% Cotton",
-  "cm": "cm"
+  "cm": "cm",
+  "kpi_period_sales": "Sales in range",
+  "kpi_period_sales_desc": "Total of paid invoices in the selected range",
+  "kpi_period_profit": "Profit in range",
+  "kpi_period_profit_desc": "Sales minus fabric cost",
+  "kpi_period_meters": "Meters sold",
+  "kpi_period_meters_desc": "Total fabric meters sold in this range",
+  "kpi_period_invoices": "Invoices in range",
+  "kpi_period_invoices_desc": "Paid invoices issued in this range"
 }
