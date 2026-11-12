@@ -360,3 +360,150 @@ html[dir="rtl"] .invoices-table { text-align: right; }
     .invoices-stats { width: 100%; overflow-x: auto; }
     .invoices-controls { flex-direction: column; }
 }
+
+/* ===== Excel export modal ===== */
+.old-invoices-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+}
+
+.old-invoices-modal {
+    width: min(440px, 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    font-family: inherit;
+}
+
+.old-invoices-modal--dark { background: #141414; color: #ffffff; }
+.old-invoices-modal--light { background: #ffffff; color: #212529; }
+
+.old-invoices-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.old-invoices-modal__header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2dd4bf;
+}
+
+.old-invoices-modal__close {
+    display: flex;
+    padding: 4px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.old-invoices-modal__close:hover:not(:disabled) {
+    opacity: 1;
+    background: rgba(128, 128, 128, 0.15);
+}
+
+.old-invoices-modal__body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px;
+}
+
+.old-invoices-modal__info {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    opacity: 0.75;
+}
+
+.old-invoices-modal__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.old-invoices-modal__form-group label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.old-invoices-modal__form-group input {
+    padding: 10px 12px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 10px;
+    background: rgba(128, 128, 128, 0.1);
+    color: inherit;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.old-invoices-modal__form-group input:focus { border-color: #2dd4bf; }
+
+.old-invoices-modal__branch-note p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #2dd4bf;
+}
+
+.old-invoices-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.old-invoices-modal__cancel,
+.old-invoices-modal__upload {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.old-invoices-modal__cancel {
+    background: rgba(128, 128, 128, 0.15);
+    color: inherit;
+}
+
+.old-invoices-modal__cancel:hover:not(:disabled) {
+    background: rgba(128, 128, 128, 0.25);
+}
+
+.old-invoices-modal__upload {
+    background: #2dd4bf;
+    color: #04211e;
+}
+
+.old-invoices-modal__upload:hover:not(:disabled) { background: #5eead4; }
+
+.old-invoices-modal__cancel:disabled,
+.old-invoices-modal__upload:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

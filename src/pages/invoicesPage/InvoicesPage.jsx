@@ -233,6 +233,23 @@ const InvoicesPage = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Error bodies arrive as a Blob because this request asks for a binary response,
+  // so the JSON message (for example the export row cap) has to be read out of it.
+  const readBlobErrorMessage = async (err, fallback) => {
+    const data = err?.response?.data;
+    if (data instanceof Blob) {
+      try {
+        const text = await data.text();
+        const parsed = JSON.parse(text);
+        if (typeof parsed?.message === "string") return parsed.message;
+        return fallback;
+      } catch {
+        return fallback;
+      }
+    }
+    return typeof data?.message === "string" ? data.message : fallback;
+  };
+
   const handleExportExcel = async () => {
     try {
       setExcelLoading(true);
@@ -287,11 +304,8 @@ const InvoicesPage = () => {
       setExportStartDate("");
       setExportEndDate("");
     } catch (err) {
-      toast.error(
-        err.response?.data?.message ||
-          t("excel_export_failed") ||
-          "Failed to export Excel",
-      );
+      const fallback = t("excel_export_failed") || "Failed to export Excel";
+      toast.error(await readBlobErrorMessage(err, fallback));
     } finally {
       setExcelLoading(false);
     }
