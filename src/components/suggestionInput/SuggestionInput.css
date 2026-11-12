@@ -12,9 +12,19 @@
   overflow-y: auto;
   list-style: none;
   border-radius: 0.75rem;
-  border: 1px solid rgba(148, 163, 184, 0.28);
+  border: 1px solid transparent;
+}
+
+.suggestion-input__list--dark {
+  border-color: rgba(148, 163, 184, 0.28);
   background-color: #12141a;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+.suggestion-input__list--light {
+  border-color: #d8dee9;
+  background-color: #ffffff;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
 }
 
 .suggestion-input__option {
@@ -24,14 +34,27 @@
   border: none;
   border-radius: 0.5rem;
   background: transparent;
-  color: inherit;
   font: inherit;
   text-align: start;
   cursor: pointer;
 }
 
-.suggestion-input__option:hover,
-.suggestion-input__option--active {
-  background-color: rgba(45, 212, 191, 0.16);
-  color: #2dd4bf;
+.suggestion-input__option--dark {
+  color: #e6e8ee;
+}
+
+.suggestion-input__option--light {
+  color: #1f2937;
+}
+
+.suggestion-input__option--dark:hover,
+.suggestion-input__option--dark.suggestion-input__option--active {
+  background-color: rgba(45, 212, 191, 0.18);
+  color: #5eead4;
+}
+
+.suggestion-input__option--light:hover,
+.suggestion-input__option--light.suggestion-input__option--active {
+  background-color: rgba(13, 148, 136, 0.12);
+  color: #0f766e;
 }

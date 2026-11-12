@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTheme } from "../../context/ThemeContext";
 import "./SuggestionInput.css";
 
 /**
@@ -20,6 +21,7 @@ const SuggestionInput = ({
   className = "inventory-form__input",
   maxVisible = 8,
 }) => {
+  const { theme = "dark" } = useTheme() || {};
   const inputRef = useRef(null);
   const listRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -144,7 +146,7 @@ const SuggestionInput = ({
         createPortal(
           <ul
             ref={listRef}
-            className="suggestion-input__list"
+            className={`suggestion-input__list suggestion-input__list--${theme}`}
             style={{
               top: rect.top,
               left: rect.left,
@@ -158,7 +160,7 @@ const SuggestionInput = ({
                   type="button"
                   role="option"
                   aria-selected={index === highlight}
-                  className={`suggestion-input__option ${
+                  className={`suggestion-input__option suggestion-input__option--${theme} ${
                     index === highlight ? "suggestion-input__option--active" : ""
                   }`}
                   onMouseEnter={() => setHighlight(index)}
