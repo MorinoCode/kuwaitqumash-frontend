@@ -360,7 +360,8 @@ const ManagerDashboard = () => {
                         {item.category || "-"}
                       </td>
                       <td className="stock-table__cell stock-table__cell--alert">
-                        {item.qty || item.quantity || 0}
+                        {item.stock_meters ?? item.qty ?? item.quantity ?? 0}{" "}
+                        {t("m") || "m"}
                       </td>
                       <td className="stock-table__cell stock-table__cell--faded">
                         {item.min || item.min_stock_level || "-"}
