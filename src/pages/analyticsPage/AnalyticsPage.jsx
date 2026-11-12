@@ -84,12 +84,6 @@ const AnalyticsPage = () => {
     }
   }, [branches, activeBranchId, selectedBranches.length]);
 
-  useEffect(() => {
-
-    if (branches.length > 0 && selectedBranches.length > 0) {
-      fetchAnalytics();
-    }
-  }, [branches.length, selectedBranches.length, fetchAnalytics]);
 
   const fetchAnalytics = useCallback(async () => {
     try {
@@ -155,6 +149,13 @@ const AnalyticsPage = () => {
       setLoading(false);
     }
   }, [dateRange, customStart, customEnd, compare, compareType, selectedBranches]);
+
+  useEffect(() => {
+
+    if (branches.length > 0 && selectedBranches.length > 0) {
+      fetchAnalytics();
+    }
+  }, [branches.length, selectedBranches.length, fetchAnalytics]);
 
   const formatTime = (dateStr) => {
     if (!dateStr) return "--";

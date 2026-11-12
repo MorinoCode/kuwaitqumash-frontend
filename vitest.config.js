@@ -9,5 +9,17 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.js"],
     include: ["src/**/*.{test,spec}.{js,jsx}"],
     css: false,
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.{js,jsx}"],
+      exclude: [
+        "src/**/*.test.{js,jsx}",
+        "src/test/**",
+        "src/locales/**",
+        "src/main.jsx",
+        "src/**/*.css",
+      ],
+      reporter: ["text-summary", "json-summary", "text"],
+    },
   },
 });
