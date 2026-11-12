@@ -391,6 +391,7 @@ const ManagerDashboard = () => {
                     fill="#2dd4bf"
                     radius={[0, 5, 5, 0]}
                     barSize={20}
+                    isAnimationActive={false}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -430,7 +431,7 @@ const ManagerDashboard = () => {
                               fill={colors[index % colors.length]}
                               stroke={theme === "dark" ? "#1a1a1a" : "#ffffff"}
                               strokeWidth={2}
-                            />
+                    />
                           );
                         },
                       )}
@@ -477,6 +478,7 @@ const ManagerDashboard = () => {
                       dataKey="revenue"
                       fill="#2dd4bf"
                       radius={[5, 5, 0, 0]}
+                      isAnimationActive={false}
                     />
                   </BarChart>
                 </ResponsiveContainer>
@@ -506,6 +508,7 @@ const ManagerDashboard = () => {
                       dataKey="revenue"
                       fill="#2dd4bf"
                       radius={[0, 5, 5, 0]}
+                      isAnimationActive={false}
                     />
                   </BarChart>
                 </ResponsiveContainer>
@@ -531,7 +534,9 @@ const ManagerDashboard = () => {
                       style={{ fontSize: 10 }}
                     />
                     <Tooltip formatter={(value) => formatPrice(value)} />
-                    <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]} />
+                    <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]}
+                      isAnimationActive={false}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

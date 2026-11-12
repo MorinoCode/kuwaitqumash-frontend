@@ -65,6 +65,13 @@ const OwnerDashboard = () => {
     isRefetching,
   } = useDashboardOwner(dateRange.start && dateRange.end ? dateRange : null);
 
+  // Long fabric/item names are clipped by the chart area, so axis labels are shortened
+  // (the full name stays in the tooltip).
+  const truncateLabel = (value, max = 16) => {
+    const text = String(value ?? "");
+    return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+  };
+
   const formatPrice = (price) => {
     if (!price && price !== 0) return "--";
     const num = parseFloat(price);
@@ -157,6 +164,14 @@ const OwnerDashboard = () => {
     );
     return [...head, other];
   }, [data, t]);
+
+  const categoryBarData = useMemo(() => {
+    const rows = data?.charts?.sales_by_category_fabric;
+    if (!rows || rows.length === 0) return [];
+    return [...rows]
+      .sort((a, b) => (b.revenue || 0) - (a.revenue || 0))
+      .slice(0, 12);
+  }, [data]);
 
   const topItemsSorted = useMemo(() => {
     if (!data?.charts?.top_5_items_revenue) return [];
@@ -510,6 +525,7 @@ const OwnerDashboard = () => {
                     stroke="#2dd4bf"
                     strokeWidth={3}
                     dot={{ fill: "#2dd4bf", r: 4 }}
+                    isAnimationActive={false}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -546,6 +562,7 @@ const OwnerDashboard = () => {
                     stroke="#2dd4bf"
                     strokeWidth={3}
                     dot={{ fill: "#2dd4bf", r: 4 }}
+                    isAnimationActive={false}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -583,7 +600,7 @@ const OwnerDashboard = () => {
                             fill={colors[index % colors.length]}
                             stroke={theme === "dark" ? "#1a1a1a" : "#ffffff"}
                             strokeWidth={2}
-                          />
+                    />
                         );
                       })}
                     </Pie>
@@ -645,7 +662,7 @@ const OwnerDashboard = () => {
                           fill={colors[index % colors.length]}
                           stroke={theme === "dark" ? "#1a1a1a" : "#ffffff"}
                           strokeWidth={2}
-                        />
+                  />
                       );
                     })}
                   </Pie>
@@ -687,7 +704,7 @@ const OwnerDashboard = () => {
             {data?.charts?.sales_by_category_fabric &&
             data.charts.sales_by_category_fabric.length > 0 ? (
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={data.charts.sales_by_category_fabric}>
+                <BarChart data={categoryBarData}>
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke={theme === "dark" ? "#444" : "#ddd"}
@@ -696,13 +713,17 @@ const OwnerDashboard = () => {
                   <XAxis
                     dataKey="name"
                     style={{ fontSize: 10 }}
-                    angle={-45}
+                    angle={-30}
                     textAnchor="end"
-                    height={80}
+                    height={90}
+                    interval={0}
+                    tickFormatter={(value) => truncateLabel(value, 14)}
                   />
                   <YAxis style={{ fontSize: 10 }} />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]}
+                    isAnimationActive={false}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -728,7 +749,9 @@ const OwnerDashboard = () => {
                   <XAxis dataKey="fabric_type" style={{ fontSize: 10 }} />
                   <YAxis style={{ fontSize: 10 }} />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]}
+                    isAnimationActive={false}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -754,11 +777,14 @@ const OwnerDashboard = () => {
                   <YAxis
                     dataKey="name"
                     type="category"
-                    width={120}
+                    width={170}
                     style={{ fontSize: 10 }}
+                    tickFormatter={(value) => truncateLabel(value, 16)}
                   />
                   <Tooltip formatter={(value) => `${value} m`} />
-                  <Bar dataKey="meters" fill="#3B82F6" radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="meters" fill="#3B82F6" radius={[0, 5, 5, 0]}
+                    isAnimationActive={false}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -800,8 +826,9 @@ const OwnerDashboard = () => {
                   <YAxis
                     dataKey="name"
                     type="category"
-                    width={120}
+                    width={170}
                     style={{ fontSize: 10 }}
+                    tickFormatter={(value) => truncateLabel(value, 16)}
                   />
                   <Tooltip
                     formatter={(value) =>
@@ -812,6 +839,7 @@ const OwnerDashboard = () => {
                     dataKey={topItemsMetric}
                     fill="#2dd4bf"
                     radius={[0, 5, 5, 0]}
+                    isAnimationActive={false}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -839,11 +867,14 @@ const OwnerDashboard = () => {
                   <YAxis
                     dataKey="name"
                     type="category"
-                    width={120}
+                    width={170}
                     style={{ fontSize: 10 }}
+                    tickFormatter={(value) => truncateLabel(value, 16)}
                   />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]}
+                    isAnimationActive={false}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (

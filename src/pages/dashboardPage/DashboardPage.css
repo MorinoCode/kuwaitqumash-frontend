@@ -1923,3 +1923,10 @@
     display: none;
   }
 }
+
+/* In an RTL page SVG text inherits direction: rtl, which flips the anchor of the
+   chart axis labels and pushes them inside the plot area. Chart labels stay LTR. */
+.chart-box .recharts-wrapper text,
+.content-panel__chart .recharts-wrapper text {
+  direction: ltr;
+}

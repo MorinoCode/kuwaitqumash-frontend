@@ -222,6 +222,7 @@ const SalesmanDashboard = () => {
                       stroke="#2dd4bf"
                       strokeWidth={3}
                       dot={{ fill: "#2dd4bf", r: 4 }}
+                      isAnimationActive={false}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -257,7 +258,7 @@ const SalesmanDashboard = () => {
                           <Cell
                             key={`cell-${index}`}
                             fill={COLORS[index % COLORS.length]}
-                          />
+                    />
                         ),
                       )}
                     </Pie>
@@ -287,6 +288,7 @@ const SalesmanDashboard = () => {
                       dataKey="revenue"
                       fill="#2dd4bf"
                       radius={[5, 5, 0, 0]}
+                      isAnimationActive={false}
                     />
                   </BarChart>
                 </ResponsiveContainer>
@@ -313,7 +315,9 @@ const SalesmanDashboard = () => {
                     style={{ fontSize: 10 }}
                   />
                   <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[0, 5, 5, 0]}
+                    isAnimationActive={false}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
