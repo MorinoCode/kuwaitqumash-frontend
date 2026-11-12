@@ -158,6 +158,7 @@
   "payments_must_match_refund": "جمع پرداخت‌ها باید با مبلغ مرجوعی برابر باشد",
   "refund_completed": "مرجوعی با موفقیت ثبت شد",
   "refund_failed": "ثبت مرجوعی ناموفق بود",
+  "old_invoices_note": "فقط فاکتورهای قدیمی‌تر از {{days}} روز (تا تاریخ {{date}}) نمایش داده می‌شوند.",
   "download_credit_note": "دانلود PDF اعتبارنامه",
   "failed_to_download_pdf": "دانلود PDF ناموفق بود",
   "partially_refunded": "بخشی از فاکتور مرجوع شده",

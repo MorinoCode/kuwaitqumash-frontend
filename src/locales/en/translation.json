@@ -40,6 +40,7 @@
   "payments_must_match_refund": "Payments total must match refund amount",
   "refund_completed": "Refund completed successfully",
   "refund_failed": "Refund failed",
+  "old_invoices_note": "Showing only invoices older than {{days}} days (up to {{date}}).",
   "download_credit_note": "Download Credit Note PDF",
   "failed_to_download_pdf": "Failed to download PDF",
   "partially_refunded": "Partially Refunded",

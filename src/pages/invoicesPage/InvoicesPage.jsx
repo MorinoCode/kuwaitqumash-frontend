@@ -129,11 +129,32 @@ const InvoicesPage = () => {
     limit: 20,
   };
 
+  const OLD_INVOICE_DAYS = 90;
+
+  const oldInvoicesCutoff = useMemo(() => {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - OLD_INVOICE_DAYS);
+    return cutoff.toISOString().split("T")[0];
+  }, []);
+
+  const [oldPage, setOldPage] = useState(1);
+
   const {
     data: invoicesData,
     isLoading: invoicesLoading,
     refetch: refetchInvoices,
   } = useInvoices(invoiceFilters);
+
+  const oldInvoiceFilters = {
+    branch_ids: invoiceFilters.branch_ids,
+    branch_id: invoiceFilters.branch_id,
+    end_date: oldInvoicesCutoff,
+    page: oldPage,
+    limit: 20,
+  };
+
+  const { data: oldInvoicesData, isLoading: oldInvoicesLoading } =
+    useInvoices(oldInvoiceFilters);
 
   const sendInvoiceWhatsAppMutation = useSendInvoiceWhatsApp();
 
@@ -157,6 +178,10 @@ const InvoicesPage = () => {
       return { ...prev, currentPage: 1 };
     });
   }, [branchIdsKey, searchTerm, startDate, endDate]);
+
+  useEffect(() => {
+    setOldPage(1);
+  }, [branchIdsKey]);
 
   useEffect(() => {
     let isMounted = true;
@@ -658,7 +683,106 @@ const InvoicesPage = () => {
           )}
         </>
       ) : (
-        null
+        <>
+          <p className="invoices-old-note">
+            {t("old_invoices_note", {
+              days: OLD_INVOICE_DAYS,
+              date: oldInvoicesCutoff,
+            })}
+          </p>
+
+          <div className="invoices-table-container">
+            <div className="invoices-table-wrapper">
+              <table className="invoices-table">
+                <thead className="invoices-table__head">
+                  <tr>
+                    <th>{t("invoice_no")}</th>
+                    <th>{t("date")}</th>
+                    <th>{t("customer")}</th>
+                    <th>{t("total_amount")}</th>
+                    <th>{t("actions")}</th>
+                  </tr>
+                </thead>
+                <tbody className="invoices-table__body">
+                  {(oldInvoicesData?.data || []).map((inv) => (
+                    <tr key={inv.id} className="invoices-row">
+                      <td className="invoices-row__cell invoices-row__no">
+                        {inv?.invoice_number || "--"}
+                      </td>
+                      <td className="invoices-row__cell">
+                        {inv.createdAt ? (
+                          <>
+                            {new Date(inv.createdAt).toLocaleDateString()}
+                            <small className="invoices-row__time">
+                              {new Date(inv.createdAt).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </small>
+                          </>
+                        ) : (
+                          "--"
+                        )}
+                      </td>
+                      <td className="invoices-row__cell invoices-row__customer">
+                        {inv.customer ? inv.customer.full_name : t("unknown")}
+                      </td>
+                      <td className="invoices-row__cell invoices-row__amount">
+                        {(parseFloat(inv?.total_amount) || 0).toFixed(3)}{" "}
+                        {t("kwd")}
+                      </td>
+                      <td className="invoices-row__cell">
+                        <div className="invoices-actions">
+                          <button
+                            className="invoices-btn invoices-btn--download"
+                            onClick={() => handleDownload(inv)}
+                            disabled={pdfLoadingId === inv.id}
+                            title={t("download_pdf")}
+                          >
+                            {pdfLoadingId === inv.id ? (
+                              <Loader size={16} className="spinner" />
+                            ) : (
+                              <Download size={16} />
+                            )}{" "}
+                            PDF
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {oldInvoicesLoading && (
+                    <tr>
+                      <td colSpan="5" className="invoices-empty">
+                        <Loader size={18} className="spinner" />
+                      </td>
+                    </tr>
+                  )}
+                  {!oldInvoicesLoading &&
+                    (oldInvoicesData?.data || []).length === 0 && (
+                      <tr>
+                        <td colSpan="5" className="invoices-empty">
+                          {t("no_invoices_found")}
+                        </td>
+                      </tr>
+                    )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {oldInvoicesData?.pagination?.totalPages > 1 && (
+            <Pagination
+              currentPage={oldInvoicesData.pagination.currentPage}
+              totalPages={oldInvoicesData.pagination.totalPages}
+              totalItems={oldInvoicesData.pagination.totalItems}
+              itemsPerPage={oldInvoicesData.pagination.itemsPerPage}
+              onPageChange={(page) => {
+                setOldPage(page);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            />
+          )}
+        </>
       )}
 
       {showExportModal && (

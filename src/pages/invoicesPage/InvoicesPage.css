@@ -507,3 +507,14 @@ html[dir="rtl"] .invoices-table { text-align: right; }
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.invoices-old-note {
+    margin: 0 0 16px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgba(45, 212, 191, 0.08);
+    border: 1px solid rgba(45, 212, 191, 0.25);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    opacity: 0.9;
+}
