@@ -517,10 +517,10 @@ const InvoicesPage = () => {
                 <tbody className="invoices-table__body">
                   {(invoices || []).map((inv) => (
                     <tr key={inv.id} className="invoices-row">
-                      <td className="invoices-row__cell invoices-row__no">
+                      <td className="invoices-row__cell invoices-row__no" data-label={t("invoice_no")}>
                         {inv?.invoice_number || "--"}
                       </td>
-                      <td className="invoices-row__cell">
+                      <td className="invoices-row__cell" data-label={t("date")}>
                         {inv.createdAt ? (
                           <>
                             {new Date(inv.createdAt).toLocaleDateString()}
@@ -535,14 +535,14 @@ const InvoicesPage = () => {
                           "--"
                         )}
                       </td>
-                      <td className="invoices-row__cell invoices-row__customer">
+                      <td className="invoices-row__cell invoices-row__customer" data-label={t("customer")}>
                         {inv.customer ? inv.customer.full_name : t("unknown")}
                       </td>
-                      <td className="invoices-row__cell invoices-row__amount">
+                      <td className="invoices-row__cell invoices-row__amount" data-label={t("total_amount")}>
                         {(parseFloat(inv?.total_amount) || 0).toFixed(3)}{" "}
                         {t("kwd")}
                       </td>
-                      <td className="invoices-row__cell">
+                      <td className="invoices-row__cell" data-label={t("actions")}>
                         <div className="invoices-actions">
                           {(inv.status === "Paid" ||
                             inv.status === "Partially Refunded") && (
@@ -706,10 +706,10 @@ const InvoicesPage = () => {
                 <tbody className="invoices-table__body">
                   {(oldInvoicesData?.data || []).map((inv) => (
                     <tr key={inv.id} className="invoices-row">
-                      <td className="invoices-row__cell invoices-row__no">
+                      <td className="invoices-row__cell invoices-row__no" data-label={t("invoice_no")}>
                         {inv?.invoice_number || "--"}
                       </td>
-                      <td className="invoices-row__cell">
+                      <td className="invoices-row__cell" data-label={t("date")}>
                         {inv.createdAt ? (
                           <>
                             {new Date(inv.createdAt).toLocaleDateString()}
@@ -724,14 +724,14 @@ const InvoicesPage = () => {
                           "--"
                         )}
                       </td>
-                      <td className="invoices-row__cell invoices-row__customer">
+                      <td className="invoices-row__cell invoices-row__customer" data-label={t("customer")}>
                         {inv.customer ? inv.customer.full_name : t("unknown")}
                       </td>
-                      <td className="invoices-row__cell invoices-row__amount">
+                      <td className="invoices-row__cell invoices-row__amount" data-label={t("total_amount")}>
                         {(parseFloat(inv?.total_amount) || 0).toFixed(3)}{" "}
                         {t("kwd")}
                       </td>
-                      <td className="invoices-row__cell">
+                      <td className="invoices-row__cell" data-label={t("actions")}>
                         <div className="invoices-actions">
                           <button
                             className="invoices-btn invoices-btn--download"

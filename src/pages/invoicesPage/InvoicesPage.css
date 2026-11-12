@@ -604,3 +604,107 @@ html[dir="rtl"] .invoices-table { text-align: right; }
     line-height: 1.7;
     opacity: 0.9;
 }
+
+/* Below this width five columns cannot share a row without clipping, so each
+   invoice becomes a labelled card and the table chrome disappears. */
+@media (max-width: 700px) {
+    .invoices-page {
+        overflow-x: hidden;
+    }
+
+    .invoices-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .invoices-stat-box {
+        flex: none;
+        min-width: 0;
+        align-items: flex-start;
+        text-align: start;
+    }
+
+    .invoices-table-container {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .invoices-table-wrapper {
+        overflow: visible;
+    }
+
+    .invoices-table {
+        display: block;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .invoices-table__head {
+        display: none;
+    }
+
+    .invoices-table__body {
+        display: block;
+    }
+
+    .invoices-row {
+        display: block;
+        margin-bottom: 12px;
+        padding: 12px 14px;
+        border: 1px solid rgba(128, 128, 128, 0.18);
+        border-radius: 14px;
+        background: rgba(128, 128, 128, 0.05);
+    }
+
+    .invoices-row__cell {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        padding: 7px 0;
+        border: none;
+        font-size: 0.85rem;
+        text-align: start;
+        white-space: normal;
+    }
+
+    .invoices-row__cell::before {
+        content: attr(data-label);
+        flex-shrink: 0;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+
+    .invoices-row__cell:last-child {
+        justify-content: flex-end;
+        padding-top: 10px;
+    }
+
+    .invoices-row__cell:last-child::before {
+        content: none;
+    }
+
+    .invoices-actions {
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    .invoices-row__amount {
+        font-size: 0.95rem;
+    }
+
+    .invoices-empty {
+        display: block;
+        padding: 24px 8px;
+    }
+
+    .invoices-empty::before {
+        content: none;
+    }
+}
