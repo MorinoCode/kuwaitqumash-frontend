@@ -27,9 +27,18 @@ const normalize = (text) =>
     .replace(/\s+/g, " ")
     .trim();
 
+// Arabic often writes the accusative tanween as a final alef ("قماشًا" -> "قماشا"),
+// which would otherwise never equal the keyword "قماش". Both the index and the
+// query go through the same stem so the two sides stay comparable.
+const stem = (word) =>
+  word.length > 3 && /[؀-ۿ]/.test(word) && word.endsWith("ا")
+    ? word.slice(0, -1)
+    : word;
+
 const tokenize = (text) =>
   normalize(text)
     .split(" ")
+    .map(stem)
     .filter((word) => word.length > 1 && !LATIN_STOP.has(word) && !SCRIPT_STOP.has(word));
 
 const toList = (values = []) => {
@@ -38,8 +47,12 @@ const toList = (values = []) => {
     const full = normalize(value);
     if (!full) return;
     out.push(full);
+    out.push(stem(full));
     full.split(" ").forEach((part) => {
-      if (part.length > 1) out.push(part);
+      if (part.length > 1) {
+        out.push(part);
+        out.push(stem(part));
+      }
     });
   });
   return [...new Set(out)];

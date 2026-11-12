@@ -38,12 +38,12 @@ const DateRangePicker = ({
         end.setHours(23, 59, 59, 999);
         break;
       case QUICK_RANGES.LAST_7_DAYS:
-        start.setDate(today.getDate() - 7);
+        start.setDate(today.getDate() - 6);
         start.setHours(0, 0, 0, 0);
         end.setHours(23, 59, 59, 999);
         break;
       case QUICK_RANGES.LAST_30_DAYS:
-        start.setDate(today.getDate() - 30);
+        start.setDate(today.getDate() - 29);
         start.setHours(0, 0, 0, 0);
         end.setHours(23, 59, 59, 999);
         break;
