@@ -12,7 +12,9 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { RefreshCw, AlertCircle, DollarSign, TrendingUp, Scale, FileText, BarChart3 } from "lucide-react";
+import { RefreshCw, AlertCircle, DollarSign, TrendingUp, Scale, FileText, BarChart3, Check, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
+import api from "../../api/axios";
 import { useTheme } from "../../context/ThemeContext";
 import { useDashboardManager } from "../../hooks/useDashboard";
 import DateRangePicker from "../../components/dashboard/DateRangePicker";
@@ -60,6 +62,34 @@ const ManagerDashboard = () => {
     refresh,
     isRefetching,
   } = useDashboardManager(dateRange.start && dateRange.end ? dateRange : null);
+
+  const [alertActionId, setAlertActionId] = useState(null);
+
+  const dismissAlert = async (id) => {
+    try {
+      setAlertActionId(id);
+      await api.post(`/inventory/${id}/dismiss-alert`);
+      refresh();
+    } catch {
+      toast.error(t("failed_to_dismiss_alert"));
+    } finally {
+      setAlertActionId(null);
+    }
+  };
+
+  const deleteLowStockItem = async (id, name) => {
+    if (!window.confirm(`${t("confirm_delete_item")}\n${name || ""}`)) return;
+    try {
+      setAlertActionId(id);
+      await api.delete(`/inventory/${id}`);
+      toast.success(t("item_deleted"));
+      refresh();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || t("failed_delete_item"));
+    } finally {
+      setAlertActionId(null);
+    }
+  };
 
   const formatPrice = (price) => {
     if (!price && price !== 0) return "--";
@@ -314,12 +344,13 @@ const ManagerDashboard = () => {
                     <th className="stock-table__header">{t("category")}</th>
                     <th className="stock-table__header">{t("current")}</th>
                     <th className="stock-table__header">{t("min_limit")}</th>
+                    <th className="stock-table__header">{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody className="stock-table__body">
                   {data.alerts.low_stock_items.map((item, i) => (
                     <tr
-                      key={i}
+                      key={item.id || i}
                       className={`stock-table__row stock-table__row--${theme} ${lowStockCount > 0 ? "stock-table__row--critical" : ""}`}
                     >
                       <td className="stock-table__cell">
@@ -333,6 +364,30 @@ const ManagerDashboard = () => {
                       </td>
                       <td className="stock-table__cell stock-table__cell--faded">
                         {item.min || item.min_stock_level || "-"}
+                      </td>
+                      <td className="stock-table__cell stock-table__cell--actions">
+                        <button
+                          type="button"
+                          className="stock-table__action-btn"
+                          title={t("dismiss_alert")}
+                          aria-label={t("dismiss_alert")}
+                          disabled={alertActionId === item.id}
+                          onClick={() => dismissAlert(item.id)}
+                        >
+                          <Check size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          className="stock-table__action-btn stock-table__action-btn--danger"
+                          title={t("delete_item")}
+                          aria-label={t("delete_item")}
+                          disabled={alertActionId === item.id}
+                          onClick={() =>
+                            deleteLowStockItem(item.id, item.name || item.item_name)
+                          }
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </td>
                     </tr>
                   ))}
