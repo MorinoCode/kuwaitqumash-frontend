@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -21,6 +21,8 @@ import "./WelcomePage.css";
 
 const LANGUAGES = ["fa", "ar", "en"];
 
+const LANGUAGE_LABELS = { fa: "فارسی", ar: "العربية", en: "English" };
+
 const WelcomePage = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -42,9 +44,30 @@ const WelcomePage = () => {
     );
   }, [i18n.language]);
 
-  const cycleLanguage = () => {
-    const index = LANGUAGES.indexOf(i18n.language);
-    i18n.changeLanguage(LANGUAGES[(index + 1) % LANGUAGES.length]);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (!langMenuOpen) return;
+
+    const handlePointerDown = (event) => {
+      if (!langMenuRef.current?.contains(event.target)) setLangMenuOpen(false);
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setLangMenuOpen(false);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [langMenuOpen]);
+
+  const selectLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    setLangMenuOpen(false);
   };
 
   const scrollTo = (id) => {
@@ -184,16 +207,46 @@ const WelcomePage = () => {
         </div>
 
         <div className="landing-nav__actions">
-          <button
-            type="button"
-            className="landing-nav__lang"
-            onClick={cycleLanguage}
-            title={t("landing.lang_title")}
-            aria-label={t("landing.lang_title")}
-          >
-            <Languages size={17} />
-            <span>{(i18n.language || "fa").toUpperCase()}</span>
-          </button>
+          <div className="landing-nav__lang-wrap" ref={langMenuRef}>
+            <button
+              type="button"
+              className="landing-nav__lang"
+              onClick={() => setLangMenuOpen((open) => !open)}
+              title={t("landing.lang_title")}
+              aria-label={t("landing.lang_title")}
+              aria-haspopup="menu"
+              aria-expanded={langMenuOpen}
+            >
+              <Languages size={17} />
+              <span>{(i18n.language || "fa").toUpperCase()}</span>
+              <ChevronDown
+                size={14}
+                className={`landing-nav__lang-caret${langMenuOpen ? " landing-nav__lang-caret--open" : ""}`}
+              />
+            </button>
+
+            {langMenuOpen && (
+              <ul className="landing-nav__lang-menu" role="menu">
+                {LANGUAGES.map((lang) => {
+                  const isActive = (i18n.language || "fa").startsWith(lang);
+                  return (
+                    <li key={lang}>
+                      <button
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={isActive}
+                        className={`landing-nav__lang-option${isActive ? " landing-nav__lang-option--active" : ""}`}
+                        onClick={() => selectLanguage(lang)}
+                      >
+                        <span>{LANGUAGE_LABELS[lang]}</span>
+                        {isActive && <Check size={14} />}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
 
           <button
             type="button"

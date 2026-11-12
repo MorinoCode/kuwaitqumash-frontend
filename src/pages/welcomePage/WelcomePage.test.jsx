@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
-import { fireEvent } from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import WelcomePage from "./WelcomePage";
+import i18n from "../../i18n";
 import { renderWithProviders } from "../../test/renderWithProviders";
 
 vi.mock("../../components/particleSphere/ParticleSphere", () => ({
@@ -42,5 +43,44 @@ describe("WelcomePage", () => {
   it("renders the feature sections", () => {
     const { container } = setup();
     expect(container.querySelectorAll("section").length).toBeGreaterThan(1);
+  });
+
+  describe("language menu", () => {
+    it("keeps the language choices hidden until the button is clicked", () => {
+      const { container } = setup();
+      expect(container.querySelectorAll('[role="menuitemradio"]').length).toBe(0);
+    });
+
+    it("opens the language menu without changing the language", () => {
+      const { container } = setup();
+      const before = i18n.language;
+
+      fireEvent.click(container.querySelector(".landing-nav__lang"));
+
+      expect(container.querySelectorAll('[role="menuitemradio"]').length).toBe(3);
+      expect(i18n.language).toBe(before);
+    });
+
+    it("changes the language from the menu and closes it", async () => {
+      const { container } = setup();
+      fireEvent.click(container.querySelector(".landing-nav__lang"));
+
+      const english = [...container.querySelectorAll('[role="menuitemradio"]')].find(
+        (option) => option.textContent.includes("English"),
+      );
+      fireEvent.click(english);
+
+      await waitFor(() => expect(i18n.language).toBe("en"));
+      expect(container.querySelectorAll('[role="menuitemradio"]').length).toBe(0);
+    });
+
+    it("closes the menu on Escape", () => {
+      const { container } = setup();
+      fireEvent.click(container.querySelector(".landing-nav__lang"));
+
+      fireEvent.keyDown(document, { key: "Escape" });
+
+      expect(container.querySelectorAll('[role="menuitemradio"]').length).toBe(0);
+    });
   });
 });
