@@ -19,6 +19,7 @@ import {
 } from "../../utils/inventoryCategories";
 import { normalizeToLatinDigits } from "../../utils/normalizeNumbers.js";
 import { Plus, X, Loader2 } from "lucide-react";
+import SuggestionInput from "../suggestionInput/SuggestionInput";
 import "./AddItemModal.css";
 import "../../pages/inventoryPage/InventoryPage.css";
 
@@ -82,6 +83,13 @@ const AddItemModal = ({
     const value = event?.target ? event.target.value : event;
     setForm((prev) => ({ ...prev, [key]: value }));
   };
+
+  // Suggestions keep the same label-based values the datalists produced.
+  const suggestionOptions = (list) =>
+    list.map((option) => {
+      const label = optionLabel(option, i18n.language);
+      return { value: label, label };
+    });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -228,37 +236,26 @@ const AddItemModal = ({
               <label className="inventory-form__section-label">
                 {t("fabric_type") || "Fabric type"} *
               </label>
-              <input
-                className="inventory-form__input"
-                list="fabric-type-options"
+              <SuggestionInput
                 value={form.fabric_type}
                 onChange={update("fabric_type")}
-                placeholder={t("fabric_type_placeholder") || "Cotton, Silk, Crepe..."}
-                required
+                options={suggestionOptions(FABRIC_TYPES)}
+                placeholder={t("fabric_type_placeholder") || "fabric_type"}
+                required={true}
               />
-              <datalist id="fabric-type-options">
-                {FABRIC_TYPES.map((type) => (
-                  <option key={type.value} value={optionLabel(type, i18n.language)} />
-                ))}
-              </datalist>
             </div>
 
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
                 {t("pattern") || "Pattern"}
               </label>
-              <input
-                className="inventory-form__input"
-                list="pattern-options"
+              <SuggestionInput
                 value={form.pattern}
                 onChange={update("pattern")}
-                placeholder={t("pattern_placeholder") || "e.g. Plain, Floral"}
+                options={suggestionOptions(PATTERNS)}
+                placeholder={t("pattern_placeholder") || "pattern"}
+                required={false}
               />
-              <datalist id="pattern-options">
-                {PATTERNS.map((pattern) => (
-                  <option key={pattern.value} value={optionLabel(pattern, i18n.language)} />
-                ))}
-              </datalist>
             </div>
           </div>
 
@@ -267,36 +264,26 @@ const AddItemModal = ({
               <label className="inventory-form__section-label">
                 {t("color") || "Color"}
               </label>
-              <input
-                className="inventory-form__input"
-                list="color-options"
+              <SuggestionInput
                 value={form.color}
                 onChange={update("color")}
-                placeholder={t("color_placeholder") || "e.g. White, Navy"}
+                options={suggestionOptions(COLORS)}
+                placeholder={t("color_placeholder") || "color"}
+                required={false}
               />
-              <datalist id="color-options">
-                {COLORS.map((color) => (
-                  <option key={color.value} value={optionLabel(color, i18n.language)} />
-                ))}
-              </datalist>
             </div>
 
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
                 {t("composition") || "Composition"}
               </label>
-              <input
-                className="inventory-form__input"
-                list="composition-options"
+              <SuggestionInput
                 value={form.composition}
                 onChange={update("composition")}
-                placeholder={t("composition_placeholder") || "e.g. 100% Cotton"}
+                options={suggestionOptions(COMPOSITIONS)}
+                placeholder={t("composition_placeholder") || "composition"}
+                required={false}
               />
-              <datalist id="composition-options">
-                {COMPOSITIONS.map((item) => (
-                  <option key={item.value} value={optionLabel(item, i18n.language)} />
-                ))}
-              </datalist>
             </div>
           </div>
 
