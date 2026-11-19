@@ -70,7 +70,7 @@ describe("MainPage", () => {
 
   it("shows the manage card to the owner", () => {
     const { container } = setup();
-    expect(container.querySelectorAll(".dashboard-card").length).toBe(7);
+    expect(container.querySelectorAll(".dashboard-card").length).toBe(8);
   });
 
   it("renders the sphere backdrop behind the cards in dark mode", () => {

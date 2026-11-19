@@ -25,7 +25,7 @@ describe("PublicNavbar", () => {
 
     const links = container.querySelector(".landing-nav__links");
     expect(links).toBeInTheDocument();
-    expect(links.querySelectorAll("button").length).toBe(4);
+    expect(links.querySelectorAll("button").length).toBe(6);
   });
 
   it("renders the action buttons: theme, language, login and cta", () => {
@@ -60,13 +60,15 @@ describe("PublicNavbar", () => {
     expect(container.querySelectorAll('[role="menuitemradio"]').length).toBe(0);
   });
 
-  it("shows signup button on login page and login button on signup page", () => {
+  it("shows primary CTA on login page and hides it on its target route", () => {
     const { container: loginContainer } = renderNavbar("/login");
     expect(loginContainer.querySelector(".landing-nav__cta")).toBeInTheDocument();
     expect(loginContainer.querySelector(".landing-nav__login")).not.toBeInTheDocument();
 
-    const { container: signupContainer } = renderNavbar("/signup");
-    expect(signupContainer.querySelector(".landing-nav__login")).toBeInTheDocument();
-    expect(signupContainer.querySelector(".landing-nav__cta")).not.toBeInTheDocument();
+    const targetRoute =
+      import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "/signup" : "/contact";
+    const { container: targetContainer } = renderNavbar(targetRoute);
+    expect(targetContainer.querySelector(".landing-nav__login")).toBeInTheDocument();
+    expect(targetContainer.querySelector(".landing-nav__cta")).not.toBeInTheDocument();
   });
 });
