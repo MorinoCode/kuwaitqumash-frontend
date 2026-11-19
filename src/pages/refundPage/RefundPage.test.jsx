@@ -111,7 +111,7 @@ describe("RefundPage", () => {
     await loadInvoice(container);
 
     fireEvent.change(container.querySelector(".refund-page__qty-input"), {
-      target: { value: "1" },
+      target: { value: "2" },
     });
     const amountInput = container.querySelector(".refund-page__payment-row input");
     fireEvent.change(amountInput, { target: { value: "10" } });

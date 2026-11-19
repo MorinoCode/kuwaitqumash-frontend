@@ -1,12 +1,19 @@
 import { describe, it, expect } from "vitest";
-import { MemoryRouter } from "react-router-dom";
+import { fireEvent, screen } from "@testing-library/react";
+import { MemoryRouter, useLocation } from "react-router-dom";
 import LegalPage from "./LegalPage";
 import { renderWithProviders } from "../../test/renderWithProviders";
 
+const LocationProbe = () => {
+  const location = useLocation();
+  return <span data-testid="path">{location.pathname}</span>;
+};
+
 const setup = (doc) =>
   renderWithProviders(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={[`/${doc}`]}>
       <LegalPage doc={doc} />
+      <LocationProbe />
     </MemoryRouter>,
   );
 
@@ -29,8 +36,7 @@ describe("LegalPage", () => {
 
   it("links back to the landing page", () => {
     const { container } = setup("privacy");
-    expect(container.querySelector(".legal-page__back").getAttribute("href")).toBe(
-      "/",
-    );
+    fireEvent.click(container.querySelector(".landing-nav__brand"));
+    expect(screen.getByTestId("path").textContent).toBe("/");
   });
 });

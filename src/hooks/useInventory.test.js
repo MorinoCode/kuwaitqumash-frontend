@@ -76,7 +76,7 @@ describe("useInventory", () => {
 });
 
 describe("inventory mutations", () => {
-  it("posts multipart data and serialises objects", async () => {
+  it("posts JSON payload when creating an item", async () => {
     api.post.mockResolvedValue({ data: { data: { id: 3, item_name: "Silk" } } });
     const { result } = renderHookWithQuery(() => useCreateInventoryItem());
 
@@ -86,8 +86,7 @@ describe("inventory mutations", () => {
 
     const [url, body] = api.post.mock.calls[0];
     expect(url).toBe("/inventory");
-    expect(body.get("item_name")).toBe("Silk");
-    expect(body.get("meta")).toBe('{"a":1}');
+    expect(body).toEqual({ item_name: "Silk", meta: { a: 1 } });
     expect(toast.success).toHaveBeenCalled();
   });
 

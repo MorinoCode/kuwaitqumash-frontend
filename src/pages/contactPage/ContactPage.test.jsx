@@ -22,7 +22,7 @@ const setup = () =>
   );
 
 const fillForm = (container, values = {}) => {
-  const [name, contact] = container.querySelectorAll("input");
+  const [name, , contact] = container.querySelectorAll("input");
   const message = container.querySelector("textarea");
   fireEvent.change(name, { target: { value: values.name ?? "Sara" } });
   fireEvent.change(contact, { target: { value: values.contact ?? "9651234567" } });
@@ -39,7 +39,7 @@ beforeEach(() => {
 describe("ContactPage", () => {
   it("renders the form fields", () => {
     const { container } = setup();
-    expect(container.querySelectorAll("input").length).toBe(2);
+    expect(container.querySelectorAll("input").length).toBe(3);
     expect(container.querySelector("textarea")).toBeInTheDocument();
   });
 

@@ -145,7 +145,10 @@ describe("InvoicePreviewModal", () => {
     const btn = container.querySelector(".sales-btn--thermal");
     expect(btn).toBeTruthy();
     fireEvent.click(btn);
-    expect(spy).toHaveBeenCalledWith(lastInvoice, { lang: expect.any(String) });
+    expect(spy).toHaveBeenCalledWith(lastInvoice, {
+      lang: expect.any(String),
+      storeName: expect.any(String),
+    });
     spy.mockRestore();
   });
 

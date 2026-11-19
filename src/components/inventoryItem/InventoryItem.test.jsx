@@ -39,12 +39,14 @@ const setup = (overrides = {}) => {
         <Route
           path="*"
           element={
-            <table>
-              <tbody>
-                <InventoryItem {...props} />
-              </tbody>
+            <>
+              <table>
+                <tbody>
+                  <InventoryItem {...props} />
+                </tbody>
+              </table>
               <LocationProbe />
-            </table>
+            </>
           }
         />
       </Routes>
@@ -55,10 +57,10 @@ const setup = (overrides = {}) => {
 
 describe("InventoryItem", () => {
   it("renders the item details", () => {
-    setup();
+    const { container } = setup();
     expect(screen.getByText("Silk Roll")).toBeInTheDocument();
     expect(screen.getByText("SI-777")).toBeInTheDocument();
-    expect(screen.getByText("12.5")).toBeInTheDocument();
+    expect(container.querySelector(".inventory-item__stock").textContent).toContain("37.5");
   });
 
   it("navigates to the item page when the row is clicked", () => {

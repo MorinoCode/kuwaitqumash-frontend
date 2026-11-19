@@ -7,8 +7,14 @@ import { useBranches } from "../../hooks/useBranches";
 import Sidebar from "./Sidebar";
 import { renderWithProviders } from "../../test/renderWithProviders";
 
+let mockRole = "store_owner";
+
 vi.mock("../../api/axios", () => ({
   default: { get: vi.fn(), post: vi.fn(), put: vi.fn(), delete: vi.fn() },
+}));
+
+vi.mock("../../context/AuthContext", () => ({
+  useAuth: () => ({ user: { full_name: "Ali Hassan", role: mockRole } }),
 }));
 
 vi.mock("../../hooks/useBranches", () => ({
@@ -26,6 +32,7 @@ const LocationProbe = () => {
 };
 
 const setup = ({ path = "/home", role = "store_owner", closeSidebar = vi.fn() } = {}) => {
+  mockRole = role;
   api.get.mockResolvedValue({
     data: { data: { full_name: "Ali Hassan", role } },
   });

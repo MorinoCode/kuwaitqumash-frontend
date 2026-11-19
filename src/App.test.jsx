@@ -33,6 +33,7 @@ vi.mock("./pages/customerDetailPage/CustomerDetailPage", () => stub("customer-de
 vi.mock("./pages/invoicesPage/InvoicesPage", () => stub("invoices"));
 vi.mock("./pages/refundPage/RefundPage", () => stub("refund"));
 vi.mock("./pages/refundsPage/RefundsPage", () => stub("refunds"));
+vi.mock("./pages/contactPage/ContactPage", () => stub("contact"));
 vi.mock("./components/layout/mainLayout/MainLayout", () => ({
   default: () => <div data-testid="layout">layout</div>,
 }));
@@ -65,10 +66,12 @@ describe("App", () => {
     await waitFor(() => expect(screen.getByTestId("welcome")).toBeInTheDocument());
   });
 
-  it("renders the signup route when navigated to /signup", async () => {
+  it("renders the signup route when navigated to /signup (or redirects when disabled)", async () => {
     window.history.pushState({}, "", "/signup");
     render(<App />);
-    await waitFor(() => expect(screen.getByTestId("signup")).toBeInTheDocument());
+    const expectedTestId =
+      import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "signup" : "contact";
+    await waitFor(() => expect(screen.getByTestId(expectedTestId)).toBeInTheDocument());
     window.history.pushState({}, "", "/");
   });
 });
