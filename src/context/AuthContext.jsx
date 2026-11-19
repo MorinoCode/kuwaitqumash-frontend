@@ -81,6 +81,23 @@ const clearAuthData = (queryClient) => {
   } catch { void 0; }
 };
 
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/signup",
+  "/contact",
+  "/privacy",
+  "/terms",
+];
+
+const isPublicPath = (pathname) => {
+  if (!pathname) return false;
+  return (
+    PUBLIC_PATHS.includes(pathname) ||
+    PUBLIC_PATHS.some((p) => p !== "/" && pathname.startsWith(p))
+  );
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -88,27 +105,42 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
   const queryClient = useQueryClient();
 
-  const isMountedRef = useRef(true);
-  const abortControllerRef = useRef(null);
+  const navigateRef = useRef(navigate);
+  const queryClientRef = useRef(queryClient);
+  const pathnameRef = useRef(location.pathname);
+  const hadNetworkErrorRef = useRef(false);
+
+  navigateRef.current = navigate;
+  queryClientRef.current = queryClient;
+  pathnameRef.current = location.pathname;
 
   useEffect(() => {
-    isMountedRef.current = true;
-    abortControllerRef.current = new AbortController();
-    const nav = navigate;
-    const pathname = location.pathname;
-    const qc = queryClient;
+    let cancelled = false;
+    const controller = new AbortController();
 
     const checkLoggedIn = async () => {
+      const token = localStorage.getItem("token");
+      const tenantId = useTenantStore.getState().tenantId;
+
+      if (!token && !tenantId && isPublicPath(pathnameRef.current)) {
+        if (!cancelled) {
+          setUser(null);
+          setLoading(false);
+        }
+        return;
+      }
+
       try {
         const res = await api.get("/auth/me", {
-          signal: abortControllerRef.current?.signal,
+          signal: controller.signal,
         });
 
-        if (!isMountedRef.current) return;
+        if (cancelled) return;
 
         const userData = res.data?.data || res.data;
 
         if (userData && typeof userData === "object") {
+          hadNetworkErrorRef.current = false;
           setUser(userData);
           if (userData.tenant_id != null) {
             useTenantStore
@@ -117,16 +149,17 @@ export const AuthProvider = ({ children }) => {
           }
         } else {
           setUser(null);
-          clearAuthData(qc);
+          clearAuthData(queryClientRef.current);
         }
       } catch (err) {
-        if (!isMountedRef.current) return;
+        if (cancelled) return;
 
         if (err.name === "CanceledError" || err.name === "AbortError") {
           return;
         }
 
         if (err.code === "ERR_NETWORK" || err.message === "Network Error") {
+          hadNetworkErrorRef.current = true;
           setLoading(false);
           return;
         }
@@ -136,14 +169,9 @@ export const AuthProvider = ({ children }) => {
 
         if (isUnauthorized) {
           setUser(null);
-          clearAuthData(qc);
-
-          if (
-            pathname !== "/login" &&
-            pathname !== "/signup" &&
-            pathname !== "/"
-          ) {
-            nav("/login", { replace: true });
+          clearAuthData(queryClientRef.current);
+          if (!isPublicPath(pathnameRef.current)) {
+            navigateRef.current("/login", { replace: true });
           }
         } else if (status === 400) {
           const errorMessage = err.response.data?.message || "";
@@ -152,18 +180,14 @@ export const AuthProvider = ({ children }) => {
             errorMessage.includes("Tenant")
           ) {
             setUser(null);
-            clearAuthData(qc);
-            if (
-              pathname !== "/login" &&
-              pathname !== "/signup" &&
-              pathname !== "/"
-            ) {
-              nav("/login", { replace: true });
+            clearAuthData(queryClientRef.current);
+            if (!isPublicPath(pathnameRef.current)) {
+              navigateRef.current("/login", { replace: true });
             }
           }
         }
       } finally {
-        if (isMountedRef.current) {
+        if (!cancelled) {
           setLoading(false);
         }
       }
@@ -172,12 +196,17 @@ export const AuthProvider = ({ children }) => {
     checkLoggedIn();
 
     return () => {
-      isMountedRef.current = false;
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+      cancelled = true;
+      controller.abort();
     };
-  }, [navigate, location.pathname, queryClient]);
+  }, []);
+
+  useEffect(() => {
+    if (loading || hadNetworkErrorRef.current) return;
+    if (!user && !isPublicPath(location.pathname)) {
+      navigate("/login", { replace: true });
+    }
+  }, [loading, user, location.pathname, navigate]);
 
   const login = (userData) => {
     if (!userData || typeof userData !== "object") {
@@ -188,6 +217,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", userData.token);
     }
 
+    hadNetworkErrorRef.current = false;
     setUser(userData);
     navigate("/home", { replace: true });
   };
@@ -196,6 +226,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await api.post("/auth/logout");
     } catch { void 0; } finally {
+      hadNetworkErrorRef.current = false;
       setUser(null);
       clearAuthData(queryClient);
       navigate("/login", { replace: true });

@@ -6,10 +6,12 @@ import api from "../../api/axios";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import useBranchStore from "../../store/branchStore";
+import useTenantStore from "../../store/tenantStore";
 import { useInvoices, useSendInvoiceWhatsApp } from "../../hooks/useInvoices";
 import { useBranches } from "../../hooks/useBranches";
 import BranchSelector from "../../components/analytics/BranchSelector";
 import Pagination from "../../components/pagination/Pagination";
+import { printThermalReceipt } from "../../utils/thermalPrint";
 import "./InvoicesPage.css";
 import {
   FileText,
@@ -21,6 +23,7 @@ import {
   MessageCircle,
   Loader,
   RotateCcw,
+  Printer,
 } from "lucide-react";
 
 const InvoicesPage = () => {
@@ -37,6 +40,7 @@ const InvoicesPage = () => {
   const [exportStartDate, setExportStartDate] = useState("");
   const [exportEndDate, setExportEndDate] = useState("");
   const [pdfLoadingId, setPdfLoadingId] = useState(null);
+  const [thermalLoadingId, setThermalLoadingId] = useState(null);
   const [waLoadingId, setWaLoadingId] = useState(null);
   const [branchWaStatus, setBranchWaStatus] = useState({});
   const [waStep, setWaStep] = useState({});
@@ -56,7 +60,7 @@ const InvoicesPage = () => {
     hasPrevPage: false,
   });
 
-  const { activeBranchId } = useBranchStore();
+  const { activeBranchId, activeBranchName } = useBranchStore();
   const isOwner = user?.role === "store_owner";
 
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
@@ -209,7 +213,9 @@ const InvoicesPage = () => {
               const d = res.data?.data || {};
               return {
                 branchId,
-                status: d.status === "CONNECTED" || !!d.is_ready,
+                status:
+                  (d.status === "CONNECTED" || !!d.is_ready) &&
+                  d.invoice_enabled !== false,
               };
             })
             .catch(() => ({ branchId, status: false })),
@@ -366,6 +372,34 @@ const InvoicesPage = () => {
       );
     } finally {
       setPdfLoadingId(null);
+    }
+  };
+
+  const handleThermalPrint = async (invoice) => {
+    if (!invoice?.id) return;
+    try {
+      setThermalLoadingId(invoice.id);
+      let fullInvoice = invoice;
+      if (!Array.isArray(invoice.items) || !Array.isArray(invoice.payments)) {
+        const res = await api.get(`/sales/${invoice.id}`);
+        fullInvoice = res.data?.data || res.data || invoice;
+      }
+      printThermalReceipt(fullInvoice, {
+        lang: "ar",
+        storeName:
+          useTenantStore.getState().tenantName ||
+          fullInvoice.branch?.name ||
+          activeBranchName ||
+          "",
+      });
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message ||
+          t("print_error") ||
+          "Failed to load invoice for thermal printing",
+      );
+    } finally {
+      setThermalLoadingId(null);
     }
   };
 
@@ -570,6 +604,20 @@ const InvoicesPage = () => {
                             )}{" "}
                             PDF
                           </button>
+                          <button
+                            type="button"
+                            className="invoices-btn invoices-btn--thermal"
+                            onClick={() => handleThermalPrint(inv)}
+                            disabled={thermalLoadingId === inv.id}
+                            title={t("print_thermal") || "Thermal 80mm"}
+                          >
+                            {thermalLoadingId === inv.id ? (
+                              <Loader size={16} className="spinner" />
+                            ) : (
+                              <Printer size={16} />
+                            )}
+                            <span>80mm</span>
+                          </button>
 
                           {branchWaStatus[inv.branch_id] && (
                             <>
@@ -745,6 +793,20 @@ const InvoicesPage = () => {
                               <Download size={16} />
                             )}{" "}
                             PDF
+                          </button>
+                          <button
+                            type="button"
+                            className="invoices-btn invoices-btn--thermal"
+                            onClick={() => handleThermalPrint(inv)}
+                            disabled={thermalLoadingId === inv.id}
+                            title={t("print_thermal") || "Thermal 80mm"}
+                          >
+                            {thermalLoadingId === inv.id ? (
+                              <Loader size={16} className="spinner" />
+                            ) : (
+                              <Printer size={16} />
+                            )}
+                            <span>80mm</span>
                           </button>
                         </div>
                       </td>

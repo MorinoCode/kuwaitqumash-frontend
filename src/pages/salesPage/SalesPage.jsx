@@ -16,7 +16,6 @@ import { useCreateSale, useSendInvoiceWhatsApp } from "../../hooks/useInvoices";
 import {
   useCustomers,
   useCreateCustomer,
-  useUpdateCustomer,
 } from "../../hooks/useCustomers";
 import { useInventory } from "../../hooks/useInventory";
 import BarcodeScanner from "../../components/barcodeScanner/BarcodeScanner";
@@ -68,7 +67,6 @@ const SalesPage = () => {
   );
 
   const createCustomerMutation = useCreateCustomer();
-  const updateCustomerMutation = useUpdateCustomer();
   const sendInvoiceWhatsAppMutation = useSendInvoiceWhatsApp();
 
   const defaultPayments = useMemo(
@@ -145,7 +143,10 @@ const SalesPage = () => {
         const res = await api.get(url, { signal: abortController.signal });
         if (isMounted) {
           const d = res.data?.data || {};
-          setWaConnected(d.status === "CONNECTED" || !!d.is_ready);
+          setWaConnected(
+            (d.status === "CONNECTED" || !!d.is_ready) &&
+              d.invoice_enabled !== false,
+          );
         }
       } catch {
         if (isMounted) {
@@ -182,7 +183,10 @@ const SalesPage = () => {
         const res = await api.get(url, { signal: abortController.signal });
         const d = res.data?.data || {};
         if (isMounted) {
-          setWaConnected(d.status === "CONNECTED" || !!d.is_ready);
+          setWaConnected(
+            (d.status === "CONNECTED" || !!d.is_ready) &&
+              d.invoice_enabled !== false,
+          );
         }
       } catch (err) {
         if (err.name !== "CanceledError" && isMounted) {
@@ -207,9 +211,12 @@ const SalesPage = () => {
         }
 
         const pricePerMeter = parseFloat(item.price_per_meter) || 0;
-        const meters = parseFloat(item.length_m ?? item.meters) || 0;
+        const stockLength = parseFloat(item.length_m ?? item.meters) || 0;
+        const stockQty = Math.max(1, parseInt(item.quantity, 10) || 1);
+        const availableMeters =
+          Math.round(stockLength * stockQty * 1000) / 1000;
 
-        if (!meters || meters <= 0) {
+        if (!availableMeters || availableMeters <= 0) {
           toast.error(
             t("invalid_item_length") || "This fabric has no length recorded",
           );
@@ -222,6 +229,12 @@ const SalesPage = () => {
           );
           return prev;
         }
+
+        const rollLength = parseFloat(item.roll_length_m) || 0;
+        const meters =
+          item.unit === "roll" && rollLength > 0
+            ? Math.min(rollLength, availableMeters)
+            : Math.min(1, availableMeters);
 
         const newItem = {
           ...item,
@@ -285,39 +298,44 @@ const SalesPage = () => {
 
   const handleScanSuccess = useCallback(
     async (barcode) => {
-      setItemSearch(barcode);
+      const cleanBarcode = String(barcode || "").trim();
       setIsScannerOpen(false);
+      if (!cleanBarcode) return;
 
-      if (itemInputRef.current) {
-        itemInputRef.current.focus();
-      }
-
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          const foundItems = inventoryList.filter(
-            (i) => i.barcode === barcode || i.barcode?.includes(barcode),
+      try {
+        const res = await api.get(
+          `/inventory/barcode/${encodeURIComponent(cleanBarcode)}`,
+        );
+        const found = res.data?.data || res.data;
+        if (!found || !found.id) {
+          toast.error(t("item_not_found") || "Item not found");
+          return;
+        }
+        if (found.status && found.status !== "In Stock") {
+          toast.warning(t("out_of_stock") || "Item is out of stock");
+          return;
+        }
+        addToCart(found);
+        setItemSearch("");
+        setShowItemDropdown(false);
+      } catch (err) {
+        if (err?.response?.status === 404) {
+          toast.error(t("item_not_found") || "Item not found");
+        } else {
+          toast.error(
+            err?.response?.data?.message ||
+              t("item_not_found") ||
+              "Item not found",
           );
-          const exactMatch = foundItems.find((i) => i.barcode === barcode);
-
-          if (exactMatch) {
-            addToCart(exactMatch);
-            setItemSearch("");
-            setShowItemDropdown(false);
-          } else if (foundItems.length === 1) {
-            addToCart(foundItems[0]);
-            setItemSearch("");
-            setShowItemDropdown(false);
-          } else if (foundItems.length > 1) {
-            setShowItemDropdown(true);
-            toast.info(t("multiple_items_found") || "Multiple items found");
-          } else {
-            toast.error(t("item_not_found") || "Item not found");
-            setItemSearch("");
-          }
-        }, 300);
-      });
+        }
+        setItemSearch("");
+      } finally {
+        if (itemInputRef.current) {
+          itemInputRef.current.focus();
+        }
+      }
     },
-    [addToCart, inventoryList, t],
+    [addToCart, t],
   );
 
   const removeFromCart = useCallback((id) => {
@@ -517,23 +535,6 @@ const SalesPage = () => {
     setPayments((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  const handleIdUpload = async (e, side) => {
-    if (!selectedCustomer) return toast.warning(t("select_customer_first"));
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      const customerData = {
-        [side === "front" ? "front_image" : "back_image"]: file,
-      };
-      const res = await updateCustomerMutation.mutateAsync({
-        id: selectedCustomer.id,
-        data: customerData,
-      });
-      setSelectedCustomer(res.data || res);
-    } catch { void 0; }
-  };
-
   const handleSubmitSale = async () => {
     if (!selectedCustomer) return toast.warning(t("select_customer_first"));
     if (cart.length === 0) return toast.warning(t("cart_empty"));
@@ -552,13 +553,22 @@ const SalesPage = () => {
 
     const exceedsStock = cart.some((i) => {
       const qty = Math.max(1, parseInt(i.cartQty, 10) || 1);
-      const stock = parseInt(i.quantity, 10) ?? 1;
-      return stock > 0 && qty > stock;
+      const parsedStock = parseInt(i.quantity, 10);
+      const stock = Number.isFinite(parsedStock) ? parsedStock : 1;
+      const requestedMeters = (parseFloat(i.meters) || 0) * qty;
+      const availableMeters = (parseFloat(i.length_m) || 0) * stock;
+      if (stock > 0 && qty > stock && availableMeters > 0 && requestedMeters > availableMeters + 0.001) {
+        return true;
+      }
+      if (availableMeters > 0 && requestedMeters > availableMeters + 0.001) {
+        return true;
+      }
+      return false;
     });
     if (exceedsStock) {
       return toast.error(
         t("quantity_exceeds_stock") ||
-          "Quantity exceeds available stock for one or more items.",
+          "Requested meters or quantity exceeds available stock for one or more items.",
       );
     }
 

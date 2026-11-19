@@ -1,24 +1,30 @@
-# CI: فقط چک و تست روی branch dev و روی PR به main/dev
-# Deploy انجام نمی‌شود؛ فقط اطمینان از سالم بودن کد
-
-name: CI (Check & Test)
+name: Frontend CI
 
 on:
-  push:
-    branches:
-      - dev
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
 
 jobs:
-  check-and-build:
-    name: Lint & Build
+  branch-policy:
+    name: Enforce Git Flow (only dev -> main)
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Verify source branch is dev
+        run: |
+          if [ "${{ github.head_ref }}" != "dev" ]; then
+            echo "::error::Only the 'dev' branch can be merged into 'main' (attempted '${{ github.head_ref }}'). Please merge into 'dev' first."
+            exit 1
+          fi
+          echo "Verified PR source branch is 'dev'."
+
+  lint-test-build:
+    name: Lint, Test & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -30,10 +36,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Run ESLint
         run: npm run lint
 
-      - name: Build
+      - name: Run Vitest unit tests
+        run: npm test
+
+      - name: Verify production build
         run: npm run build
-        env:
-          VITE_API_URL: https://placeholder-for-ci.run.app

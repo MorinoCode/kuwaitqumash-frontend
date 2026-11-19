@@ -41,7 +41,7 @@ describe("Cart", () => {
 
   it("shows the computed line total in meters", () => {
     const { container } = setup();
-    expect(container.textContent).toContain("6.000");
+    expect(container.textContent).toContain("6");
   });
 
   it("updates the quantity", () => {

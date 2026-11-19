@@ -73,7 +73,7 @@ describe("AuthProvider", () => {
 
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
     expect(screen.getByTestId("user").textContent).toBe("none");
-    expect(screen.getByTestId("path").textContent).toBe("/login");
+    await waitFor(() => expect(screen.getByTestId("path").textContent).toBe("/login"));
   });
 
   it("stays on a public page after a 401", async () => {

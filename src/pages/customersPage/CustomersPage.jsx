@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -83,14 +83,7 @@ const CustomersPage = () => {
   const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    totalPages: 1,
-    totalItems: 0,
-    itemsPerPage: 20,
-    hasNextPage: false,
-    hasPrevPage: false,
-  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -103,13 +96,19 @@ const CustomersPage = () => {
     useBranchStore();
   const activeBranchName = branchNameFromStore || t("all_branches");
 
+  const [prevBranchId, setPrevBranchId] = useState(activeBranchId);
+  if (prevBranchId !== activeBranchId) {
+    setPrevBranchId(activeBranchId);
+    setCurrentPage(1);
+  }
+
   const customerFilters = {
     search: searchTerm.trim() || undefined,
     branch_id:
       user?.role === "store_owner" && activeBranchId
         ? activeBranchId
         : undefined,
-    page: pagination.currentPage,
+    page: currentPage,
     limit: 20,
   };
 
@@ -120,6 +119,14 @@ const CustomersPage = () => {
   } = useCustomers(customerFilters);
   const customers = useMemo(() => customersData?.data || [], [customersData?.data]);
   const loading = customersLoading;
+  const pagination = customersData?.pagination || {
+    currentPage,
+    totalPages: 1,
+    totalItems: customers.length,
+    itemsPerPage: 20,
+    hasNextPage: false,
+    hasPrevPage: false,
+  };
 
   const createCustomerMutation = useCreateCustomer();
   const updateCustomerMutation = useUpdateCustomer();
@@ -128,23 +135,15 @@ const CustomersPage = () => {
   const isSaving =
     createCustomerMutation.isPending || updateCustomerMutation.isPending;
 
-  useEffect(() => {
-    if (customersData?.pagination) {
-      setPagination(customersData.pagination);
-    }
-  }, [customersData]);
-
   const handlePageChange = (newPage) => {
-    setPagination((prev) => ({ ...prev, currentPage: newPage }));
-
+    setCurrentPage(newPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  useEffect(() => {
-    if (pagination.currentPage !== 1) {
-      setPagination((prev) => ({ ...prev, currentPage: 1 }));
-    }
-  }, [searchTerm, activeBranchId, pagination.currentPage]);
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -319,7 +318,7 @@ const CustomersPage = () => {
             className="customers-search__input"
             placeholder={t("search_customer_placeholder")}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

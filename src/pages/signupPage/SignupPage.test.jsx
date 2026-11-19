@@ -48,4 +48,59 @@ describe("SignupPage", () => {
     const { container } = setup();
     expect(container.querySelectorAll("img").length).toBeGreaterThan(0);
   });
+
+  it("shows an error for non-ASCII store names without English characters", () => {
+    const { container } = setup();
+    const storeInput = container.querySelector('input[name="storeName"]');
+    fireEvent.change(storeInput, { target: { value: "پارچه سرای کویت" } });
+    expect(container.querySelector(".signup-card__error-msg")).toBeTruthy();
+    const submit = [...container.querySelectorAll("button")].find((button) =>
+      button.className.includes("submit"),
+    );
+    expect(submit).toBeDisabled();
+  });
+
+  it("shows a Store ID preview and submits valid registration data", async () => {
+    api.post.mockResolvedValue({ data: { tenant_id: "al-baraka-fabrics" } });
+    const { container } = setup();
+
+    fireEvent.change(container.querySelector('input[name="storeName"]'), {
+      target: { value: "Al-Baraka Fabrics" },
+    });
+    expect(container.querySelector(".signup-card__hint")?.textContent).toContain(
+      "al-baraka-fabrics",
+    );
+
+    fireEvent.change(container.querySelector('input[name="fullName"]'), {
+      target: { value: "Ali Reza" },
+    });
+    fireEvent.change(container.querySelector('input[name="username"]'), {
+      target: { value: "owner_ali" },
+    });
+    fireEvent.change(container.querySelector('input[name="phone"]'), {
+      target: { value: "96512345678" },
+    });
+    fireEvent.change(container.querySelector('input[name="password"]'), {
+      target: { value: "Secret123!" },
+    });
+    fireEvent.change(container.querySelector('input[name="confirmPassword"]'), {
+      target: { value: "Secret123!" },
+    });
+
+    const submit = [...container.querySelectorAll("button")].find((button) =>
+      button.className.includes("submit"),
+    );
+    expect(submit).not.toBeDisabled();
+
+    fireEvent.submit(container.querySelector("form"));
+    await waitFor(() =>
+      expect(api.post).toHaveBeenCalledWith("/platform/register", {
+        store_name: "al-baraka fabrics",
+        username: "owner_ali",
+        owner_name: "Ali Reza",
+        phone: "96512345678",
+        password: "Secret123!",
+      }),
+    );
+  });
 });

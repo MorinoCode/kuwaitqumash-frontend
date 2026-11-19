@@ -72,24 +72,7 @@ export const useCreateInventoryItem = () => {
 
   return useMutation({
     mutationFn: async (data) => {
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => {
-        if (key === "images" && Array.isArray(data[key])) {
-          data[key].forEach((file) => {
-            formData.append("images", file);
-          });
-        } else if (data[key] !== null && data[key] !== undefined) {
-          if (typeof data[key] === "object") {
-            formData.append(key, JSON.stringify(data[key]));
-          } else {
-            formData.append(key, data[key]);
-          }
-        }
-      });
-
-      const res = await api.post("/inventory", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await api.post("/inventory", data);
       return res.data;
     },
     onMutate: async (newItem) => {
@@ -107,8 +90,6 @@ export const useCreateInventoryItem = () => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         status: "In Stock",
-
-        images: newItem.images || [],
         quantity: newItem.quantity || 1,
         length_m: parseFloat(newItem.length_m) || 0,
         cost_per_meter: parseFloat(newItem.cost_per_meter) || 0,
@@ -212,26 +193,7 @@ export const useUpdateInventoryItem = () => {
 
   return useMutation({
     mutationFn: async ({ id, data }) => {
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => {
-        if (key === "images" && Array.isArray(data[key])) {
-          data[key].forEach((file) => {
-            if (file instanceof File) {
-              formData.append("images", file);
-            }
-          });
-        } else if (data[key] !== null && data[key] !== undefined) {
-          if (typeof data[key] === "object") {
-            formData.append(key, JSON.stringify(data[key]));
-          } else {
-            formData.append(key, data[key]);
-          }
-        }
-      });
-
-      const res = await api.put(`/inventory/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await api.put(`/inventory/${id}`, data);
       return res.data;
     },
     onMutate: async ({ id, data }) => {

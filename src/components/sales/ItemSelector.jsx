@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Plus, ScanLine } from 'lucide-react';
+import { getTotalStockMeters } from '../../utils/inventoryCategories';
 
 const ItemSelector = ({
     itemSearch,
@@ -62,7 +63,7 @@ const ItemSelector = ({
                                     {i18n.language === 'ar' && item.item_name_ar ? item.item_name_ar : item.item_name}
                                 </div>
                                 <div className="sales-dropdown__sub">
-                                    {item.barcode} | {item.length_m} m {item.fabric_type ? `| ${item.fabric_type}` : ''} | {(parseFloat(item.price_per_meter) || 0).toFixed(3)} KD/m
+                                    {item.barcode} | {getTotalStockMeters(item)} {t('m') || 'm'} {item.fabric_type ? `| ${item.fabric_type}` : ''} | {(parseFloat(item.price_per_meter) || 0).toFixed(3)} KD/m
                                 </div>
                             </li>
                         ))}

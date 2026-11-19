@@ -19,6 +19,7 @@ const WelcomePage = lazy(() => import("./pages/welcomePage/WelcomePage"));
 const LoginPage = lazy(() => import("./pages/loginPage/LoginPage"));
 const MainPage = lazy(() => import("./pages/mainPage/MainPage"));
 const SignupPage = lazy(() => import("./pages/signupPage/SignupPage"));
+const ALLOW_PUBLIC_SIGNUP = import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false";
 const DashboardPage = lazy(() => import("./pages/dashboardPage/DashboardPage"));
 const AnalyticsPage = lazy(() => import("./pages/analyticsPage/AnalyticsPage"));
 const InventoryPage = lazy(() => import("./pages/inventoryPage/InventoryPage"));
@@ -42,9 +43,6 @@ const RefundPage = lazy(() => import("./pages/refundPage/RefundPage"));
 const RefundsPage = lazy(() => import("./pages/refundsPage/RefundsPage"));
 const ContactPage = lazy(() => import("./pages/contactPage/ContactPage"));
 const LegalPage = lazy(() => import("./pages/legalPage/LegalPage"));
-const ContactInboxPage = lazy(
-  () => import("./pages/contactInboxPage/ContactInboxPage"),
-);
 
 function RouteFallback() {
   return (
@@ -106,9 +104,13 @@ function App() {
                 <Route
                   path="/signup"
                   element={
-                    <ErrorBoundary>
-                      <SignupPage />
-                    </ErrorBoundary>
+                    ALLOW_PUBLIC_SIGNUP ? (
+                      <ErrorBoundary>
+                        <SignupPage />
+                      </ErrorBoundary>
+                    ) : (
+                      <Navigate to="/contact" replace />
+                    )
                   }
                 />
 
@@ -228,14 +230,6 @@ function App() {
                     element={
                       <ErrorBoundary>
                         <RefundsPage />
-                      </ErrorBoundary>
-                    }
-                  />
-                  <Route
-                    path="/admin/messages"
-                    element={
-                      <ErrorBoundary>
-                        <ContactInboxPage />
                       </ErrorBoundary>
                     }
                   />

@@ -9,6 +9,7 @@ import {
   localizedOption,
   localizeWords,
   localizeItemName,
+  getRollBreakdown,
 } from "../../utils/inventoryCategories";
 import "./InventoryItem.css";
 
@@ -51,6 +52,8 @@ const InventoryItem = memo(
     const livePrice = calculateLivePrice(item);
     const profit = calculateProfit(item);
     const isProfitPositive = parseFloat(profit) >= 0;
+    const { totalMeters, rollLength, fullRolls, remainderMeters } =
+      getRollBreakdown(item);
 
     return (
       <tr
@@ -90,11 +93,19 @@ const InventoryItem = memo(
             .filter(Boolean)
             .join(" / ") || "-"}
         </td>
-        <td className="inventory-item__cell" data-label={t("length_m") || "Length"}>
-          {item.length_m ?? 0} <small>{t("m") || "m"}</small>
-        </td>
-        <td className="inventory-item__cell" data-label={t("quantity")}>
-          {item.quantity}
+        <td className="inventory-item__cell" data-label={t("stock_meters") || "Stock (m)"}>
+          <div className="inventory-item__stock">
+            <span>
+              {totalMeters} <small>{t("m") || "m"}</small>
+            </span>
+            {rollLength > 0 && (
+              <span className="inventory-item__stock-sub">
+                {remainderMeters > 0
+                  ? `${fullRolls} ${t("full_rolls") || "full roll(s)"} + ${remainderMeters} ${t("m") || "m"}`
+                  : `${fullRolls} ${t("roll") || "roll"} × ${rollLength} ${t("m") || "m"}`}
+              </span>
+            )}
+          </div>
         </td>
         <td
           className="inventory-item__cell inventory-item__cell--mono"

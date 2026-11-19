@@ -4,11 +4,12 @@ import { useTheme } from "../../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/AuthContext";
 import Sidebar from "../../sidebar/Sidebar";
-import { Menu, Sun, Moon, Languages, LogOut, Check, Sparkles } from "lucide-react";
-import logoImage from "../../../assets/logo-kuwaitqumash.svg";
+import { Menu, Sun, Moon, Languages, LogOut, Check, Sparkles, AlertTriangle } from "lucide-react";
+import logoImage from "../../../assets/logo1.png";
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import HelpAssistant from "../../helpAssistant/HelpAssistant";
 import { getUiStrings } from "../../../utils/helpAssistant.js";
+import useTenantStore from "../../../store/tenantStore";
 import "./MainLayout.css";
 
 const LANGUAGES = [
@@ -27,6 +28,7 @@ const MainLayout = () => {
   const { theme, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const { logout } = useAuth();
+  const subscriptionWarning = useTenantStore((s) => s.subscriptionWarning);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const closeSidebar = () => setIsSidebarOpen(false);
@@ -54,15 +56,19 @@ const MainLayout = () => {
     };
   }, [isLangOpen]);
 
-  const changeLanguage = (next) => {
-    i18n.changeLanguage(next);
-    const isRtl = next === "ar" || next === "fa";
+  React.useEffect(() => {
+    const lang = i18n.language || "fa";
+    const isRtl = lang === "ar" || lang === "fa";
     document.dir = isRtl ? "rtl" : "ltr";
     document.body.dir = isRtl ? "rtl" : "ltr";
     document.body.classList.remove("font-arabic", "font-english", "font-persian");
     document.body.classList.add(
-      next === "fa" ? "font-persian" : next === "ar" ? "font-arabic" : "font-english",
+      lang === "fa" ? "font-persian" : lang === "ar" ? "font-arabic" : "font-english",
     );
+  }, [i18n.language]);
+
+  const changeLanguage = (next) => {
+    i18n.changeLanguage(next);
     setIsLangOpen(false);
   };
 
@@ -181,6 +187,54 @@ const MainLayout = () => {
             </button>
           </div>
         </header>
+
+        {subscriptionWarning && (
+          <aside
+            className={`subscription-banner subscription-banner--${subscriptionWarning.type || "warning"}`}
+            role="alert"
+            style={{
+              padding: "10px 16px",
+              margin: "12px 1rem 0 1rem",
+              borderRadius: "8px",
+              backgroundColor:
+                subscriptionWarning.type === "expired_readonly"
+                  ? "#ffebee"
+                  : subscriptionWarning.type === "grace_period"
+                    ? "#fff3e0"
+                    : "#e3f2fd",
+              color:
+                subscriptionWarning.type === "expired_readonly"
+                  ? "#c62828"
+                  : subscriptionWarning.type === "grace_period"
+                    ? "#e65100"
+                    : "#1565c0",
+              border: `1px solid ${
+                subscriptionWarning.type === "expired_readonly"
+                  ? "#ffcdd2"
+                  : subscriptionWarning.type === "grace_period"
+                    ? "#ffe0b2"
+                    : "#bbdefb"
+              }`,
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+            }}
+          >
+            <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+            <span>
+              {subscriptionWarning.type === "expired_readonly"
+                ? t("subscription_expired_readonly_msg") ||
+                  "Subscription expired. Store is in read-only mode. Please contact administrator to renew."
+                : subscriptionWarning.type === "grace_period"
+                  ? t("subscription_grace_period_msg") ||
+                    "Subscription has expired. You are currently in a 7-day grace period. Please renew promptly."
+                  : t("subscription_expiring_soon_msg") ||
+                    "Your annual store subscription is expiring soon. Please contact administrator to renew."}
+            </span>
+          </aside>
+        )}
 
         <main className="page-container">
           <ErrorBoundary resetKeys={[location.pathname]}>

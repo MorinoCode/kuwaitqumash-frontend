@@ -86,6 +86,13 @@ const MainPage = () => {
           desc: "analytics_kpi",
         },
         {
+          title: "ai_analytics",
+          icon: TrendingUp,
+          link: "/analytics",
+          color: "info",
+          desc: "ai_analytics_desc",
+        },
+        {
           title: "manage",
           icon: Store,
           link: "/manage",
@@ -111,7 +118,11 @@ const MainPage = () => {
         return {
           ...section,
           items: section.items.filter(
-            (item) => !(item.title === "manage" && user?.role === "sales_man")
+            (item) =>
+              !(
+                (item.title === "manage" || item.title === "ai_analytics") &&
+                user?.role === "sales_man"
+              )
           ),
         };
       }

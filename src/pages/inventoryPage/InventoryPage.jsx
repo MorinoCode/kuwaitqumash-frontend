@@ -11,6 +11,7 @@ import {
   localizedOption,
   localizeWords,
   localizeItemName,
+  getRollBreakdown,
   FABRIC_TYPES,
   PATTERNS,
   COLORS,
@@ -228,15 +229,9 @@ const InventoryPage = () => {
     setItemToEdit(null);
   };
 
-  const handleEditItem = async (item) => {
-
-    try {
-
-      setItemToEdit(item);
-      setIsAddModalOpen(true);
-    } catch {
-      toast.error(t("failed_to_load_item") || "Failed to load item details");
-    }
+  const handleEditItem = (item) => {
+    setItemToEdit(item);
+    setIsAddModalOpen(true);
   };
 
   const handleDeleteItem = (id) => {
@@ -328,7 +323,7 @@ const InventoryPage = () => {
           <div className="inventory-stat">
             <span>{t("total_meters") || "Total meters"}:</span>{" "}
             <strong>
-              {displayStats.meters} {t("g")}
+              {displayStats.meters} {t("m") || "m"}
             </strong>
           </div>
           <div className="inventory-stat inventory-stat--brand">
@@ -482,8 +477,7 @@ const InventoryPage = () => {
                     <th>{t("item_details")}</th>
                     <th>{t("fabric_type")}</th>
                     <th>{t("pattern") || "Pattern"}</th>
-                    <th>{t("length_m") || "Length (m)"}</th>
-                    <th>{t("qty")}</th>
+                    <th>{t("stock_meters") || "Stock (m)"}</th>
                     <th>{t("buy_price")}</th>
                     <th>{t("live_value")}</th>
                     <th>{t("profit")}</th>
@@ -522,6 +516,8 @@ const InventoryPage = () => {
                   const livePrice = calculateLivePrice(item);
                   const profit = calculateProfit(item);
                   const isProfitPositive = parseFloat(profit) >= 0;
+                  const { totalMeters, rollLength, fullRolls, remainderMeters } =
+                    getRollBreakdown(item);
 
                   return (
                     <div key={item.id} className="inventory-mobile-card">
@@ -593,18 +589,17 @@ const InventoryPage = () => {
                         </div>
                         <div className="inventory-mobile-card__detail-item">
                           <span className="inventory-mobile-card__detail-label">
-                            {t("length_m") || "Length"}
+                            {t("stock_meters") || "Stock (m)"}
                           </span>
                           <span className="inventory-mobile-card__detail-value">
-                            {item.length_m ?? 0} m
-                          </span>
-                        </div>
-                        <div className="inventory-mobile-card__detail-item">
-                          <span className="inventory-mobile-card__detail-label">
-                            {t("qty")}
-                          </span>
-                          <span className="inventory-mobile-card__detail-value">
-                            {item.quantity}
+                            {totalMeters} {t("m") || "m"}
+                            {rollLength > 0 && (
+                              <small style={{ display: "block", opacity: 0.7 }}>
+                                {remainderMeters > 0
+                                  ? `${fullRolls} ${t("full_rolls") || "full roll(s)"} + ${remainderMeters} ${t("m") || "m"}`
+                                  : `${fullRolls} ${t("roll") || "roll"} × ${rollLength} ${t("m") || "m"}`}
+                              </small>
+                            )}
                           </span>
                         </div>
                         <div className="inventory-mobile-card__detail-item">

@@ -6,6 +6,36 @@
     font-size: 0.9rem;
 }
 
+.inventory-form__stock-preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    background: rgba(45, 212, 191, 0.08);
+    border: 1px solid rgba(45, 212, 191, 0.28);
+    font-size: 0.9rem;
+}
+
+.inventory-form__stock-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.inventory-form__stock-preview-item strong {
+    color: #2dd4bf;
+    font-weight: 700;
+}
+
+.inventory-form__stock-preview-note {
+    opacity: 0.75;
+    font-size: 0.85em;
+}
+
 .inventory-form__actions {
     display: flex;
     gap: 1rem;

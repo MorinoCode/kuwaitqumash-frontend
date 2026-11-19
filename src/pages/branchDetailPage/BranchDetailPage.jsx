@@ -74,15 +74,13 @@ export default function BranchDetailPage() {
   const [bulkSegment, setBulkSegment] = useState("all");
   const [bulkBranchId, setBulkBranchId] = useState(id || "");
   const [bulkMessage, setBulkMessage] = useState("");
-  const [bulkDelay, setBulkDelay] = useState(3000);
   const [bulkSending, setBulkSending] = useState(false);
 
   const isOwner = user?.role === "store_owner";
   const isManager = user?.role === "branch_manager";
   const ownBranch =
     user?.branch_id != null && String(user.branch_id) === String(id);
-  const canEdit =
-    isOwner || ((isManager || user?.role === "sales_man") && ownBranch);
+  const canEdit = isOwner || (isManager && ownBranch);
   const canEditSendToCustomer = isOwner || (isManager && ownBranch);
   const canManageLogo = isOwner || (isManager && ownBranch);
 
@@ -347,8 +345,11 @@ export default function BranchDetailPage() {
 
   const handleDisconnectWa = async () => {
     try {
-      await api.post(`/whatsapp/disconnect?branch_id=${id}`);
-      setWaStatus({ status: "DISCONNECTED" });
+      const url = waStatus?.is_central_fallback
+        ? "/whatsapp/disconnect"
+        : `/whatsapp/disconnect?branch_id=${id}`;
+      await api.post(url);
+      setWaStatus({ status: "DISCONNECTED", is_ready: false });
       setQrDataUrl(null);
       toast.success(t("disconnected") || "Disconnected");
     } catch (e) {
@@ -367,23 +368,19 @@ export default function BranchDetailPage() {
       const payload = {
         segment: bulkSegment,
         message: bulkMessage.trim(),
-        delay_ms: Math.max(
-          500,
-          Math.min(60000, parseInt(bulkDelay, 10) || 3000),
-        ),
       };
 
-      const branchIdToUse = bulkBranchId
-        ? parseInt(bulkBranchId, 10)
-        : id
-          ? parseInt(id, 10)
-          : null;
-      if (branchIdToUse) {
+      const branchIdToUse = bulkBranchId ? parseInt(bulkBranchId, 10) : null;
+      if (branchIdToUse && Number.isFinite(branchIdToUse)) {
         payload.branch_id = branchIdToUse;
       }
       const res = await api.post("/whatsapp/bulk", payload);
       toast.success(
-        t("bulk_sent") || `Sent to ${res.data.sent}/${res.data.total}`,
+        res.data?.queued
+          ? res.data.message ||
+              t("bulk_queued") ||
+              `Queued ${res.data.queued} messages for background delivery`
+          : t("bulk_sent") || `Sent to ${res.data.sent}/${res.data.total}`,
       );
     } catch (err) {
       toast.error(err.response?.data?.message || "Bulk send failed");
@@ -739,6 +736,9 @@ export default function BranchDetailPage() {
                     ? t("connected") +
                       (waStatus?.phone_connected
                         ? ` (${waStatus.phone_connected})`
+                        : "") +
+                      (waStatus?.is_central_fallback
+                        ? ` (${t("store_central_number") || "Store Central Number"})`
                         : "")
                     : t("disconnected") || "Disconnected"}
                 </span>
@@ -857,16 +857,10 @@ export default function BranchDetailPage() {
               </div>
               <div className="branch-detail__bulk-row">
                 <div className="branch-detail__bulk-field">
-                  <label>{t("delay_ms")}</label>
-                  <input
-                    type="number"
-                    className="branch-detail__input"
-                    min={500}
-                    max={60000}
-                    step={500}
-                    value={bulkDelay}
-                    onChange={(e) => setBulkDelay(e.target.value)}
-                  />
+                  <p className="branch-detail__hint branch-detail__hint--sm">
+                    {t("bulk_antiban_hint") ||
+                      "Automatic anti-ban pacing (20–45s between messages during Kuwait working hours 09:00–22:00) is enforced by the background worker."}
+                  </p>
                 </div>
                 <div className="branch-detail__bulk-actions">
                   <button

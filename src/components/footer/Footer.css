@@ -22,12 +22,28 @@
   min-width: 250px;
 }
 
+.footer-brand-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: block;
+  text-align: start;
+}
+
 .welcome-logo-img-footer {
   height: 40px;
   width: auto;
   object-fit: contain;
   display: block;
   margin-bottom: 1.5rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.footer-brand-btn:hover .welcome-logo-img-footer {
+  opacity: 0.85;
+  transform: scale(1.02);
 }
 
 .footer-tagline {
@@ -62,14 +78,22 @@
   margin-bottom: 0.8rem;
 }
 
-.footer-links-col ul li a {
+.footer-links-col ul li a,
+.footer-links-col ul li button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  cursor: pointer;
   color: #888;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s ease;
 }
 
-.footer-links-col ul li a:hover {
+.footer-links-col ul li a:hover,
+.footer-links-col ul li button:hover {
   color: #fff;
 }
 
@@ -98,4 +122,45 @@
     width: 100%;
     justify-content: space-between;
   }
+}
+
+/* Light Theme */
+.welcome-footer--light,
+body.light .welcome-footer {
+  border-top-color: #e2e8f0;
+  background: #f8f9fa;
+}
+
+.welcome-footer--light .footer-tagline,
+body.light .welcome-footer .footer-tagline {
+  color: #64748b;
+}
+
+.welcome-footer--light .footer-links-col h4,
+body.light .welcome-footer .footer-links-col h4 {
+  color: #0d9488;
+}
+
+.welcome-footer--light .footer-links-col ul li a,
+.welcome-footer--light .footer-links-col ul li button,
+body.light .welcome-footer .footer-links-col ul li a,
+body.light .welcome-footer .footer-links-col ul li button {
+  color: #64748b;
+}
+
+.welcome-footer--light .footer-links-col ul li a:hover,
+.welcome-footer--light .footer-links-col ul li button:hover,
+body.light .welcome-footer .footer-links-col ul li a:hover,
+body.light .welcome-footer .footer-links-col ul li button:hover {
+  color: #0f172a;
+}
+
+.welcome-footer--light .footer-divider,
+body.light .welcome-footer .footer-divider {
+  background: #e2e8f0;
+}
+
+.welcome-footer--light .footer-copyright,
+body.light .welcome-footer .footer-copyright {
+  color: #94a3b8;
 }

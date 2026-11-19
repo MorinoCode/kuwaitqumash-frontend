@@ -64,4 +64,11 @@ describe("App", () => {
     render(<App />);
     await waitFor(() => expect(screen.getByTestId("welcome")).toBeInTheDocument());
   });
+
+  it("renders the signup route when navigated to /signup", async () => {
+    window.history.pushState({}, "", "/signup");
+    render(<App />);
+    await waitFor(() => expect(screen.getByTestId("signup")).toBeInTheDocument());
+    window.history.pushState({}, "", "/");
+  });
 });

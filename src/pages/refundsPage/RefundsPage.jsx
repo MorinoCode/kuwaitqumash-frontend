@@ -44,8 +44,8 @@ const RefundsPage = () => {
         const params = { page: pageNum, limit: 20 };
         if (!isOwner && activeBranchId) {
           params.branch_id = activeBranchId;
-        } else if (isOwner && selectedBranchIds?.length === 1) {
-          params.branch_id = selectedBranchIds[0];
+        } else if (isOwner && selectedBranchIds?.length > 0) {
+          params.branch_ids = selectedBranchIds.join(",");
         }
         if (searchTerm.trim()) params.search = searchTerm.trim();
         if (startDate) params.start_date = startDate;

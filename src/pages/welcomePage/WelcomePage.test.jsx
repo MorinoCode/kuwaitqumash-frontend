@@ -29,6 +29,12 @@ describe("WelcomePage", () => {
     expect(container.querySelector(".hero__wordmark").textContent).toContain("Qumash");
   });
 
+  it("navigates to /signup from the signup call to action by default", () => {
+    const { container, getByTestId } = setup();
+    fireEvent.click(container.querySelector(".landing-nav__cta"));
+    expect(getByTestId("path").textContent).toBe("/signup");
+  });
+
   it("navigates to login from the primary call to action", () => {
     const { container } = setup();
     const cta = [...container.querySelectorAll("button")].find((button) =>
@@ -119,6 +125,14 @@ describe("WelcomePage", () => {
       fireEvent.keyDown(document, { key: "Escape" });
 
       expect(container.querySelectorAll('[role="menuitemradio"]').length).toBe(0);
+    });
+
+    it("toggles theme between dark and light", () => {
+      const { container } = setup();
+      const themeBtn = container.querySelector(".landing-nav__theme-btn");
+      expect(themeBtn).toBeInTheDocument();
+      fireEvent.click(themeBtn);
+      expect(document.body.classList.contains("light") || container.querySelector(".landing--light")).toBeTruthy();
     });
   });
 });

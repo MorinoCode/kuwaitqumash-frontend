@@ -88,4 +88,9 @@ describe("InvoicesPage", () => {
     const { container } = setup();
     await waitFor(() => expect(container.innerHTML.length).toBeGreaterThan(0));
   });
+
+  it("renders thermal 80mm print action button", () => {
+    const { container } = setup();
+    expect(container.querySelector(".invoices-btn--thermal")).toBeInTheDocument();
+  });
 });

@@ -120,7 +120,6 @@ export const COLORS = [
 export const UNITS = [
   { value: "meter", label: "Meter", labelAr: "متر", labelFa: "متر", short: "m" },
   { value: "roll", label: "Roll", labelAr: "طاقة", labelFa: "طاقه", short: "roll" },
-  { value: "piece", label: "Piece", labelAr: "قطعة", labelFa: "عدد", short: "pc" },
 ];
 
 export const COUNTRIES = [
@@ -220,3 +219,23 @@ export const formatMeters = (value) => {
 
 export const unitShort = (unit) =>
   UNITS.find((u) => u.value === unit)?.short || unit || "m";
+
+export const getTotalStockMeters = (item) => {
+  const length = parseFloat(item?.length_m ?? item?.meters) || 0;
+  const qty = Math.max(1, parseInt(item?.quantity, 10) || 1);
+  return Math.round(length * qty * 1000) / 1000;
+};
+
+export const getRollBreakdown = (item) => {
+  const totalMeters = getTotalStockMeters(item);
+  const rollLength = parseFloat(item?.roll_length_m) || 0;
+  if (item?.unit !== "roll" || rollLength <= 0) {
+    return { totalMeters, rollLength: 0, fullRolls: 0, remainderMeters: 0 };
+  }
+  const fullRolls = Math.floor((totalMeters + 0.0001) / rollLength);
+  const remainderMeters = Math.max(
+    0,
+    Math.round((totalMeters - fullRolls * rollLength) * 1000) / 1000,
+  );
+  return { totalMeters, rollLength, fullRolls, remainderMeters };
+};

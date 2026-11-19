@@ -54,8 +54,8 @@ const setup = () =>
 beforeEach(() => {
   vi.clearAllMocks();
   role = "store_owner";
-  global.URL.createObjectURL = vi.fn(() => "blob:refund");
-  global.URL.revokeObjectURL = vi.fn();
+  globalThis.URL.createObjectURL = vi.fn(() => "blob:refund");
+  globalThis.URL.revokeObjectURL = vi.fn();
 });
 
 describe("RefundsPage", () => {

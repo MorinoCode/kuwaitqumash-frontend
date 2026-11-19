@@ -23,7 +23,6 @@ vi.mock("../../hooks/useInventory", () => ({
       quantity: 2,
       cost_per_meter: "1.5",
       price_per_meter: "2.5",
-      images: [],
       status: "In Stock",
     },
     isLoading: false,

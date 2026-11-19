@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, CheckCircle, Printer, MessageCircle, Loader, Edit2 } from 'lucide-react';
+import { printThermalReceipt } from '../../utils/thermalPrint';
+import useTenantStore from '../../store/tenantStore';
 
 const InvoicePreviewModal = ({
     isOpen,
@@ -12,6 +14,7 @@ const InvoicePreviewModal = ({
     printPdfLoading,
     onClose,
     onOpenPDF,
+    onPrintThermal,
     onSendWa,
     onEditPhone,
     onCancelEditPhone
@@ -146,6 +149,22 @@ const InvoicePreviewModal = ({
                                 <Printer size={18} style={{marginRight:8}}/>
                             )}
                             {t('print_pdf')}
+                        </button>
+                        <button
+                            type="button"
+                            className="sales-btn sales-btn--secondary sales-btn--thermal"
+                            onClick={() =>
+                                onPrintThermal
+                                    ? onPrintThermal(lastInvoice)
+                                    : printThermalReceipt(lastInvoice, {
+                                        lang: "ar",
+                                        storeName: useTenantStore.getState().tenantName || lastInvoice?.branch?.name || "",
+                                      })
+                            }
+                            aria-label={t('print_thermal') || 'Thermal 80mm'}
+                        >
+                            <Printer size={18} style={{marginRight:8}}/>
+                            {t('print_thermal') || 'Thermal 80mm'}
                         </button>
                         {waConnected && waStep === null && (
                             <button

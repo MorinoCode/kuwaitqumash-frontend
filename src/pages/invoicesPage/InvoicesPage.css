@@ -282,6 +282,14 @@ html[dir="rtl"] .invoices-table { text-align: right; }
 .invoices-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .invoices-btn--view { }
 .invoices-btn--download { }
+.invoices-btn--thermal {
+    background: rgba(15, 138, 126, 0.15);
+    color: #2dd4bf;
+}
+.invoices-btn--thermal:hover:not(:disabled) {
+    background: #0f8a7e;
+    color: #fff;
+}
 .invoices-btn--refund {
     background: rgba(239, 68, 68, 0.12);
     color: #ef4444;

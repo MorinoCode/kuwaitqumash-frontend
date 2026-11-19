@@ -77,7 +77,36 @@ const RefundPage = () => {
         next[item.id] = {
           invoice_item_id: item.id,
           quantity_refunded: q,
-          amount_refunded: amountPerUnit * q,
+          amount_refunded: Math.round(amountPerUnit * q * 1000) / 1000,
+        };
+      }
+      return next;
+    });
+  };
+
+  const setItemMeters = (item, rawMeters) => {
+    const maxMeters = Number(item.meters_available ?? item.total_meters ?? item.meters ?? 0);
+    const totalSoldMeters = Number(item.total_meters ?? (item.meters || 0) * (item.quantity || 1));
+    const parsed = parseFloat(rawMeters);
+    const m = Number.isFinite(parsed)
+      ? Math.max(0, Math.min(Math.round(parsed * 1000) / 1000, maxMeters))
+      : 0;
+    setSelectedItems((prev) => {
+      const next = { ...prev };
+      if (m <= 0) {
+        delete next[item.id];
+      } else {
+        const ratio = totalSoldMeters > 0 ? m / totalSoldMeters : 1;
+        const maxAmount = Number(item.amount_refundable ?? item.total_price ?? 0);
+        const amount = Math.min(
+          maxAmount,
+          Math.round(parseFloat(item.total_price || 0) * ratio * 1000) / 1000,
+        );
+        next[item.id] = {
+          invoice_item_id: item.id,
+          quantity_refunded: 1,
+          meters_refunded: m,
+          amount_refunded: amount,
         };
       }
       return next;
@@ -86,6 +115,17 @@ const RefundPage = () => {
 
   const totalRefundAmount = Object.values(selectedItems).reduce((s, i) => s + (i?.amount_refunded || 0), 0);
   const paymentsTotal = payments.reduce((s, p) => s + (parseFloat(p.amount) || 0), 0);
+
+  useEffect(() => {
+    if (payments.length === 1) {
+      setPayments((prev) => [
+        {
+          ...prev[0],
+          amount: totalRefundAmount > 0 ? totalRefundAmount.toFixed(3) : "",
+        },
+      ]);
+    }
+  }, [totalRefundAmount, payments.length]);
 
   const addPayment = () => {
     setPayments((prev) => [...prev, { method: "Cash", amount: "", reference_number: "" }]);
@@ -258,28 +298,48 @@ const RefundPage = () => {
             <h3 className="refund-page__section-title">{t("select_items_to_refund") || "Select items to refund"}</h3>
             <div className="refund-page__items-list">
               {invoiceData.items.map((item) => {
-                if (item.quantity_available < 1) return null;
+                const isMetered = Number(item.total_meters ?? item.meters ?? 0) > 0;
+                const maxMeters = Number(item.meters_available ?? item.total_meters ?? item.meters ?? 0);
+                if (isMetered ? maxMeters <= 0.001 : item.quantity_available < 1) return null;
                 const sel = selectedItems[item.id];
                 const qty = sel?.quantity_refunded || 0;
+                const metersVal = sel?.meters_refunded ?? "";
+                const refundAmt = sel?.amount_refunded || 0;
                 return (
                   <div key={item.id} className="refund-page__item-row">
                     <div className="refund-page__item-info">
                       <span className="refund-page__item-name">{item.item_name}</span>
                       <span className="refund-page__item-meta">
-                        {item.meters ? `${item.meters} m` : ""} {item.fabric_type ? `• ${item.fabric_type}` : ""} • {item.quantity_available} {t("available")}
+                        {isMetered
+                          ? `${maxMeters.toFixed(2)} ${t("m") || "m"} ${t("available")}`
+                          : `${item.quantity_available} ${t("available")}`}
+                        {item.fabric_type ? ` • ${item.fabric_type}` : ""}
                       </span>
                     </div>
                     <div className="refund-page__item-actions">
-                      <input
-                        type="number"
-                        min={0}
-                        max={item.quantity_available}
-                        value={qty}
-                        onChange={(e) => setItemQty(item, e.target.value)}
-                        className="refund-page__qty-input"
-                      />
+                      {isMetered ? (
+                        <input
+                          type="number"
+                          step="0.01"
+                          min={0}
+                          max={maxMeters}
+                          placeholder={t("length_m") || "Meters"}
+                          value={metersVal}
+                          onChange={(e) => setItemMeters(item, e.target.value)}
+                          className="refund-page__qty-input"
+                        />
+                      ) : (
+                        <input
+                          type="number"
+                          min={0}
+                          max={item.quantity_available}
+                          value={qty}
+                          onChange={(e) => setItemQty(item, e.target.value)}
+                          className="refund-page__qty-input"
+                        />
+                      )}
                       <span className="refund-page__item-amount">
-                        {(qty > 0 ? (parseFloat(item.total_price) / item.quantity) * qty : 0).toFixed(3)} {t("kwd")}
+                        {refundAmt.toFixed(3)} {t("kwd")}
                       </span>
                     </div>
                   </div>

@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { fireEvent } from "@testing-library/react";
 import InvoicePreviewModal from "./InvoicePreviewModal";
 import { renderWithProviders } from "../../test/renderWithProviders";
+import * as thermalPrint from "../../utils/thermalPrint";
 
 const lastInvoice = {
   invoice_number: "INV-10",
@@ -136,5 +137,22 @@ describe("InvoicePreviewModal", () => {
     const buttons = [...container.querySelectorAll(".sales-modal__wa-flow button")];
     expect(buttons[1]).toBeDisabled();
     expect(container.querySelector(".sales-spin")).toBeTruthy();
+  });
+
+  it("triggers 80mm thermal receipt printing", () => {
+    const spy = vi.spyOn(thermalPrint, "printThermalReceipt").mockReturnValue(true);
+    const { container } = setup();
+    const btn = container.querySelector(".sales-btn--thermal");
+    expect(btn).toBeTruthy();
+    fireEvent.click(btn);
+    expect(spy).toHaveBeenCalledWith(lastInvoice, { lang: expect.any(String) });
+    spy.mockRestore();
+  });
+
+  it("uses custom onPrintThermal callback when provided", () => {
+    const onPrintThermal = vi.fn();
+    const { container } = setup({ onPrintThermal });
+    fireEvent.click(container.querySelector(".sales-btn--thermal"));
+    expect(onPrintThermal).toHaveBeenCalledWith(lastInvoice);
   });
 });

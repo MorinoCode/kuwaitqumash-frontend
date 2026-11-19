@@ -44,7 +44,9 @@ const HelpAssistant = ({ isOpen, onClose }) => {
   const quickQuestions = useMemo(() => getQuickQuestions(uiLanguage), [uiLanguage]);
   const isRtl = uiLanguage === "ar" || uiLanguage === "fa";
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => [
+    { id: "greeting", role: "bot", text: ui.greeting },
+  ]);
   const [showQuickQuestions, setShowQuickQuestions] = useState(false);
   const [draft, setDraft] = useState("");
   const [thinking, setThinking] = useState(false);
@@ -54,12 +56,9 @@ const HelpAssistant = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (!isOpen) return;
-    setMessages((current) =>
-      current.length > 0 ? current : [{ id: "greeting", role: "bot", text: ui.greeting }],
-    );
     const focusTimer = setTimeout(() => inputRef.current?.focus(), 150);
     return () => clearTimeout(focusTimer);
-  }, [isOpen, ui.greeting]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (bodyRef.current) {

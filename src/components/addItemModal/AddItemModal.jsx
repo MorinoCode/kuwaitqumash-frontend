@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
@@ -10,6 +10,7 @@ import {
 import {
   optionValue,
   optionLabel,
+  getTotalStockMeters,
   COUNTRIES,
   FABRIC_TYPES,
   PATTERNS,
@@ -23,6 +24,7 @@ import SuggestionInput from "../suggestionInput/SuggestionInput";
 import "./AddItemModal.css";
 import "../../pages/inventoryPage/InventoryPage.css";
 
+const round3 = (value) => Math.round((Number(value) || 0) * 1000) / 1000;
 
 const EMPTY_ITEM = {
   item_name: "",
@@ -32,11 +34,11 @@ const EMPTY_ITEM = {
   color: "",
   unit: "meter",
   length_m: "",
-  quantity: 1,
+  roll_length_m: "",
+  roll_count: 1,
   min_stock_level: 5,
   cost_per_meter: "",
   price_per_meter: "",
-  supplier_name: "",
   country_of_origin: "Kuwait",
   barcode: "",
   description: "",
@@ -57,7 +59,6 @@ const AddItemModal = ({
 }) => {
   const { theme } = useTheme();
   const { t, i18n } = useTranslation();
-  const fileInputRef = useRef(null);
 
   const createItemMutation = useCreateInventoryItem();
   const updateItemMutation = useUpdateInventoryItem();
@@ -65,31 +66,16 @@ const AddItemModal = ({
   const isEditMode = !!itemToEdit;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState(EMPTY_ITEM);
-  const [selectedImages, setSelectedImages] = useState([]);
-
-  const getImageUrl = (image) => {
-    if (!image) return "";
-    if (typeof image === "string") {
-      if (image.startsWith("http")) return image;
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-      return image.startsWith("/") ? `${API_URL}${image}` : `${API_URL}/${image}`;
-    }
-    return URL.createObjectURL(image);
-  };
+  // True when editing a roll item that already has partial meters cut (e.g. 117m of 30m rolls)
+  const [isPartialRollEdit, setIsPartialRollEdit] = useState(false);
 
   const update = (key) => (event) => {
     const value = event?.target ? event.target.value : event;
+    if (key === "unit") {
+      setIsPartialRollEdit(false);
+    }
     setForm((prev) => ({ ...prev, [key]: value }));
   };
-
-  // length_m is the length of one roll/piece (stock math multiplies it by
-  // quantity), so the label follows the selected sale unit.
-  const lengthFieldLabel =
-    form.unit === "roll"
-      ? t("length_per_roll_m") || "Length per roll (m)"
-      : form.unit === "piece"
-        ? t("length_per_piece_m") || "Length per piece (m)"
-        : t("length_m") || "Length (m)";
 
   // Suggestions keep the same label-based values the datalists produced.
   const suggestionOptions = (list) =>
@@ -101,6 +87,34 @@ const AddItemModal = ({
   useEffect(() => {
     if (!isOpen) return;
     if (itemToEdit) {
+      const normalizedUnit = itemToEdit.unit === "roll" ? "roll" : "meter";
+      const totalMeters = getTotalStockMeters(itemToEdit);
+      const savedRollLen = parseFloat(itemToEdit.roll_length_m) || 0;
+      const legacyQty = parseInt(itemToEdit.quantity, 10) || 1;
+
+      let rollLen = "";
+      let rollCount = 1;
+      let partialRoll = false;
+
+      if (normalizedUnit === "roll") {
+        if (savedRollLen > 0) {
+          rollLen = savedRollLen;
+          const exactRolls = totalMeters / savedRollLen;
+          if (exactRolls > 0 && Math.abs(exactRolls - Math.round(exactRolls)) < 0.001) {
+            rollCount = Math.max(1, Math.round(exactRolls));
+          } else {
+            partialRoll = true;
+          }
+        } else if (legacyQty > 1 && parseFloat(itemToEdit.length_m) > 0) {
+          rollLen = parseFloat(itemToEdit.length_m);
+          rollCount = legacyQty;
+        } else {
+          rollLen = totalMeters || "";
+          rollCount = 1;
+        }
+      }
+
+      setIsPartialRollEdit(partialRoll);
       setForm({
         ...EMPTY_ITEM,
         item_name: itemToEdit.item_name || "",
@@ -108,39 +122,38 @@ const AddItemModal = ({
         composition: itemToEdit.composition || "",
         pattern: itemToEdit.pattern || "",
         color: itemToEdit.color || "",
-        unit: itemToEdit.unit || "meter",
-        length_m: itemToEdit.length_m ?? "",
-        quantity: itemToEdit.quantity ?? 1,
+        unit: normalizedUnit,
+        length_m: totalMeters || "",
+        roll_length_m: rollLen,
+        roll_count: rollCount,
         min_stock_level: itemToEdit.min_stock_level ?? 5,
         cost_per_meter: itemToEdit.cost_per_meter ?? "",
         price_per_meter: itemToEdit.price_per_meter ?? "",
-        supplier_name: itemToEdit.supplier_name || "",
         country_of_origin: itemToEdit.country_of_origin || "Kuwait",
         barcode: itemToEdit.barcode || "",
         description: itemToEdit.description || "",
         description_ar: itemToEdit.description_ar || "",
       });
-      const existing = itemToEdit.images || itemToEdit.image_urls || [];
-      setSelectedImages(Array.isArray(existing) ? existing : []);
     } else {
+      setIsPartialRollEdit(false);
       setForm(EMPTY_ITEM);
-      setSelectedImages([]);
     }
   }, [isOpen, itemToEdit]);
 
-  const handleImageSelect = (event) => {
-    const files = Array.from(event.target.files || []);
-    if (selectedImages.length + files.length > 5) {
-      toast.warning(t("max_images_alert") || "Maximum 5 images allowed");
-      return;
+  const computedTotalMeters = (() => {
+    if (form.unit === "roll" && !isPartialRollEdit) {
+      const perRoll = num(form.roll_length_m) ?? 0;
+      const count = Math.max(0, Math.floor(num(form.roll_count) ?? 0));
+      return round3(perRoll * count);
     }
-    setSelectedImages((prev) => [...prev, ...files]);
-    event.target.value = "";
-  };
+    return round3(num(form.length_m) ?? 0);
+  })();
 
-  const removeSelectedImage = (index) => {
-    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
-  };
+  const computedPurchaseValue = (() => {
+    const cost = num(form.cost_per_meter) ?? 0;
+    if (cost <= 0 || computedTotalMeters <= 0) return 0;
+    return round3(computedTotalMeters * cost);
+  })();
 
   const buildPayload = () => {
     const fabricType = optionValue(FABRIC_TYPES, form.fabric_type);
@@ -152,25 +165,27 @@ const AddItemModal = ({
       .filter(Boolean)
       .join(" ");
 
+    const isRoll = form.unit === "roll";
+    const parsedRollLen = isRoll ? (num(form.roll_length_m) ?? null) : null;
+
     return {
       fabric_type: fabricType,
       item_name: (form.item_name || fallbackName || "").trim() || undefined,
       composition: optionValue(COMPOSITIONS, form.composition) || undefined,
       pattern: optionValue(PATTERNS, form.pattern) || undefined,
       color: optionValue(COLORS, form.color) || undefined,
-      unit: form.unit || "meter",
-      length_m: num(form.length_m) ?? 0,
-      quantity: num(form.quantity) ?? 1,
+      unit: isRoll ? "roll" : "meter",
+      length_m: computedTotalMeters,
+      roll_length_m: parsedRollLen,
+      quantity: 1,
       min_stock_level: num(form.min_stock_level) ?? 5,
       cost_per_meter: num(form.cost_per_meter) ?? 0,
       price_per_meter: num(form.price_per_meter) ?? 0,
-      supplier_name: form.supplier_name || undefined,
       country_of_origin: form.country_of_origin || undefined,
       barcode: form.barcode || undefined,
       description: form.description || undefined,
       description_ar: form.description_ar || undefined,
       branch_id: activeBranchId || itemToEdit?.branch_id || undefined,
-      images: selectedImages.filter((img) => img instanceof File),
     };
   };
 
@@ -182,8 +197,14 @@ const AddItemModal = ({
       toast.error(t("fabric_type_required") || "Fabric type is required");
       return;
     }
+    if (!(computedTotalMeters > 0)) {
+      toast.error(t("invalid_item_length") || "Valid length (meters) is required");
+      return;
+    }
     if (!(num(form.price_per_meter) > 0)) {
-      toast.error(t("price_per_meter_required") || "Price per meter is required");
+      toast.error(
+        t("price_per_meter_required") || "Selling price per meter is required",
+      );
       return;
     }
 
@@ -310,37 +331,6 @@ const AddItemModal = ({
 
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
-                {lengthFieldLabel} *
-              </label>
-              <input
-                type="number"
-                step="0.001"
-                min="0"
-                className="inventory-form__input"
-                value={form.length_m}
-                onChange={update("length_m")}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="inventory-form__row">
-            <div className="inventory-form__section">
-              <label className="inventory-form__section-label">
-                {t("quantity") || "Quantity"} *
-              </label>
-              <input
-                type="number"
-                min="1"
-                className="inventory-form__input"
-                value={form.quantity}
-                onChange={update("quantity")}
-                required
-              />
-            </div>
-
-            <div className="inventory-form__section">
-              <label className="inventory-form__section-label">
                 {t("min_stock_level") || "Minimum stock (m)"}
               </label>
               <input
@@ -353,6 +343,113 @@ const AddItemModal = ({
               />
             </div>
           </div>
+
+          {form.unit === "meter" ? (
+            <div className="inventory-form__section">
+              <label className="inventory-form__section-label">
+                {t("total_length_m") || "Total stock length (m)"} *
+              </label>
+              <input
+                type="number"
+                step="0.001"
+                min="0"
+                className="inventory-form__input"
+                value={form.length_m}
+                onChange={update("length_m")}
+                required
+              />
+            </div>
+          ) : isPartialRollEdit ? (
+            <div className="inventory-form__row">
+              <div className="inventory-form__section">
+                <label className="inventory-form__section-label">
+                  {t("remaining_length_m") || "Total remaining length (m)"} *
+                </label>
+                <input
+                  type="number"
+                  step="0.001"
+                  min="0"
+                  className="inventory-form__input"
+                  value={form.length_m}
+                  onChange={update("length_m")}
+                  required
+                />
+              </div>
+
+              <div className="inventory-form__section">
+                <label className="inventory-form__section-label">
+                  {t("length_per_roll_m") || "Length per roll (m)"}
+                </label>
+                <input
+                  type="number"
+                  step="0.001"
+                  min="0"
+                  className="inventory-form__input"
+                  value={form.roll_length_m}
+                  onChange={update("roll_length_m")}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="inventory-form__row">
+              <div className="inventory-form__section">
+                <label className="inventory-form__section-label">
+                  {t("length_per_roll_m") || "Length per roll (m)"} *
+                </label>
+                <input
+                  type="number"
+                  step="0.001"
+                  min="0"
+                  className="inventory-form__input"
+                  value={form.roll_length_m}
+                  onChange={update("roll_length_m")}
+                  required
+                />
+              </div>
+
+              <div className="inventory-form__section">
+                <label className="inventory-form__section-label">
+                  {t("roll_count") || "Number of rolls"} *
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  className="inventory-form__input"
+                  value={form.roll_count}
+                  onChange={update("roll_count")}
+                  required
+                />
+              </div>
+            </div>
+          )}
+
+          {computedTotalMeters > 0 && (
+            <div className="inventory-form__stock-preview">
+              <div className="inventory-form__stock-preview-item">
+                <span>{t("total_stock_preview") || "Total stock"}:</span>
+                <strong>
+                  {computedTotalMeters} {t("m") || "m"}
+                </strong>
+                {form.unit === "roll" &&
+                  !isPartialRollEdit &&
+                  (num(form.roll_length_m) ?? 0) > 0 && (
+                    <span className="inventory-form__stock-preview-note">
+                      ({Math.floor(num(form.roll_count) ?? 0)} ×{" "}
+                      {num(form.roll_length_m)} {t("m") || "m"})
+                    </span>
+                  )}
+              </div>
+              {computedPurchaseValue > 0 && (
+                <div className="inventory-form__stock-preview-item">
+                  <span>{t("total_purchase_value") || "Total purchase value"}:</span>
+                  <strong>
+                    {computedPurchaseValue.toFixed(3)} {t("kwd") || "KWD"}
+                  </strong>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="inventory-form__row">
             <div className="inventory-form__section">
@@ -371,7 +468,7 @@ const AddItemModal = ({
 
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
-                {t("price_per_meter") || "Price per meter"} *
+                {t("price_per_meter") || "Selling price per meter"} *
               </label>
               <input
                 type="number"
@@ -388,17 +485,6 @@ const AddItemModal = ({
           <div className="inventory-form__row">
             <div className="inventory-form__section">
               <label className="inventory-form__section-label">
-                {t("supplier_name") || "Supplier"}
-              </label>
-              <input
-                className="inventory-form__input"
-                value={form.supplier_name}
-                onChange={update("supplier_name")}
-              />
-            </div>
-
-            <div className="inventory-form__section">
-              <label className="inventory-form__section-label">
                 {t("country_of_origin") || "Country of origin"}
               </label>
               <select
@@ -413,55 +499,16 @@ const AddItemModal = ({
                 ))}
               </select>
             </div>
-          </div>
 
-          <div className="inventory-form__section">
-            <label className="inventory-form__section-label">
-              {t("barcode") || "Barcode"}
-            </label>
-            <input
-              className="inventory-form__input"
-              value={form.barcode}
-              onChange={update("barcode")}
-              placeholder={t("barcode_optional_hint") || "Leave empty to generate"}
-            />
-          </div>
-
-          <div className="inventory-form__section">
-            <label className="inventory-form__section-label">
-              {t("images")} ({t("optional")})
-            </label>
-            <div className="inventory-form__upload-section">
-              <div className="inventory-form__thumbnails">
-                {selectedImages.map((image, index) => (
-                  <div key={index} className="inventory-form__thumb">
-                    <img src={getImageUrl(image)} alt="preview" loading="lazy" />
-                    <button
-                      type="button"
-                      className="inventory-form__remove-thumb"
-                      onClick={() => removeSelectedImage(index)}
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                ))}
-                {selectedImages.length < 5 && (
-                  <button
-                    type="button"
-                    className="inventory-form__add-thumb"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <Plus size={20} />
-                  </button>
-                )}
-              </div>
+            <div className="inventory-form__section">
+              <label className="inventory-form__section-label">
+                {t("barcode") || "Barcode"}
+              </label>
               <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                accept="image/*"
-                multiple
-                onChange={handleImageSelect}
+                className="inventory-form__input"
+                value={form.barcode}
+                onChange={update("barcode")}
+                placeholder={t("barcode_optional_hint") || "Leave empty to generate"}
               />
             </div>
           </div>

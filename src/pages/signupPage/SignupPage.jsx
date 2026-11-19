@@ -1,17 +1,27 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import api from "../../api/axios.js";
 import { useTheme } from "../../context/ThemeContext";
 import { normalizeToLatinDigits } from "../../utils/normalizeNumbers.js";
-import { Eye, EyeOff, Sun, Moon } from "lucide-react";
-import logoImage from "../../assets/logo-kuwaitqumash.svg";
+import { Eye, EyeOff } from "lucide-react";
+import logoImage from "../../assets/logo1.png";
+import PublicNavbar from "../../components/publicNavbar/PublicNavbar";
 import "./SignupPage.css";
+
+const toStoreSlug = (name) =>
+  String(name || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const { t, i18n } = useTranslation();
 
   const [formData, setFormData] = useState({
@@ -30,6 +40,15 @@ const SignupPage = () => {
 
   const usernameRegex = useMemo(() => /^[a-zA-Z0-9_.-]+$/, []);
   const PASSWORD_MIN_LENGTH = 6;
+  const redirectTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimerRef.current) {
+        clearTimeout(redirectTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
 
@@ -47,8 +66,21 @@ const SignupPage = () => {
     );
   }, [i18n.language]);
 
+  const storeSlugPreview = useMemo(
+    () => toStoreSlug(formData.storeName),
+    [formData.storeName]
+  );
+
   const localErrors = useMemo(() => {
     const newErrors = {};
+    if (
+      formData.storeName.trim() &&
+      (!storeSlugPreview || !/[a-z0-9]/.test(storeSlugPreview))
+    ) {
+      newErrors.storeName =
+        t("store_name_english_required") ||
+        "Use English letters or numbers (used as your Store ID for login).";
+    }
     if (formData.password && formData.password.length < PASSWORD_MIN_LENGTH) {
       newErrors.password =
         t("password_min_length") ||
@@ -80,7 +112,7 @@ const SignupPage = () => {
       }
     }
     return newErrors;
-  }, [formData, t, usernameRegex]);
+  }, [formData, storeSlugPreview, t, usernameRegex]);
 
   const errors = useMemo(() => ({ ...localErrors, ...serverErrors }), [localErrors, serverErrors]);
 
@@ -92,6 +124,7 @@ const SignupPage = () => {
     return (
       Object.keys(localErrors).length === 0 &&
       formData.storeName.trim().length >= 3 &&
+      /[a-z0-9]/.test(storeSlugPreview) &&
       formData.username.trim().length >= 3 &&
       usernameRegex.test(formData.username.trim()) &&
       formData.fullName.trim().length >= 3 &&
@@ -101,7 +134,7 @@ const SignupPage = () => {
       formData.password === formData.confirmPassword &&
       !isSubmitting
     );
-  }, [formData, localErrors, usernameRegex, isSubmitting]);
+  }, [formData, localErrors, storeSlugPreview, usernameRegex, isSubmitting]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -121,13 +154,6 @@ const SignupPage = () => {
     }
   };
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    document.dir = lng === "ar" || lng === "fa" ? "rtl" : "ltr";
-    document.body.dir = lng === "ar" || lng === "fa" ? "rtl" : "ltr";
-    document.body.classList.remove("font-arabic", "font-english");
-    document.body.classList.add(lng === "ar" ? "font-arabic" : "font-english");
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -162,9 +188,9 @@ const SignupPage = () => {
         }
       );
 
-      setTimeout(() => {
+      redirectTimerRef.current = setTimeout(() => {
         navigate("/login", { state: { tenantId } });
-      }, 5500);
+      }, 2500);
     } catch (err) {
       const data = err.response?.data;
       const serverMessage =
@@ -206,63 +232,7 @@ const SignupPage = () => {
       className={`signup-page signup-page--${theme}`}
       dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
-      <div
-        className="signup-page__logo-link"
-        onClick={() => navigate("/")}
-      >
-        <img
-          src={logoImage}
-          alt={t("app_title") || "KuwaitQumash"}
-          className="signup-page__top-logo"
-        />
-      </div>
-
-      <div className={`signup-page__controls signup-page__controls--${theme}`}>
-
-        <button
-          type="button"
-          className={`signup-page__theme-btn signup-page__theme-btn--${theme}`}
-          onClick={toggleTheme}
-          aria-label={
-            theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-          }
-          title={theme === "dark" ? t("light_mode") : t("dark_mode")}
-        >
-          {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-
-        <div
-          className={`signup-page__language-selector signup-page__language-selector--${theme}`}
-        >
-          <button
-            type="button"
-            className={`signup-page__lang-btn ${
-              i18n.language === "fa" ? "signup-page__lang-btn--active" : ""
-            } signup-page__lang-btn--${theme}`}
-            onClick={() => changeLanguage("fa")}
-          >
-            FA
-          </button>
-          <button
-            type="button"
-            className={`signup-page__lang-btn ${
-              i18n.language === "en" ? "signup-page__lang-btn--active" : ""
-            } signup-page__lang-btn--${theme}`}
-            onClick={() => changeLanguage("en")}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            className={`signup-page__lang-btn ${
-              i18n.language === "ar" ? "signup-page__lang-btn--active" : ""
-            } signup-page__lang-btn--${theme}`}
-            onClick={() => changeLanguage("ar")}
-          >
-            AR
-          </button>
-        </div>
-      </div>
+      <PublicNavbar />
 
       <div className={`signup-card signup-card--${theme}`}>
         <header className={`signup-card__header`}>
@@ -294,7 +264,9 @@ const SignupPage = () => {
             </label>
             <input
               name="storeName"
-              className={`signup-card__input signup-card__input--${theme}`}
+              className={`signup-card__input ${
+                errors.storeName ? "signup-card__input--error" : ""
+              } signup-card__input--${theme}`}
               type="text"
               placeholder={t("store_name_placeholder") || "e.g. Al-Baraka Fabrics"}
               value={formData.storeName}
@@ -302,6 +274,23 @@ const SignupPage = () => {
               required
               maxLength={100}
             />
+            {errors.storeName ? (
+              <span
+                className={`signup-card__error-msg signup-card__error-msg--${theme}`}
+              >
+                {errors.storeName}
+              </span>
+            ) : (
+              storeSlugPreview && (
+                <span
+                  className={`signup-card__hint signup-card__hint--${theme}`}
+                  dir="ltr"
+                >
+                  {t("store_id_preview", { tenantId: storeSlugPreview }) ||
+                    `Your Store ID: ${storeSlugPreview}`}
+                </span>
+              )
+            )}
           </div>
 
           <div className={`signup-card__form-group`}>
@@ -312,7 +301,9 @@ const SignupPage = () => {
             </label>
             <input
               name="fullName"
-              className={`signup-card__input signup-card__input--${theme}`}
+              className={`signup-card__input ${
+                errors.fullName ? "signup-card__input--error" : ""
+              } signup-card__input--${theme}`}
               type="text"
               placeholder={t("full_name") || "Full Name"}
               value={formData.fullName}
@@ -320,6 +311,13 @@ const SignupPage = () => {
               required
               maxLength={100}
             />
+            {errors.fullName && (
+              <span
+                className={`signup-card__error-msg signup-card__error-msg--${theme}`}
+              >
+                {errors.fullName}
+              </span>
+            )}
           </div>
 
           <div className={`signup-card__form-group`}>

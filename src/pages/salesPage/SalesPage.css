@@ -376,6 +376,29 @@ html[dir="rtl"] .sales-search__input {
   opacity: 0.6;
   font-family: monospace;
 }
+.sales-cart__roll-chip {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  background: rgba(45, 212, 191, 0.08);
+  color: #2dd4bf;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.sales-cart__roll-chip:hover {
+  background: rgba(45, 212, 191, 0.18);
+  border-color: rgba(45, 212, 191, 0.65);
+}
+.sales-cart__roll-chip--active {
+  background: rgba(45, 212, 191, 0.22);
+  border-color: #2dd4bf;
+}
 .sales-cart__total {
   font-weight: 700;
   color: #2dd4bf;
@@ -732,6 +755,7 @@ html[dir="rtl"] .sales-payment__input {
 
 .sales-modal__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 20px;
 }

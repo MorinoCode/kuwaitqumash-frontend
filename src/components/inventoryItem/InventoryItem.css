@@ -76,6 +76,18 @@
 .inventory-item__cell--mono { font-family: monospace; opacity: 0.8; }
 .inventory-item__cell--bold { font-weight: 700; }
 
+.inventory-item__stock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.inventory-item__stock-sub {
+    font-size: 0.75rem;
+    opacity: 0.65;
+    white-space: nowrap;
+}
+
 .inventory-item__profit { font-weight: 600; }
 .inventory-item__profit--pos { color: #10b981; }
 .inventory-item__profit--neg { color: #ef4444; }

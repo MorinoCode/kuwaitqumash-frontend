@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { ArrowLeft, CheckCircle2, Send } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Send, Store } from "lucide-react";
 import api from "../../api/axios";
+import { useTheme } from "../../context/ThemeContext";
+import PublicNavbar from "../../components/publicNavbar/PublicNavbar";
 import Footer from "../../components/footer/Footer";
 import "./ContactPage.css";
 
-const EMPTY_FORM = { name: "", contact: "", message: "" };
+const EMPTY_FORM = { name: "", storeName: "", contact: "", message: "" };
 
 const ContactPage = () => {
   const { t, i18n } = useTranslation();
+  const themeContext = useTheme();
+  const theme = themeContext?.theme || "dark";
   const isRtl = i18n.language === "ar" || i18n.language === "fa";
 
   const [form, setForm] = useState(EMPTY_FORM);
@@ -34,12 +38,16 @@ const ContactPage = () => {
       return;
     }
 
+    const compiledMessage = form.storeName.trim()
+      ? `نام فروشگاه: ${form.storeName.trim()}\n\n${form.message.trim()}`
+      : form.message.trim();
+
     try {
       setSending(true);
       await api.post("/platform/contact", {
         name: form.name.trim(),
         contact: form.contact.trim(),
-        message: form.message.trim(),
+        message: compiledMessage,
       });
       setSent(true);
       setForm(EMPTY_FORM);
@@ -51,13 +59,10 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="contact-page" dir={isRtl ? "rtl" : "ltr"}>
-      <main className="contact-page__main">
-        <Link to="/" className="contact-page__back">
-          <ArrowLeft size={16} className={isRtl ? "flip-x" : ""} />
-          {t("contact_page.back_home")}
-        </Link>
+    <div className={`contact-page contact-page--${theme}`} dir={isRtl ? "rtl" : "ltr"}>
+      <PublicNavbar />
 
+      <main className="contact-page__main">
         <h1 className="contact-page__title">{t("contact_page.title")}</h1>
         <p className="contact-page__subtitle">{t("contact_page.subtitle")}</p>
 
@@ -85,6 +90,17 @@ const ContactPage = () => {
                 placeholder={t("contact_page.name_placeholder")}
                 maxLength={100}
                 required
+              />
+            </label>
+
+            <label className="contact-page__field">
+              <span>{t("contact_page.store_label", "نام فروشگاه (اختیاری)")}</span>
+              <input
+                type="text"
+                value={form.storeName}
+                onChange={updateField("storeName")}
+                placeholder={t("contact_page.store_placeholder", "مثلاً فروشگاه پارچه کویت")}
+                maxLength={100}
               />
             </label>
 

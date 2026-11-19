@@ -6,14 +6,15 @@ import api from "../../api/axios";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import useTenantStore from "../../store/tenantStore";
-import { Eye, EyeOff, Sun, Moon } from "lucide-react";
-import logoImage from "../../assets/logo-kuwaitqumash.svg";
+import { Eye, EyeOff } from "lucide-react";
+import logoImage from "../../assets/logo1.png";
+import PublicNavbar from "../../components/publicNavbar/PublicNavbar";
 import "./LoginPage.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const { t, i18n } = useTranslation();
   const { setTenant } = useTenantStore();
   const { login } = useAuth();
@@ -25,6 +26,9 @@ const LoginPage = () => {
   }));
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isPublicSignupAllowed =
+    import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false";
 
   const isFormValid =
     credentials.storeId.trim().length > 0 &&
@@ -101,76 +105,12 @@ const LoginPage = () => {
     }
   };
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    document.dir = lng === "ar" || lng === "fa" ? "rtl" : "ltr";
-    document.body.dir = lng === "ar" || lng === "fa" ? "rtl" : "ltr";
-    document.body.classList.remove("font-arabic", "font-english");
-    document.body.classList.add(lng === "ar" ? "font-arabic" : "font-english");
-  };
-
   return (
     <div
       className={`login-page login-page--${theme}`}
       dir={i18n.language === "ar" || i18n.language === "fa" ? "rtl" : "ltr"}
     >
-      <div
-        className="login-page__logo-link"
-        onClick={() => navigate("/")}
-      >
-        <img
-          src={logoImage}
-          alt={t("app_title")}
-          className="login-page__top-logo"
-        />
-      </div>
-
-      <div className={`login-page__controls login-page__controls--${theme}`}>
-
-        <button
-          type="button"
-          className={`login-page__theme-btn login-page__theme-btn--${theme}`}
-          onClick={toggleTheme}
-          aria-label={
-            theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-          }
-          title={theme === "dark" ? t("light_mode") : t("dark_mode")}
-        >
-          {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-
-        <div
-          className={`login-page__language-selector login-page__language-selector--${theme}`}
-        >
-          <button
-            type="button"
-            className={`login-page__lang-btn ${
-              i18n.language === "fa" ? "login-page__lang-btn--active" : ""
-            } login-page__lang-btn--${theme}`}
-            onClick={() => changeLanguage("fa")}
-          >
-            FA
-          </button>
-          <button
-            type="button"
-            className={`login-page__lang-btn ${
-              i18n.language === "en" ? "login-page__lang-btn--active" : ""
-            } login-page__lang-btn--${theme}`}
-            onClick={() => changeLanguage("en")}
-          >
-            EN
-          </button>
-          <button
-            type="button"
-            className={`login-page__lang-btn ${
-              i18n.language === "ar" ? "login-page__lang-btn--active" : ""
-            } login-page__lang-btn--${theme}`}
-            onClick={() => changeLanguage("ar")}
-          >
-            AR
-          </button>
-        </div>
-      </div>
+      <PublicNavbar />
 
       <div className={`login-card login-card--${theme}`}>
         <header className={`login-card__header login-card__header--${theme}`}>
@@ -271,9 +211,12 @@ const LoginPage = () => {
             <button
               type="button"
               className={`login-card__signup-btn login-card__signup-btn--${theme}`}
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate(isPublicSignupAllowed ? "/signup" : "/contact")}
             >
-              {t("dont_have_account")} {t("sign_up")}
+              {t("dont_have_account")}{" "}
+              {isPublicSignupAllowed
+                ? t("sign_up")
+                : t("landing.contact_plan_cta", "با ما تماس بگیرید")}
             </button>
           </footer>
         </form>

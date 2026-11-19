@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import { __instances } from "html5-qrcode";
 import BarcodeScanner from "./BarcodeScanner";
 import { renderWithProviders } from "../../test/renderWithProviders";

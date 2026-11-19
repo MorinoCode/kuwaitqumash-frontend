@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
-import { removeStorageItem } from "../../utils/storage";
 import useBranchStore from "../../store/branchStore";
-import useTenantStore from "../../store/tenantStore";
 import { useBranches } from "../../hooks/useBranches";
 import "./Sidebar.css";
 import {
-  Home, LayoutDashboard, Package, ShoppingCart, Layers, Store, ChevronDown,
+  Home, LayoutDashboard, BarChart3, Package, ShoppingCart, Layers, Store, ChevronDown,
   Users, X, Settings, Check, FileText, RotateCcw
 } from "lucide-react";
 
@@ -20,51 +19,13 @@ const Sidebar = ({ closeSidebar }) => {
   const navigate = useNavigate();
 
   const [isStoreMenuOpen, setIsStoreMenuOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const { user: currentUser } = useAuth();
 
   const { activeBranchId, setActiveBranch, validateBranch } = useBranchStore();
-  const { clearTenant } = useTenantStore();
 
   const { data: branches = [], isLoading: branchesLoading } = useBranches();
 
   const activeStore = branches.find(b => b.id === activeBranchId) || null;
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userRes = await api.get('/auth/me');
-        const user = userRes.data.data || userRes.data;
-        setCurrentUser(user);
-      } catch (err) {
-
-        if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
-          return;
-        }
-
-        if (err.response?.status === 400) {
-          const errorMessage = err.response.data?.message || '';
-          if (errorMessage.includes('tenant') || errorMessage.includes('Tenant')) {
-            clearTenant();
-            useBranchStore.getState().clearBranch();
-            removeStorageItem('token');
-            removeStorageItem('authToken');
-            navigate('/login', { replace: true });
-            return;
-          }
-        }
-
-        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-          clearTenant();
-          useBranchStore.getState().clearBranch();
-          removeStorageItem('token');
-          removeStorageItem('authToken');
-          navigate('/login', { replace: true });
-        }
-      }
-    };
-
-    fetchUser();
-  }, [navigate, clearTenant]);
 
   useEffect(() => {
     if (!branchesLoading && branches.length > 0 && currentUser) {
@@ -244,6 +205,17 @@ const Sidebar = ({ closeSidebar }) => {
         >
           <LayoutDashboard size={20} /> <span>{t('dashboard')}</span>
         </Link>
+        {currentUser?.role !== 'sales_man' && (
+          <Link
+            to="/analytics"
+            className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/analytics")}`}
+            onClick={closeSidebar}
+            aria-label={t('ai_analytics') || 'Analytics'}
+            aria-current={isActive("/analytics") ? 'page' : undefined}
+          >
+            <BarChart3 size={20} /> <span>{t('ai_analytics') || 'Analytics'}</span>
+          </Link>
+        )}
         <Link
           to="/inventory"
           className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/inventory")}`}

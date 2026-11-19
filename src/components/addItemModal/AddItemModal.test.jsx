@@ -51,14 +51,14 @@ describe("AddItemModal", () => {
     expect(input.value).toBe("Cotton");
   });
 
-  it("labels the length field by the selected sale unit", () => {
+  it("switches stock fields between meter and roll modes", () => {
     const { container } = setup();
     const unitSelect = container.querySelector("select.inventory-form__input");
+    expect(container.textContent).toMatch(/Total stock length|متراژ کل موجودی/);
+
     fireEvent.change(unitSelect, { target: { value: "roll" } });
     expect(container.textContent).toMatch(/Length per roll|طول هر طاقه/);
-
-    fireEvent.change(unitSelect, { target: { value: "piece" } });
-    expect(container.textContent).toMatch(/Length per piece|طول هر عدد/);
+    expect(container.textContent).toMatch(/Number of rolls|تعداد طاقه/);
   });
 
   it("requires the mandatory fields before saving", () => {

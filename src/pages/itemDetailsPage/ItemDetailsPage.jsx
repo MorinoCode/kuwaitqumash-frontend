@@ -10,6 +10,7 @@ import {
   localizedOption,
   localizeWords,
   localizeItemName,
+  getRollBreakdown,
 } from "../../utils/inventoryCategories";
 
 import { useReactToPrint } from "react-to-print";
@@ -31,10 +32,6 @@ import {
   Printer,
   Edit3,
   X,
-  Image as ImageIcon,
-  ChevronLeft,
-  ChevronRight,
-  Gem,
 } from "lucide-react";
 
 const ItemDetailsPage = () => {
@@ -42,7 +39,6 @@ const ItemDetailsPage = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const { t, i18n } = useTranslation();
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const currency = t("kwd") || "KWD";
 
   const {
@@ -54,11 +50,8 @@ const ItemDetailsPage = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
   const printRef = useRef(null);
-  const imagePrintRef = useRef(null);
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
@@ -111,96 +104,6 @@ const ItemDetailsPage = () => {
         `,
   });
 
-  const handlePrintImage = useReactToPrint({
-    contentRef: imagePrintRef,
-    onBeforeGetContent: () => {
-      return new Promise((resolve) => {
-        const doPrepare = async () => {
-          const el = imagePrintRef.current;
-          if (!el) {
-            resolve();
-            return;
-          }
-
-          const img = el.querySelector("img");
-          if (!img || !img.src) {
-            resolve();
-            return;
-          }
-
-          if (img.src.startsWith("data:")) {
-            resolve();
-            return;
-          }
-
-          const loadingToast = toast.loading(
-            t("preparing_print") || "Preparing image...",
-          );
-
-          try {
-            const separator = img.src.includes("?") ? "&" : "?";
-            const freshUrl = `${img.src}${separator}t=${new Date().getTime()}`;
-
-            const response = await fetch(freshUrl, {
-              mode: "cors",
-              cache: "no-store",
-            });
-
-            if (!response.ok) throw new Error("Network error");
-
-            const blob = await response.blob();
-            const reader = new FileReader();
-
-            reader.onloadend = () => {
-              img.src = reader.result;
-              toast.dismiss(loadingToast);
-              setTimeout(() => resolve(), 500);
-            };
-            reader.onerror = () => {
-              toast.dismiss(loadingToast);
-              resolve();
-            };
-            reader.readAsDataURL(blob);
-          } catch {
-            toast.dismiss(loadingToast);
-            resolve();
-          }
-        };
-        doPrepare();
-      });
-    },
-    onPrintError: () => {
-      toast.error(t("print_error"));
-    },
-    pageStyle: `
-            @page { size: A4; margin: 0; }
-            html, body {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
-            .print-image-container {
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                background: white !important;
-            }
-            .print-image-container img {
-                max-width: 95% !important;
-                max-height: 95% !important;
-                object-fit: contain !important;
-                display: block !important;
-            }
-        `,
-  });
-
-  const touchStartX = useRef(null);
-  const touchEndX = useRef(null);
-
   useEffect(() => {
     if (!loading && !item && id) {
       navigate("/inventory");
@@ -226,44 +129,6 @@ const ItemDetailsPage = () => {
     setIsConfirmModalOpen(true);
   };
 
-  const getImageUrl = (url) => {
-    if (!url) return "";
-    if (url.startsWith("http")) return url;
-    const cleanUrl = url.startsWith("/") ? url : `/${url}`;
-    return `${API_URL}${cleanUrl}`;
-  };
-
-  const handleNextImage = () => {
-    const totalImages = item?.images?.length || 0;
-    if (totalImages <= 1) return;
-    setSelectedImageIndex((prev) => (prev + 1) % totalImages);
-  };
-
-  const handlePrevImage = () => {
-    const totalImages = item?.images?.length || 0;
-    if (totalImages <= 1) return;
-    setSelectedImageIndex((prev) => (prev - 1 + totalImages) % totalImages);
-  };
-
-  const onTouchStart = (e) => {
-    touchEndX.current = null;
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const onTouchMove = (e) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const distance = touchStartX.current - touchEndX.current;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe) handleNextImage();
-    if (isRightSwipe) handlePrevImage();
-  };
-
   if (loading || !item)
     return (
       <div
@@ -272,14 +137,6 @@ const ItemDetailsPage = () => {
         {t("loading")}
       </div>
     );
-
-  const currentImages = item.images || [];
-  const allImages = currentImages;
-
-  const mainImageSrc =
-    allImages.length > 0
-      ? getImageUrl(currentImages[selectedImageIndex])
-      : null;
 
   return (
     <div className={`item-details item-details--${theme}`}>
@@ -313,122 +170,6 @@ const ItemDetailsPage = () => {
       </header>
 
       <div className="item-details__content">
-        <div className="item-gallery">
-          <div
-            className="item-gallery__main"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          >
-            {allImages.length > 0 ? (
-              <>
-                <img
-                  src={mainImageSrc}
-                  alt="Main Item"
-                  loading="lazy"
-                  onError={(e) => {
-                    const placeholder =
-                      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2RkZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE2IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RXJyb3I8L3RleHQ+PC9zdmc+";
-                    e.target.src = placeholder;
-                  }}
-                />
-                {allImages.length > 1 && (
-                  <>
-                    <button
-                      className="item-gallery__arrow item-gallery__arrow--prev"
-                      onClick={handlePrevImage}
-                    >
-                      <ChevronLeft size={24} />
-                    </button>
-                    <button
-                      className="item-gallery__arrow item-gallery__arrow--next"
-                      onClick={handleNextImage}
-                    >
-                      <ChevronRight size={24} />
-                    </button>
-                  </>
-                )}
-              </>
-            ) : (
-              <div className="item-gallery__placeholder">
-                <ImageIcon size={48} /> {t("no_images")}
-              </div>
-            )}
-          </div>
-
-          <div className="item-gallery__thumbnails">
-            {currentImages.map((img, idx) => (
-              <div
-                key={idx}
-                className={`item-gallery__thumb ${selectedImageIndex === idx ? "item-gallery__thumb--active" : ""}`}
-                onClick={() => setSelectedImageIndex(idx)}
-              >
-                <img
-                  src={getImageUrl(img)}
-                  alt={`thumb-${idx}`}
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-
-          {allImages.length > 0 && mainImageSrc && (
-            <>
-              <div
-                style={{
-                  position: "fixed",
-                  left: "-10000px",
-                  top: 0,
-                  width: "210mm",
-                  height: "297mm",
-                  zIndex: -9999,
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  ref={imagePrintRef}
-                  className="print-image-container"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <img
-                    src={mainImageSrc}
-                    alt="Print View"
-                    crossOrigin="anonymous"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                      objectFit: "contain",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="item-gallery__print-image-wrap">
-                <button
-                  type="button"
-                  className="item-action-btn item-action-btn--secondary"
-                  onClick={() => handlePrintImage()}
-                >
-                  <Printer size={16} />{" "}
-                  {t("print_this_image") || "Print this image"}
-                </button>
-              </div>
-            </>
-          )}
-
-          <div className="item-details__barcode">
-            <p>
-              {t("barcode")}: <strong>{item.barcode}</strong>
-            </p>
-          </div>
-        </div>
-
         <div className="item-info">
           <h1 className="item-info__title">
             {localizeItemName(item.item_name, i18n.language)}
@@ -468,28 +209,43 @@ const ItemDetailsPage = () => {
             <div className="item-info__group">
               <label>{t("unit") || "Sale unit"}</label>
               <p className="item-info__value">
-                {localizedOption(UNITS, item.unit || "meter", i18n.language)}
+                {localizedOption(UNITS, item.unit === "roll" ? "roll" : "meter", i18n.language)}
               </p>
             </div>
-            <div className="item-info__group">
-              <label>
-                {item.unit === "roll"
-                  ? t("length_per_roll_m") || "Length per roll (m)"
-                  : item.unit === "piece"
-                    ? t("length_per_piece_m") || "Length per piece (m)"
-                    : t("length_m") || "Length (m)"}
-              </label>
-              <p className="item-info__value">
-                {item.length_m ?? 0} {t("m") || "m"}
-              </p>
-            </div>
-            <div className="item-info__group">
-              <label>{t("quantity")}</label>
-              <p className="item-info__value">{item.quantity || 1}</p>
-            </div>
+            {(() => {
+              const { totalMeters, rollLength, fullRolls, remainderMeters } =
+                getRollBreakdown(item);
+              return (
+                <>
+                  <div className="item-info__group">
+                    <label>{t("stock_meters") || "Stock (m)"}</label>
+                    <p className="item-info__value">
+                      {totalMeters} {t("m") || "m"}
+                    </p>
+                    {rollLength > 0 && (
+                      <small style={{ opacity: 0.7 }}>
+                        {remainderMeters > 0
+                          ? `${fullRolls} ${t("full_rolls") || "full roll(s)"} + ${remainderMeters} ${t("m") || "m"}`
+                          : `${fullRolls} ${t("roll") || "roll"} × ${rollLength} ${t("m") || "m"}`}
+                      </small>
+                    )}
+                  </div>
+                  {rollLength > 0 && (
+                    <div className="item-info__group">
+                      <label>{t("length_per_roll_m") || "Length per roll (m)"}</label>
+                      <p className="item-info__value">
+                        {rollLength} {t("m") || "m"}
+                      </p>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
             <div className="item-info__group">
               <label>{t("min_stock")}</label>
-              <p className="item-info__value">{item.min_stock_level || 0}</p>
+              <p className="item-info__value">
+                {item.min_stock_level || 0} {t("m") || "m"}
+              </p>
             </div>
             <div className="item-info__group">
               <label>{t("cost_per_meter")}</label>
@@ -498,14 +254,10 @@ const ItemDetailsPage = () => {
               </p>
             </div>
             <div className="item-info__group">
-              <label>{t("price_per_meter") || "Price per meter"}</label>
+              <label>{t("price_per_meter") || "Selling price per meter"}</label>
               <p className="item-info__value">
                 {(parseFloat(item.price_per_meter) || 0).toFixed(3)} {currency}
               </p>
-            </div>
-            <div className="item-info__group">
-              <label>{t("supplier_name") || "Supplier"}</label>
-              <p className="item-info__value">{item.supplier_name || "-"}</p>
             </div>
             <div className="item-info__group">
               <label>{t("country")}</label>

@@ -46,21 +46,25 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
   };
 
   const sortedItems = [...items].sort((a, b) => {
-    const aVal = a[sortColumn];
-    const bVal = b[sortColumn];
+    let aVal = a[sortColumn];
+    let bVal = b[sortColumn];
+    if (sortColumn === "meters" || sortColumn === "weight") {
+      aVal = a.meters ?? a.weight ?? 0;
+      bVal = b.meters ?? b.weight ?? 0;
+    }
     const multiplier = sortDirection === "asc" ? 1 : -1;
     return (aVal > bVal ? 1 : -1) * multiplier;
   });
 
   const formatValue = (value, type) => {
     if (type === "currency") {
-      return `${parseFloat(value).toLocaleString()} KWD`;
+      return `${parseFloat(value || 0).toLocaleString("en-US", { minimumFractionDigits: 3, maximumFractionDigits: 3 })} KWD`;
     }
     if (type === "number") {
-      return parseInt(value).toLocaleString();
+      return parseInt(value || 0).toLocaleString();
     }
-    if (type === "weight") {
-      return `${parseFloat(value).toFixed(2)} g`;
+    if (type === "weight" || type === "meters") {
+      return `${parseFloat(value || 0).toFixed(2)} m`;
     }
     return value;
   };
@@ -135,11 +139,11 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
                     (sortDirection === "asc" ? "↑" : "↓")}
                 </th>
                 <th
-                  onClick={() => handleSort("weight")}
+                  onClick={() => handleSort("meters")}
                   className="sortable text-right"
                 >
-                  {t("weight")}{" "}
-                  {sortColumn === "weight" &&
+                  {t("meters") || t("total_meters") || "Meters"}{" "}
+                  {(sortColumn === "meters" || sortColumn === "weight") &&
                     (sortDirection === "asc" ? "↑" : "↓")}
                 </th>
               </tr>
@@ -166,8 +170,8 @@ const TopItemsTable = ({ dateRange, selectedBranches, theme, metricType }) => {
                   <td className="number">
                     {formatValue(item.quantity, "number")}
                   </td>
-                  <td className="weight">
-                    {formatValue(item.meters ?? item.weight, "weight")}
+                  <td className="meters">
+                    {formatValue(item.meters ?? item.weight, "meters")}
                   </td>
                 </tr>
               ))}

@@ -1,6 +1,6 @@
 import { HELP_UI, HELP_TOPICS, SUPPORT_CONTACT } from "../data/helpGuide.js";
 
-const DIACRITICS = /[\u064B-\u0652\u0670\u0640\u06D6-\u06ED]/g;
+const DIACRITICS = /[\p{M}\u0640]/gu;
 const LATIN_STOP = new Set([
   "a", "an", "the", "is", "are", "do", "does", "how", "what", "where", "when",
   "can", "i", "to", "of", "and", "or", "for", "in", "on", "my", "me", "it",

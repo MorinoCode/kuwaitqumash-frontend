@@ -7,6 +7,15 @@ const useTenantStore = create(
     (set) => ({
       tenantId: null,
       tenantName: null,
+      subscriptionWarning: null,
+
+      setSubscriptionWarning: (warning) => {
+        set({ subscriptionWarning: warning });
+      },
+
+      clearSubscriptionWarning: () => {
+        set({ subscriptionWarning: null });
+      },
 
       setTenant: (tenantId, tenantName = null) => {
         set({
@@ -19,6 +28,7 @@ const useTenantStore = create(
         set({
           tenantId: null,
           tenantName: null,
+          subscriptionWarning: null,
         });
       },
 
@@ -28,6 +38,7 @@ const useTenantStore = create(
           set({
             tenantId: null,
             tenantName: null,
+            subscriptionWarning: null,
           });
         } catch { void 0; }
       },

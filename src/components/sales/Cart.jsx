@@ -21,12 +21,7 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
     }
   };
 
-  const unitLabel = (item) =>
-    item.unit === "roll"
-      ? t("roll") || "roll"
-      : item.unit === "piece"
-        ? t("piece") || "pc"
-        : t("meter") || "m";
+  const meterUnitLabel = t("m") || "m";
 
   const lineMeters = (item) => {
     const meters = parseFloat(item.meters) || 0;
@@ -66,7 +61,18 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                 normalizeToLatinDigits(String(item.quantity ?? "")),
                 10,
               );
-              const exceedsStock = stockQty > 0 && qty > stockQty;
+              const stockLen = parseFloat(item.length_m) || 0;
+              const availableMeters =
+                stockLen > 0 ? stockLen * Math.max(1, stockQty || 1) : 0;
+              const rollLength =
+                item.unit === "roll" ? parseFloat(item.roll_length_m) || 0 : 0;
+              const isFullRollSelected =
+                rollLength > 0 &&
+                Math.abs((parseFloat(item.meters) || 0) - rollLength) < 0.001;
+              const exceedsStock =
+                availableMeters > 0
+                  ? lineMeters(item) > availableMeters + 0.001
+                  : stockQty > 0 && qty > stockQty;
               return (
                 <tr
                   key={item.id}
@@ -79,6 +85,22 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                         : item.item_name}
                     </div>
                     <div className="sales-cart__item-sub">{item.barcode}</div>
+                    {rollLength > 0 && (
+                      <button
+                        type="button"
+                        className={`sales-cart__roll-chip ${isFullRollSelected ? "sales-cart__roll-chip--active" : ""}`}
+                        onClick={() => {
+                          const targetMeters =
+                            availableMeters > 0
+                              ? Math.min(rollLength, availableMeters)
+                              : rollLength;
+                          onUpdateItem(item.id, "meters", String(targetMeters));
+                        }}
+                      >
+                        1 {t("roll") || "roll"} ({Number(rollLength.toFixed(3))}{" "}
+                        {meterUnitLabel})
+                      </button>
+                    )}
                     {exceedsStock && (
                       <div
                         className="sales-cart__stock-warning"
@@ -114,13 +136,15 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                       aria-label={`${t("length_m")} for ${item.item_name}`}
                     />
                     <span
-                      style={{ marginLeft: "0.5rem", fontSize: "0.85rem" }}
+                      style={{ marginInlineStart: "0.5rem", fontSize: "0.85rem" }}
                     >
-                      {unitLabel(item)}
+                      {meterUnitLabel}
                     </span>
-                    <div style={{ fontSize: "0.75rem", opacity: 0.7 }}>
-                      {lineMeters(item).toFixed(3)} {unitLabel(item)}
-                    </div>
+                    {qty > 1 && (
+                      <div style={{ fontSize: "0.75rem", opacity: 0.7 }}>
+                        {t("total")}: {Number(lineMeters(item).toFixed(3))} {meterUnitLabel}
+                      </div>
+                    )}
                   </td>
                   <td>
                     <input
@@ -194,7 +218,20 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
         {cart.length === 0 ? (
           <div className="sales-cart__empty">{t("cart_is_empty")}</div>
         ) : (
-          cart.map((item) => (
+          cart.map((item) => {
+            const stockQty = parseInt(
+              normalizeToLatinDigits(String(item.quantity ?? "")),
+              10,
+            );
+            const stockLen = parseFloat(item.length_m) || 0;
+            const availableMeters =
+              stockLen > 0 ? stockLen * Math.max(1, stockQty || 1) : 0;
+            const rollLength =
+              item.unit === "roll" ? parseFloat(item.roll_length_m) || 0 : 0;
+            const isFullRollSelected =
+              rollLength > 0 &&
+              Math.abs((parseFloat(item.meters) || 0) - rollLength) < 0.001;
+            return (
             <div key={item.id} className="sales-cart__mobile-item">
               <div className="sales-cart__mobile-header">
                 <div style={{ flex: 1 }}>
@@ -207,6 +244,22 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                     {item.barcode}
                     {item.fabric_type ? ` | ${item.fabric_type}` : ""}
                   </div>
+                  {rollLength > 0 && (
+                    <button
+                      type="button"
+                      className={`sales-cart__roll-chip ${isFullRollSelected ? "sales-cart__roll-chip--active" : ""}`}
+                      onClick={() => {
+                        const targetMeters =
+                          availableMeters > 0
+                            ? Math.min(rollLength, availableMeters)
+                            : rollLength;
+                        onUpdateItem(item.id, "meters", String(targetMeters));
+                      }}
+                    >
+                      1 {t("roll") || "roll"} ({Number(rollLength.toFixed(3))}{" "}
+                      {meterUnitLabel})
+                    </button>
+                  )}
                 </div>
                 <button
                   className="sales-cart__mobile-remove"
@@ -235,7 +288,7 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                 </div>
                 <div className="sales-cart__mobile-input-group">
                   <label>
-                    {t("length_m") || "Length"} ({unitLabel(item)})
+                    {t("length_m") || "Length"} ({meterUnitLabel})
                   </label>
                   <input
                     type="number"
@@ -303,7 +356,8 @@ const Cart = ({ cart, onUpdateItem, onRemoveItem }) => {
                 </div>
               </div>
             </div>
-          ))
+          );
+          })
         )}
       </div>
     </div>

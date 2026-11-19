@@ -33,7 +33,7 @@ describe("option catalogues", () => {
   });
 
   it("describes every unit with a short label", () => {
-    expect(UNITS.map((u) => u.value)).toEqual(["meter", "roll", "piece"]);
+    expect(UNITS.map((u) => u.value)).toEqual(["meter", "roll"]);
     expect(UNITS[0].short).toBe("m");
   });
 });

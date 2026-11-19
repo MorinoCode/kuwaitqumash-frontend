@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, fireEvent } from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import {
   useCustomers,

@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../context/ThemeContext";
 import {
   ArrowRight,
   BarChart3,
@@ -14,17 +15,19 @@ import {
   Sparkles,
   Store,
 } from "lucide-react";
-import logoImage from "../../assets/logo-kuwaitqumash.svg";
 import Footer from "../../components/footer/Footer";
 import ParticleSphere from "../../components/particleSphere/ParticleSphere";
+import PublicNavbar from "../../components/publicNavbar/PublicNavbar";
 import "./WelcomePage.css";
 
-const LANGUAGES = ["fa", "ar", "en"];
-
-const LANGUAGE_LABELS = { fa: "فارسی", ar: "العربية", en: "English" };
+const SIGNUP_ENTRY_PATH =
+  import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "/signup" : "/contact";
 
 const WelcomePage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const themeContext = useTheme();
+  const theme = themeContext?.theme || "dark";
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar" || i18n.language === "fa";
   const [activeFaq, setActiveFaq] = useState(null);
@@ -44,31 +47,17 @@ const WelcomePage = () => {
     );
   }, [i18n.language]);
 
-  const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const langMenuRef = useRef(null);
-
   useEffect(() => {
-    if (!langMenuOpen) return;
-
-    const handlePointerDown = (event) => {
-      if (!langMenuRef.current?.contains(event.target)) setLangMenuOpen(false);
-    };
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") setLangMenuOpen(false);
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [langMenuOpen]);
-
-  const selectLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-    setLangMenuOpen(false);
-  };
+    const params = new URLSearchParams(location.search);
+    const section = params.get("section");
+    if (section) {
+      const timer = setTimeout(() => {
+        const node = document.getElementById(section);
+        if (node) node.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [location.search]);
 
   const scrollTo = (id) => {
     const node = document.getElementById(id);
@@ -148,91 +137,8 @@ const WelcomePage = () => {
   ];
 
   return (
-    <div className="landing" dir={isRtl ? "rtl" : "ltr"}>
-      <nav className="landing-nav">
-        <button
-          type="button"
-          className="landing-nav__brand"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <img src={logoImage} alt={t("app_title")} />
-        </button>
-
-        <div className="landing-nav__links">
-          <button type="button" onClick={() => scrollTo("features")}>
-            {t("landing.nav_features")}
-          </button>
-          <button type="button" onClick={() => scrollTo("how")}>
-            {t("landing.nav_how")}
-          </button>
-          <button type="button" onClick={() => scrollTo("pricing")}>
-            {t("landing.nav_pricing")}
-          </button>
-          <button type="button" onClick={() => scrollTo("faq")}>
-            {t("landing.nav_faq")}
-          </button>
-        </div>
-
-        <div className="landing-nav__actions">
-          <div className="landing-nav__lang-wrap" ref={langMenuRef}>
-            <button
-              type="button"
-              className="landing-nav__lang"
-              onClick={() => setLangMenuOpen((open) => !open)}
-              title={t("landing.lang_title")}
-              aria-label={t("landing.lang_title")}
-              aria-haspopup="menu"
-              aria-expanded={langMenuOpen}
-            >
-              <Languages size={17} />
-              <span>{(i18n.language || "fa").toUpperCase()}</span>
-              <ChevronDown
-                size={14}
-                className={`landing-nav__lang-caret${langMenuOpen ? " landing-nav__lang-caret--open" : ""}`}
-              />
-            </button>
-
-            {langMenuOpen && (
-              <ul className="landing-nav__lang-menu" role="menu">
-                {LANGUAGES.map((lang) => {
-                  const isActive = (i18n.language || "fa").startsWith(lang);
-                  return (
-                    <li key={lang}>
-                      <button
-                        type="button"
-                        role="menuitemradio"
-                        aria-checked={isActive}
-                        className={`landing-nav__lang-option${isActive ? " landing-nav__lang-option--active" : ""}`}
-                        onClick={() => selectLanguage(lang)}
-                      >
-                        <span>{LANGUAGE_LABELS[lang]}</span>
-                        {isActive && <Check size={14} />}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-
-          <button
-            type="button"
-            className="landing-nav__login"
-            onClick={() => navigate("/login")}
-          >
-            {t("landing.nav_login")}
-          </button>
-
-          <button
-            type="button"
-            className="landing-nav__cta"
-            onClick={() => navigate("/signup")}
-          >
-            {t("landing.nav_signup")}
-            <ArrowRight size={16} className={isRtl ? "flip-x" : ""} />
-          </button>
-        </div>
-      </nav>
+    <div className={`landing landing--${theme || "dark"}`} dir={isRtl ? "rtl" : "ltr"}>
+      <PublicNavbar />
 
       <header className="hero">
         <div className="hero__sphere">
@@ -241,11 +147,6 @@ const WelcomePage = () => {
         <div className="hero__vignette" aria-hidden="true" />
 
         <div className="hero__content">
-          <span className="hero__badge">
-            <i className="hero__badge-dot" />
-            {t("landing.badge")}
-          </span>
-
           <h1 className="hero__wordmark" dir="ltr">
             <span>Kuwait</span>
             <span className="hero__wordmark-accent">Qumash</span>
@@ -257,7 +158,7 @@ const WelcomePage = () => {
             <button
               type="button"
               className="btn-pill btn-pill--solid"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate(SIGNUP_ENTRY_PATH)}
             >
               {t("landing.cta_start")}
               <ArrowRight size={18} className={isRtl ? "flip-x" : ""} />
@@ -395,7 +296,7 @@ const WelcomePage = () => {
             <button
               type="button"
               className="btn-pill btn-pill--solid btn-pill--block"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate(SIGNUP_ENTRY_PATH)}
             >
               {contactPlan.cta}
             </button>
@@ -444,7 +345,7 @@ const WelcomePage = () => {
         <button
           type="button"
           className="btn-pill btn-pill--solid"
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate(SIGNUP_ENTRY_PATH)}
         >
           {t("landing.cta_btn")}
           <ArrowRight size={18} className={isRtl ? "flip-x" : ""} />

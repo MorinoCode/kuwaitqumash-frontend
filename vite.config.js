@@ -26,17 +26,50 @@ export default defineConfig({
         name: 'KuwaitQumash',
         short_name: 'KuwaitQumash',
         description: 'KuwaitQumash Management App',
-        theme_color: '#ffffff',
+        theme_color: '#0F8A7E',
         background_color: '#ffffff',
         display: 'standalone',
-        icons: []
+        icons: [
+          {
+            src: '/pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/favicon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any'
+          }
+        ]
       }
     })
   ],
   server: {
+    host: true,
     port: 5173,
+    strictPort: true,
     proxy: {
-      '/api': { target: 'http://localhost:5000', changeOrigin: true },
+      '/api': { target: 'http://localhost:5001', changeOrigin: true },
     },
   },
   build: {
