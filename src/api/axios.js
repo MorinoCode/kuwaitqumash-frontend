@@ -1,7 +1,9 @@
 import axios from 'axios';
 import useTenantStore from '../store/tenantStore';
 
-const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const rawApiUrl =
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.PROD ? 'https://152.70.24.75.nip.io' : 'http://localhost:5001');
 const cleanApiUrl = rawApiUrl.replace(/\/+$/, '').replace(/\/api$/, '');
 
 const instance = axios.create({
