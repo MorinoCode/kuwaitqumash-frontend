@@ -31,7 +31,9 @@ const InvoicesPage = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const { user } = useAuth();
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.PROD ? "https://152.70.24.75.nip.io" : "http://localhost:5000");
 
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
