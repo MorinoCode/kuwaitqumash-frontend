@@ -99,7 +99,7 @@ const Sidebar = ({ closeSidebar }) => {
             }}
             style={{ cursor: 'pointer' }}
           >
-            KuwaitQumash
+            {t('app_title', 'Qummash')}
           </span>
         </div>
         <button

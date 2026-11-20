@@ -102,12 +102,12 @@ const PublicNavbar = ({ className = "" }) => {
         type="button"
         className="landing-nav__brand"
         onClick={handleBrandClick}
-        title={t("app_title") || "KuwaitQumash"}
-        aria-label={t("app_title") || "KuwaitQumash"}
+        title={t("app_title") || "Qummash"}
+        aria-label={t("app_title") || "Qummash"}
       >
         <img
           src={logoImage}
-          alt={t("app_title") || "KuwaitQumash"}
+          alt={t("app_title") || "Qummash"}
           className="landing-nav__logo-img"
         />
       </button>

@@ -242,7 +242,7 @@ const SignupPage = () => {
           >
             <img
               src={logoImage}
-              alt={t("app_title") || "KuwaitQumash"}
+              alt={t("app_title") || "Qummash"}
               className="signup-card__logo"
             />
           </div>

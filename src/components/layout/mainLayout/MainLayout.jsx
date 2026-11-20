@@ -110,7 +110,7 @@ const MainLayout = () => {
             >
               <img
                 src={logoImage}
-                alt={t("app_title") || "KuwaitQumash"}
+                alt={t("app_title") || "Qummash"}
                 className="brand-logo"
               />
             </div>
