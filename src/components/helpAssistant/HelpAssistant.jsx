@@ -236,7 +236,7 @@ const HelpAssistant = ({ isOpen, onClose }) => {
         </button>
       </form>
 
-      <span className="help-assistant__footnote">{t("app_title") || "KuwaitQumash"}</span>
+      <span className="help-assistant__footnote">{t("app_title") || "Qummash"}</span>
     </div>
   );
 };

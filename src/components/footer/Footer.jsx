@@ -42,9 +42,9 @@ const Footer = () => {
               className="footer-brand-btn"
               onClick={handleBrandClick}
               title={t('home', 'خانه')}
-              aria-label={t('app_title', 'KuwaitQumash')}
+              aria-label={t('app_title', 'Qummash')}
             >
-              <img src={logoImage} alt="KuwaitQumash" className="welcome-logo-img-footer" />
+              <img src={logoImage} alt={t('app_title', 'Qummash')} className="welcome-logo-img-footer" />
             </button>
             <p className="footer-tagline">
               {t('footer.tagline', 'Fabric store management for metered sales, rolls and customer accounts.')}
@@ -100,7 +100,7 @@ const Footer = () => {
         <div className="footer-divider"></div>
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {new Date().getFullYear()} KuwaitQumash. {t('footer.rights', 'All rights reserved.')}
+            © {new Date().getFullYear()} Qummash. {t('footer.rights', 'All rights reserved.')}
           </p>
         </div>
       </div>

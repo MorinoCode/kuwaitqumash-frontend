@@ -1,5 +1,5 @@
 {
-  "app_title": "KuwaitQumash",
+  "app_title": "Qummash",
   "home": "Home",
   "dashboard": "Dashboard",
   "inventory": "Inventory",
@@ -1004,7 +1004,7 @@
     "updated": "Last updated: November 2026",
     "privacy": {
       "title": "Privacy policy",
-      "intro": "This page explains what KuwaitQumash stores and how we look after it.",
+      "intro": "This page explains what Qummash stores and how we look after it.",
       "sections": [
         {
           "title": "What we store",
@@ -1034,7 +1034,7 @@
     },
     "terms": {
       "title": "Terms of service",
-      "intro": "By creating an account and using KuwaitQumash you accept the terms below.",
+      "intro": "By creating an account and using Qummash you accept the terms below.",
       "sections": [
         {
           "title": "Your account",

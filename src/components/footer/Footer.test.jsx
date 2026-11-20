@@ -30,7 +30,7 @@ describe("Footer", () => {
   it("shows the brand and copyright", () => {
     const { container } = setup();
     expect(container.querySelector(".footer-copyright").textContent).toContain(
-      "KuwaitQumash",
+      "Qummash",
     );
   });
 });

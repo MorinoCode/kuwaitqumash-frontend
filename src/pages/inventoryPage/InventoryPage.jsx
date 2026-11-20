@@ -76,7 +76,7 @@ const InventoryPage = () => {
     setActiveBranch,
   } = useBranchStore();
   const activeBranchName = (branchNameFromStore || t("main_branch")).replace(
-    /^KuwaitQumash\s+/i,
+    /^(KuwaitQumash|Qummash)\s+/i,
     "",
   );
 

@@ -23,9 +23,9 @@ export default defineConfig({
         ]
       },
       manifest: {
-        name: 'KuwaitQumash',
-        short_name: 'KuwaitQumash',
-        description: 'KuwaitQumash Management App',
+        name: 'Qummash',
+        short_name: 'Qummash',
+        description: 'Qummash Management App',
         theme_color: '#0F8A7E',
         background_color: '#ffffff',
         display: 'standalone',

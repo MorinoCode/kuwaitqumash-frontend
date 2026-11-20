@@ -1,4 +1,4 @@
-// راهنمای کاربری KuwaitQumash در سه زبان.
+// راهنمای کاربری Qummash در سه زبان.
 // تنها منبع دانش دستیار راهنما؛ هیچ اطلاعات محرمانه‌ای (کلید API، رمز، آدرس سرور) در این فایل نیست.
 
 export const HELP_LANGUAGES = ["fa", "en", "ar"];
@@ -19,7 +19,7 @@ export const HELP_UI = {
     close: "بستن",
     clear: "گفتگوی جدید",
     greeting:
-      "سلام! من دستیار راهنمای KuwaitQumash هستم. هر سؤالی درباره فروش، انبار، مرجوعی، مشتری، فاکتور و اتصال واتساپ داری بپرس؛ به همان زبانی که می‌نویسی جواب می‌دهم.",
+      "سلام! من دستیار راهنمای قمّاش هستم. هر سؤالی درباره فروش، انبار، مرجوعی، مشتری، فاکتور و اتصال واتساپ داری بپرس؛ به همان زبانی که می‌نویسی جواب می‌دهم.",
     noAnswer:
       "جواب این سؤال در راهنمای سایت نیست. لطفاً با پشتیبانی فروشگاه تماس بگیرید تا کمکت کنند.",
     suggestions: [
@@ -43,7 +43,7 @@ export const HELP_UI = {
     close: "Close",
     clear: "New chat",
     greeting:
-      "Hi! I am the KuwaitQumash help assistant. Ask me anything about sales, inventory, refunds, customers, invoices or connecting WhatsApp. I reply in the language you type.",
+      "Hi! I am the Qummash help assistant. Ask me anything about sales, inventory, refunds, customers, invoices or connecting WhatsApp. I reply in the language you type.",
     noAnswer:
       "That answer is not in the site guide. Please contact store support so a person can help you.",
     suggestions: [
@@ -67,7 +67,7 @@ export const HELP_UI = {
     close: "إغلاق",
     clear: "محادثة جديدة",
     greeting:
-      "مرحبًا! أنا مساعد دليل KuwaitQumash. اسألني عن البيع، المخزون، المرتجعات، العملاء، الفواتير أو ربط واتساب. سأجيب باللغة التي تكتب بها.",
+      "مرحبًا! أنا مساعد دليل قمّاش. اسألني عن البيع، المخزون، المرتجعات، العملاء، الفواتير أو ربط واتساب. سأجيب باللغة التي تكتب بها.",
     noAnswer:
       "هذه الإجابة غير موجودة في دليل الموقع. يُرجى التواصل مع دعم المتجر لمساعدتك.",
     suggestions: [

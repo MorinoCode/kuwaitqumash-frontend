@@ -10,7 +10,7 @@ const BranchSelector = ({ branches, selectedBranches, onSelectionChange }) => {
   const getBranchDisplayName = (branch) => {
     if (!branch || !branch.name) return "";
 
-    return branch.name.replace(/^KuwaitQumash\s+/i, "");
+    return branch.name.replace(/^(KuwaitQumash|Qummash)\s+/i, "");
   };
 
   useEffect(() => {

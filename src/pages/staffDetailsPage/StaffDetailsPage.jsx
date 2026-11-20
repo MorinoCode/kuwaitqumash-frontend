@@ -101,7 +101,7 @@ const StaffDetailsPage = () => {
                 <Briefcase size={16} className="staff-info__icon" />
                 <span className="staff-info__value">
                   {staff.branch
-                    ? staff.branch.name.replace(/^KuwaitQumash\s+/i, "")
+                    ? staff.branch.name.replace(/^(KuwaitQumash|Qummash)\s+/i, "")
                     : t("no_branch")}
                 </span>
               </div>

@@ -26,7 +26,7 @@ const BranchChart = ({
 
   const chartData = data.map((d) => {
 
-    let cleanName = d.name.replace(/^KuwaitQumash\s*/i, "");
+    let cleanName = d.name.replace(/^(KuwaitQumash|Qummash)\s*/i, "");
 
     const dataKey = viewType === "quantity" ? "quantity" : metricType;
 
