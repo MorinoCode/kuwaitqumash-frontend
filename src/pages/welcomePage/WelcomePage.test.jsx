@@ -26,7 +26,7 @@ describe("WelcomePage", () => {
   it("renders the hero section", () => {
     const { container } = setup();
     expect(container.querySelector(".hero")).toBeInTheDocument();
-    expect(container.querySelector(".hero__wordmark").textContent).toContain("Qumash");
+    expect(container.querySelector(".hero__wordmark").textContent).toContain("Qummash");
   });
 
   it("navigates to signup or contact from the primary navbar CTA", () => {

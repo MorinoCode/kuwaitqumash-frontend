@@ -148,8 +148,7 @@ const WelcomePage = () => {
 
         <div className="hero__content">
           <h1 className="hero__wordmark" dir="ltr">
-            <span>Kuwait</span>
-            <span className="hero__wordmark-accent">Qumash</span>
+            <span className="hero__wordmark-accent">Qummash</span>
           </h1>
 
           <p className="hero__tagline">{t("landing.hero_desc")}</p>
