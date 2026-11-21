@@ -221,8 +221,8 @@ export const AuthProvider = ({ children }) => {
 
     hadNetworkErrorRef.current = false;
     setUser(userData);
-    navigate("/home", { replace: true });
-  }, [navigate]);
+    navigateRef.current("/home", { replace: true });
+  }, []);
 
   const logout = useCallback(async () => {
     try {
@@ -230,10 +230,10 @@ export const AuthProvider = ({ children }) => {
     } catch { void 0; } finally {
       hadNetworkErrorRef.current = false;
       setUser(null);
-      clearAuthData(queryClient);
-      navigate("/login", { replace: true });
+      clearAuthData(queryClientRef.current);
+      navigateRef.current("/login", { replace: true });
     }
-  }, [navigate, queryClient]);
+  }, []);
 
   const contextValue = useMemo(
     () => ({ user, login, logout, loading }),
