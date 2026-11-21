@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, waitFor, act } from "@testing-library/react";
 import { __instances } from "html5-qrcode";
 import BarcodeScanner from "./BarcodeScanner";
 import { renderWithProviders } from "../../test/renderWithProviders";
@@ -78,7 +78,9 @@ describe("BarcodeScanner", () => {
     const instance = __instances[0];
     await waitFor(() => expect(instance.start).toHaveBeenCalled());
 
-    await instance.decodedCallback("SI-123");
+    await act(async () => {
+      await instance.decodedCallback("SI-123");
+    });
 
     expect(onScanSuccess).toHaveBeenCalledWith("SI-123");
     expect(onClose).toHaveBeenCalled();
@@ -96,12 +98,14 @@ describe("BarcodeScanner", () => {
 
   it("closes from the header button", async () => {
     const { container, onClose } = setup();
+    await waitFor(() => expect(__instances.length).toBeGreaterThan(0));
     fireEvent.click(container.querySelector(".barcode-scanner-close"));
     await waitFor(() => expect(onClose).toHaveBeenCalled());
   });
 
-  it("shows the scan title", () => {
+  it("shows the scan title", async () => {
     const { container } = setup();
+    await waitFor(() => expect(__instances.length).toBeGreaterThan(0));
     expect(container.querySelector(".barcode-scanner-title").textContent.length).toBeGreaterThan(0);
   });
 });

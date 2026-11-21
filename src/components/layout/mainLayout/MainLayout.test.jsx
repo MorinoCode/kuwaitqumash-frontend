@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import i18n from "../../../i18n";
 import MainLayout from "./MainLayout";
@@ -75,11 +75,13 @@ describe("MainLayout", () => {
     );
     fireEvent.click(english);
 
-    expect(i18n.language).toBe("en");
+    await waitFor(() => expect(i18n.language).toBe("en"));
     expect(document.body.classList.contains("font-english")).toBe(true);
     expect(container.querySelector(".lang-menu__list")).toBeNull();
 
-    await i18n.changeLanguage("fa");
+    await act(async () => {
+      await i18n.changeLanguage("fa");
+    });
   });
 
   it("closes the language menu with Escape", () => {
@@ -103,12 +105,12 @@ describe("MainLayout", () => {
     expect(logout).toHaveBeenCalled();
   });
 
-  it("opens and closes the help assistant", () => {
+  it("opens and closes the help assistant", async () => {
     const { container } = setup();
     const helpButton = container.querySelector(".header-btn--help");
 
     fireEvent.click(helpButton);
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
 
     fireEvent.click(helpButton);
     expect(screen.queryByRole("dialog")).toBeNull();

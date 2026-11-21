@@ -7,6 +7,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import useBranchStore from "../../store/branchStore";
 import { useBranches } from "../../hooks/useBranches";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import BranchSelector from "../../components/analytics/BranchSelector";
 import Pagination from "../../components/pagination/Pagination";
 import "./RefundsPage.css";
@@ -27,6 +28,7 @@ const RefundsPage = () => {
   const [selectedBranchIds, setSelectedBranchIds] = useState([]);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [pagination, setPagination] = useState({
@@ -47,7 +49,7 @@ const RefundsPage = () => {
         } else if (isOwner && selectedBranchIds?.length > 0) {
           params.branch_ids = selectedBranchIds.join(",");
         }
-        if (searchTerm.trim()) params.search = searchTerm.trim();
+        if (debouncedSearchTerm.trim()) params.search = debouncedSearchTerm.trim();
         if (startDate) params.start_date = startDate;
         if (endDate) params.end_date = endDate;
         const res = await api.get("/refunds", { params });
@@ -67,7 +69,7 @@ const RefundsPage = () => {
         setLoading(false);
       }
     },
-    [isOwner, selectedBranchIds, activeBranchId, searchTerm, startDate, endDate, t]
+    [isOwner, selectedBranchIds, activeBranchId, debouncedSearchTerm, startDate, endDate, t]
   );
 
   useEffect(() => {

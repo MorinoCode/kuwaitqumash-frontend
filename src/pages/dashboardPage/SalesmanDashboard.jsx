@@ -3,6 +3,11 @@ import { useTranslation } from "react-i18next";
 import {
   RefreshCw,
   AlertCircle,
+  Sparkles,
+  ShoppingCart,
+  Package,
+  FileText,
+  Scissors,
 } from "lucide-react";
 import {
   LineChart,
@@ -147,15 +152,33 @@ const SalesmanDashboard = () => {
             </span>
           )}
         </div>
-        <button
-          className={`dashboard-header__refresh-btn dashboard-header__refresh-btn--${theme}`}
-          onClick={refresh}
-          disabled={isRefetching}
-          title={t("refresh")}
-        >
-          <RefreshCw size={18} className={isRefetching ? "spinning" : ""} />
-          {t("refresh")}
-        </button>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <a
+            href="/sales"
+            className="dash-csv-btn"
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
+          >
+            <ShoppingCart size={16} />
+            <span>{t("create_invoice") || "+ صدور فاکتور جدید"}</span>
+          </a>
+          <a
+            href="/inventory"
+            className="dash-csv-btn"
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
+          >
+            <Package size={16} />
+            <span>{t("inventory") || "موجودی انبار"}</span>
+          </a>
+          <button
+            className={`dashboard-header__refresh-btn dashboard-header__refresh-btn--${theme}`}
+            onClick={refresh}
+            disabled={isRefetching}
+            title={t("refresh")}
+          >
+            <RefreshCw size={18} className={isRefetching ? "spinning" : ""} />
+            {t("refresh")}
+          </button>
+        </div>
       </div>
 
       <DateRangePicker
@@ -163,11 +186,65 @@ const SalesmanDashboard = () => {
         defaultRange="last_7_days"
       />
 
+      {data?.kpi && (
+        <div className={`dash-story-box dash-story-box--${theme}`}>
+          <div className="dash-story__header">
+            <Sparkles size={20} />
+            <h3>
+              {i18n.language === "fa"
+                ? "خلاصه عملکرد شما به زبان ساده"
+                : i18n.language === "ar"
+                  ? "ملخص أدائك بلغة بسيطة"
+                  : "Your Personal Sales Summary"}
+            </h3>
+          </div>
+          <ul className="dash-story__list">
+            <li>
+              {i18n.language === "fa" ? (
+                <>
+                  خسته نباشید! شما در این بازه زمانی{" "}
+                  <strong>{data.kpi.invoice_count ?? 0} فاکتور</strong> صادر
+                  کرده‌اید و در مجموع{" "}
+                  <strong>{data.kpi.my_meters_today ?? "0.00"} متر پارچه</strong>{" "}
+                  به ارزش خالص{" "}
+                  <strong className="dash-hl-teal">
+                    {formatPrice(data.kpi.my_sales_today)} دینار
+                  </strong>{" "}
+                  فروخته‌اید.
+                </>
+              ) : i18n.language === "ar" ? (
+                <>
+                  يعطيك العافية! أصدرت{" "}
+                  <strong>{data.kpi.invoice_count ?? 0} فاتورة</strong> وبعت{" "}
+                  <strong>{data.kpi.my_meters_today ?? "0.00"} متر</strong> من
+                  القماش بقيمة صافية{" "}
+                  <strong className="dash-hl-teal">
+                    {formatPrice(data.kpi.my_sales_today)} د.ك
+                  </strong>
+                  .
+                </>
+              ) : (
+                <>
+                  Great job! You issued{" "}
+                  <strong>{data.kpi.invoice_count ?? 0} invoices</strong> and sold{" "}
+                  <strong>{data.kpi.my_meters_today ?? "0.00"} meters</strong> of
+                  fabric for{" "}
+                  <strong className="dash-hl-teal">
+                    {formatPrice(data.kpi.my_sales_today)} KWD
+                  </strong>
+                  .
+                </>
+              )}
+            </li>
+          </ul>
+        </div>
+      )}
+
       <div className="kpi-grid">
         <div className={`kpi-card kpi-card--${theme}`}>
           <h3 className="kpi-card__title">{t("my_sales_today")}</h3>
           <div className="kpi-card__value-wrapper">
-            <span className="kpi-card__value">
+            <span className="kpi-card__value" style={{ color: "var(--brand)" }}>
               {formatPrice(data?.kpi?.my_sales_today)}
             </span>
             <span className="kpi-card__unit">{t("kwd")}</span>
@@ -175,10 +252,20 @@ const SalesmanDashboard = () => {
         </div>
 
         <div className={`kpi-card kpi-card--${theme}`}>
-          <h3 className="kpi-card__title">{t("items_sold_count")}</h3>
+          <h3 className="kpi-card__title">{t("meters_sold") || "متراژ فروخته‌شده"}</h3>
           <div className="kpi-card__value-wrapper">
             <span className="kpi-card__value">
-              {data?.kpi?.items_sold_count || 0}
+              {data?.kpi?.my_meters_today ?? "0.00"}
+            </span>
+            <span className="kpi-card__unit">{t("m") || "m"}</span>
+          </div>
+        </div>
+
+        <div className={`kpi-card kpi-card--${theme}`}>
+          <h3 className="kpi-card__title">{t("invoices") || "تعداد فاکتورها"}</h3>
+          <div className="kpi-card__value-wrapper">
+            <span className="kpi-card__value">
+              {data?.kpi?.invoice_count ?? data?.kpi?.items_sold_count ?? 0}
             </span>
           </div>
         </div>
@@ -194,6 +281,93 @@ const SalesmanDashboard = () => {
         </div>
       </div>
 
+      {(data?.charts?.recent_invoices?.length > 0 ||
+        data?.charts?.branch_remnants?.length > 0) && (
+        <div className="charts-grid" style={{ marginBottom: "24px" }}>
+          {data?.charts?.recent_invoices?.length > 0 && (
+            <div className={`chart-box chart-box--${theme}`} style={{ minHeight: "auto" }}>
+              <h3 className="chart-box__title dash-icon-title">
+                <FileText size={20} />
+                <span>{t("my_recent_invoices_title")}</span>
+              </h3>
+              <p className="dash-guide-text">{t("my_recent_invoices_guide")}</p>
+              <div className="stock-table-wrapper">
+                <table className={`stock-table stock-table--${theme}`}>
+                  <thead className="stock-table__head">
+                    <tr className="stock-table__row">
+                      <th className="stock-table__header">{t("invoice_number") || "شماره فاکتور"}</th>
+                      <th className="stock-table__header">{t("customer") || "مشتری"}</th>
+                      <th className="stock-table__header">{t("meters") || "متراژ"}</th>
+                      <th className="stock-table__header">{t("total") || "مبلغ"}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="stock-table__body">
+                    {data.charts.recent_invoices.map((inv) => (
+                      <tr
+                        key={inv.id}
+                        className={`stock-table__row stock-table__row--${theme}`}
+                      >
+                        <td className="stock-table__cell" style={{ fontWeight: 700 }}>
+                          {inv.invoice_number}
+                        </td>
+                        <td className="stock-table__cell">{inv.customer_name}</td>
+                        <td className="stock-table__cell">
+                          {parseFloat(inv.total_meters || 0).toFixed(2)} m
+                        </td>
+                        <td className="stock-table__cell" style={{ color: "var(--brand)", fontWeight: 700 }}>
+                          {formatPrice(inv.total_amount)} {t("kwd")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {data?.charts?.branch_remnants?.length > 0 && (
+            <div className={`chart-box chart-box--${theme}`} style={{ minHeight: "auto" }}>
+              <h3 className="chart-box__title dash-icon-title">
+                <Scissors size={20} style={{ color: "#ec4899" }} />
+                <span>{t("salesman_remnants_title")}</span>
+              </h3>
+              <p className="dash-guide-text">{t("salesman_remnants_guide")}</p>
+              <div className="stock-table-wrapper">
+                <table className={`stock-table stock-table--${theme}`}>
+                  <thead className="stock-table__head">
+                    <tr className="stock-table__row">
+                      <th className="stock-table__header">{t("item_name")}</th>
+                      <th className="stock-table__header">{t("fabric_type")}</th>
+                      <th className="stock-table__header">{t("stock_meters") || "متراژ باقیمانده"}</th>
+                      <th className="stock-table__header">{t("price") || "قیمت هر متر"}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="stock-table__body">
+                    {data.charts.branch_remnants.map((item) => (
+                      <tr
+                        key={item.id}
+                        className={`stock-table__row stock-table__row--${theme}`}
+                      >
+                        <td className="stock-table__cell">{item.name}</td>
+                        <td className="stock-table__cell">
+                          <span className="dash-fabric-pill">{item.fabric_type}</span>
+                        </td>
+                        <td className="stock-table__cell" style={{ color: "#ec4899", fontWeight: 700 }}>
+                          {parseFloat(item.stock_meters || 0).toFixed(2)} m
+                        </td>
+                        <td className="stock-table__cell">
+                          {formatPrice(item.price_per_meter)} {t("kwd")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="charts-grid">
         {data?.charts?.sales_trend_7d &&
           data.charts.sales_trend_7d.length > 0 && (
@@ -206,15 +380,18 @@ const SalesmanDashboard = () => {
                   <LineChart data={data.charts.sales_trend_7d}>
                     <CartesianGrid
                       strokeDasharray="3 3"
-                      stroke={theme === "dark" ? "#444" : "#ddd"}
-                      opacity={0.3}
+                      stroke={theme === "dark" ? "rgba(148, 163, 184, 0.22)" : "#e2e8f0"}
                     />
                     <XAxis
                       dataKey="date"
-                      style={{ fontSize: 10 }}
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
                       tickFormatter={formatDate}
                     />
-                    <YAxis style={{ fontSize: 10 }} />
+                    <YAxis
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                    />
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Line
                       type="monotone"
@@ -278,11 +455,17 @@ const SalesmanDashboard = () => {
                   <BarChart data={data.charts.sales_by_fabric}>
                     <CartesianGrid
                       strokeDasharray="3 3"
-                      stroke={theme === "dark" ? "#444" : "#ddd"}
-                      opacity={0.3}
+                      stroke={theme === "dark" ? "rgba(148, 163, 184, 0.22)" : "#e2e8f0"}
                     />
-                    <XAxis dataKey="fabric_type" style={{ fontSize: 10 }} />
-                    <YAxis style={{ fontSize: 10 }} />
+                    <XAxis
+                      dataKey="fabric_type"
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                    />
+                    <YAxis
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                    />
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Bar
                       dataKey="revenue"
@@ -304,15 +487,19 @@ const SalesmanDashboard = () => {
                 <BarChart data={data.charts.top_5_items} layout="vertical">
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
+                    stroke={theme === "dark" ? "rgba(148, 163, 184, 0.22)" : "#e2e8f0"}
                   />
-                  <XAxis type="number" style={{ fontSize: 10 }} />
+                  <XAxis
+                    type="number"
+                    stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                    tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                  />
                   <YAxis
                     dataKey="name"
                     type="category"
                     width={120}
-                    style={{ fontSize: 10 }}
+                    stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                    tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
                   />
                   <Tooltip formatter={(value) => formatPrice(value)} />
                   <Bar dataKey="revenue" fill="#2dd4bf" radius={[0, 5, 5, 0]}

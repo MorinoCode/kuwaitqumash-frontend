@@ -2,10 +2,16 @@ import { describe, it, expect } from "vitest";
 import i18n from "./i18n";
 
 describe("i18n", () => {
-  it("loads the three supported languages", () => {
-    for (const language of ["fa", "ar", "en"]) {
-      expect(i18n.hasResourceBundle(language, "translation")).toBe(true);
-    }
+  it("loads the default Persian language eagerly and lazy-loads others on demand", async () => {
+    expect(i18n.hasResourceBundle("fa", "translation")).toBe(true);
+
+    await i18n.changeLanguage("en");
+    expect(i18n.hasResourceBundle("en", "translation")).toBe(true);
+
+    await i18n.changeLanguage("ar");
+    expect(i18n.hasResourceBundle("ar", "translation")).toBe(true);
+
+    await i18n.changeLanguage("fa");
   });
 
   it("starts in Persian with English as fallback", () => {

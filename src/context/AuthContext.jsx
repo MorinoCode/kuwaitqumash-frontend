@@ -4,6 +4,8 @@ import React, {
   useEffect,
   useContext,
   useRef,
+  useCallback,
+  useMemo,
 } from "react";
 import api from "../api/axios";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -208,7 +210,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [loading, user, location.pathname, navigate]);
 
-  const login = (userData) => {
+  const login = useCallback((userData) => {
     if (!userData || typeof userData !== "object") {
       return;
     }
@@ -220,9 +222,9 @@ export const AuthProvider = ({ children }) => {
     hadNetworkErrorRef.current = false;
     setUser(userData);
     navigate("/home", { replace: true });
-  };
+  }, [navigate]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await api.post("/auth/logout");
     } catch { void 0; } finally {
@@ -231,10 +233,15 @@ export const AuthProvider = ({ children }) => {
       clearAuthData(queryClient);
       navigate("/login", { replace: true });
     }
-  };
+  }, [navigate, queryClient]);
+
+  const contextValue = useMemo(
+    () => ({ user, login, logout, loading }),
+    [user, login, logout, loading],
+  );
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={contextValue}>
       {!loading && children}
     </AuthContext.Provider>
   );

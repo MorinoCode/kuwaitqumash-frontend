@@ -4,7 +4,7 @@ import { queryKeys } from "../config/queryClient";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
-export const useInvoices = (filters = {}) => {
+export const useInvoices = (filters = {}, options = {}) => {
   const queryParams = new URLSearchParams();
   if (filters.branch_ids) queryParams.append("branch_ids", filters.branch_ids);
   if (filters.branch_id) queryParams.append("branch_id", filters.branch_id);
@@ -24,6 +24,7 @@ export const useInvoices = (filters = {}) => {
       const res = await api.get(url);
       return res.data;
     },
+    enabled: options.enabled ?? true,
     staleTime: 3 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     refetchOnMount: false,

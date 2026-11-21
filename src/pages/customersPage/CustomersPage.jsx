@@ -17,6 +17,8 @@ import { normalizeToLatinDigits } from "../../utils/normalizeNumbers.js";
 import "./CustomersPage.css";
 import { Users, Search, Plus, Edit, Trash2, X, Loader } from "lucide-react";
 
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+
 const emptyForm = {
   full_name: "",
   phone: "",
@@ -83,6 +85,7 @@ const CustomersPage = () => {
   const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -103,7 +106,7 @@ const CustomersPage = () => {
   }
 
   const customerFilters = {
-    search: searchTerm.trim() || undefined,
+    search: debouncedSearchTerm.trim() || undefined,
     branch_id:
       user?.role === "store_owner" && activeBranchId
         ? activeBranchId

@@ -1,9 +1,37 @@
 import axios from 'axios';
 import useTenantStore from '../store/tenantStore';
 
-const rawApiUrl =
-    import.meta.env.VITE_API_URL ||
-    (import.meta.env.PROD ? 'https://152.70.24.75.nip.io' : 'http://localhost:5001');
+function resolveApiBaseUrl() {
+    if (typeof window !== 'undefined' && window.location) {
+        const hostname = window.location.hostname;
+        const isLocal =
+            hostname === 'localhost' ||
+            hostname === '127.0.0.1' ||
+            hostname === '0.0.0.0' ||
+            hostname.endsWith('.local');
+
+        if (isLocal) {
+            const envUrl = import.meta.env.VITE_API_URL;
+            if (envUrl && (envUrl.includes('localhost') || envUrl.includes('127.0.0.1'))) {
+                return envUrl;
+            }
+            return 'http://localhost:5001';
+        }
+
+        const envUrl = import.meta.env.VITE_API_URL;
+        if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+            return envUrl;
+        }
+        return 'https://152.70.24.75.nip.io';
+    }
+
+    return (
+        import.meta.env.VITE_API_URL ||
+        (import.meta.env.PROD ? 'https://152.70.24.75.nip.io' : 'http://localhost:5001')
+    );
+}
+
+const rawApiUrl = resolveApiBaseUrl();
 const cleanApiUrl = rawApiUrl.replace(/\/+$/, '').replace(/\/api$/, '');
 
 const instance = axios.create({
@@ -17,10 +45,17 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
-        const tenantId = useTenantStore.getState().tenantId;
+        const hasExplicitTenant =
+            config.headers &&
+            (config.headers['x-tenant-id'] ||
+             config.headers['X-Tenant-Id'] ||
+             (typeof config.headers.get === 'function' && config.headers.get('x-tenant-id')));
 
-        if (tenantId && tenantId.trim()) {
-            config.headers['x-tenant-id'] = tenantId.trim();
+        if (!hasExplicitTenant) {
+            const tenantId = useTenantStore.getState().tenantId;
+            if (tenantId && tenantId.trim()) {
+                config.headers['x-tenant-id'] = tenantId.trim();
+            }
         }
 
         const token = localStorage.getItem('token');
