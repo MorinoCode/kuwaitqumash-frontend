@@ -16,9 +16,6 @@ import "./PublicNavbar.css";
 const LANGUAGES = ["fa", "ar", "en"];
 const LANGUAGE_LABELS = { fa: "فارسی", ar: "العربية", en: "English" };
 
-const SIGNUP_ENTRY_PATH =
-  import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "/signup" : "/contact";
-
 const PublicNavbar = ({ className = "" }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -88,9 +85,6 @@ const PublicNavbar = ({ className = "" }) => {
 
   const isLoginPage = location.pathname === "/login";
   const isContactPage = location.pathname === "/contact";
-  const isSignupPage = location.pathname === "/signup";
-  const isPublicSignupAllowed =
-    import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false";
 
   return (
     <nav
@@ -217,28 +211,15 @@ const PublicNavbar = ({ className = "" }) => {
           </button>
         )}
 
-        {isPublicSignupAllowed ? (
-          !isSignupPage && (
-            <button
-              type="button"
-              className="landing-nav__cta"
-              onClick={() => navigate("/signup")}
-            >
-              <span>{t("landing.nav_signup")}</span>
-              <ArrowRight size={16} className={isRtl ? "flip-x" : ""} />
-            </button>
-          )
-        ) : (
-          !isContactPage && (
-            <button
-              type="button"
-              className="landing-nav__cta"
-              onClick={() => navigate("/contact")}
-            >
-              <span>{t("landing.contact_plan_cta")}</span>
-              <ArrowRight size={16} className={isRtl ? "flip-x" : ""} />
-            </button>
-          )
+        {!isContactPage && (
+          <button
+            type="button"
+            className="landing-nav__cta"
+            onClick={() => navigate("/contact")}
+          >
+            <span>{t("landing.contact_plan_cta")}</span>
+            <ArrowRight size={16} className={isRtl ? "flip-x" : ""} />
+          </button>
         )}
       </div>
     </nav>

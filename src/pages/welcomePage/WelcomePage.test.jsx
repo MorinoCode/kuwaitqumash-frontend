@@ -29,12 +29,10 @@ describe("WelcomePage", () => {
     expect(container.querySelector(".hero__wordmark").textContent).toContain("Qummash");
   });
 
-  it("navigates to signup or contact from the primary navbar CTA", () => {
+  it("navigates to /contact from the primary navbar CTA", () => {
     const { container, getByTestId } = setup();
     fireEvent.click(container.querySelector(".landing-nav__cta"));
-    const expected =
-      import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "/signup" : "/contact";
-    expect(getByTestId("path").textContent).toBe(expected);
+    expect(getByTestId("path").textContent).toBe("/contact");
   });
 
   it("navigates to login from the primary call to action", () => {
