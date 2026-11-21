@@ -19,7 +19,6 @@ const stub = (name) => ({ default: () => <div data-testid={name}>{name}</div> })
 vi.mock("./pages/welcomePage/WelcomePage", () => stub("welcome"));
 vi.mock("./pages/loginPage/LoginPage", () => stub("login"));
 vi.mock("./pages/mainPage/MainPage", () => stub("main"));
-vi.mock("./pages/signupPage/SignupPage", () => stub("signup"));
 vi.mock("./pages/dashboardPage/DashboardPage", () => stub("dashboard"));
 vi.mock("./pages/inventoryPage/InventoryPage", () => stub("inventory"));
 vi.mock("./pages/salesPage/SalesPage", () => stub("sales"));
@@ -67,12 +66,10 @@ describe("App", () => {
     await waitFor(() => expect(screen.getByTestId("welcome")).toBeInTheDocument());
   });
 
-  it("renders the signup route when navigated to /signup (or redirects when disabled)", async () => {
+  it("redirects /signup permanently to /contact", async () => {
     window.history.pushState({}, "", "/signup");
     render(<App />);
-    const expectedTestId =
-      import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "signup" : "contact";
-    await waitFor(() => expect(screen.getByTestId(expectedTestId)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId("contact")).toBeInTheDocument());
     window.history.pushState({}, "", "/");
   });
 });

@@ -20,8 +20,7 @@ import ParticleSphere from "../../components/particleSphere/ParticleSphere";
 import PublicNavbar from "../../components/publicNavbar/PublicNavbar";
 import "./WelcomePage.css";
 
-const SIGNUP_ENTRY_PATH =
-  import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "/signup" : "/contact";
+const SIGNUP_ENTRY_PATH = "/contact";
 
 const WelcomePage = () => {
   const navigate = useNavigate();

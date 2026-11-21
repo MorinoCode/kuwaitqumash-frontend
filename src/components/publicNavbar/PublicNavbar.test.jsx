@@ -60,14 +60,12 @@ describe("PublicNavbar", () => {
     expect(container.querySelectorAll('[role="menuitemradio"]').length).toBe(0);
   });
 
-  it("shows primary CTA on login page and hides it on its target route", () => {
+  it("shows primary CTA on login page and hides it on /contact", () => {
     const { container: loginContainer } = renderNavbar("/login");
     expect(loginContainer.querySelector(".landing-nav__cta")).toBeInTheDocument();
     expect(loginContainer.querySelector(".landing-nav__login")).not.toBeInTheDocument();
 
-    const targetRoute =
-      import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false" ? "/signup" : "/contact";
-    const { container: targetContainer } = renderNavbar(targetRoute);
+    const { container: targetContainer } = renderNavbar("/contact");
     expect(targetContainer.querySelector(".landing-nav__login")).toBeInTheDocument();
     expect(targetContainer.querySelector(".landing-nav__cta")).not.toBeInTheDocument();
   });

@@ -27,9 +27,6 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isPublicSignupAllowed =
-    import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false";
-
   const isFormValid =
     credentials.storeId.trim().length > 0 &&
     credentials.username.trim().length > 0 &&
@@ -214,12 +211,10 @@ const LoginPage = () => {
             <button
               type="button"
               className={`login-card__signup-btn login-card__signup-btn--${theme}`}
-              onClick={() => navigate(isPublicSignupAllowed ? "/signup" : "/contact")}
+              onClick={() => navigate("/contact")}
             >
               {t("dont_have_account")}{" "}
-              {isPublicSignupAllowed
-                ? t("sign_up")
-                : t("landing.contact_plan_cta", "با ما تماس بگیرید")}
+              {t("landing.contact_plan_cta", "با ما تماس بگیرید")}
             </button>
           </footer>
         </form>

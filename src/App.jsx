@@ -18,8 +18,6 @@ import { useTranslation } from "react-i18next";
 const WelcomePage = lazy(() => import("./pages/welcomePage/WelcomePage"));
 const LoginPage = lazy(() => import("./pages/loginPage/LoginPage"));
 const MainPage = lazy(() => import("./pages/mainPage/MainPage"));
-const SignupPage = lazy(() => import("./pages/signupPage/SignupPage"));
-const ALLOW_PUBLIC_SIGNUP = import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false";
 const DashboardPage = lazy(() => import("./pages/dashboardPage/DashboardPage"));
 const InventoryPage = lazy(() => import("./pages/inventoryPage/InventoryPage"));
 const SalesPage = lazy(() => import("./pages/salesPage/SalesPage"));
@@ -102,15 +100,7 @@ function App() {
                 />
                 <Route
                   path="/signup"
-                  element={
-                    ALLOW_PUBLIC_SIGNUP ? (
-                      <ErrorBoundary>
-                        <SignupPage />
-                      </ErrorBoundary>
-                    ) : (
-                      <Navigate to="/contact" replace />
-                    )
-                  }
+                  element={<Navigate to="/contact" replace />}
                 />
 
                 <Route
