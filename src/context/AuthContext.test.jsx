@@ -108,12 +108,13 @@ describe("AuthProvider", () => {
       .mockResolvedValue({ data: { data: { id: 1, username: "ali" } } });
     renderApp();
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
+    await waitFor(() => expect(screen.getByTestId("path").textContent).toBe("/login"));
 
     fireEvent.click(screen.getByText("login"));
 
     await waitFor(() => expect(screen.getByTestId("user").textContent).toBe("ali"));
     expect(localStorage.getItem("token")).toBe("tok");
-    expect(screen.getByTestId("path").textContent).toBe("/home");
+    await waitFor(() => expect(screen.getByTestId("path").textContent).toBe("/home"));
   });
 
   it("logs out by clearing local storage", async () => {

@@ -1,59 +1,21 @@
 import React, { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  Legend,
-} from "recharts";
-import { Eye, EyeOff, RefreshCw, AlertCircle, DollarSign, TrendingUp, Scale, ShoppingCart, Users, Store, Check, Trash2 } from "lucide-react";
+import { Eye, EyeOff, RefreshCw, AlertCircle, DollarSign, TrendingUp, Scale, ShoppingCart, Users, Store, Check, Trash2, Sparkles, CreditCard, AlertTriangle } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useDashboardOwner } from "../../hooks/useDashboard";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
 import DateRangePicker from "../../components/dashboard/DateRangePicker";
+import OwnerTablesSection from "./OwnerTablesSection";
+import OwnerChartsSection from "./OwnerChartsSection";
 import "./DashboardPage.css";
-
-const COLORS_DARK = [
-  "#2dd4bf",
-  "#10B981",
-  "#3B82F6",
-  "#F59E0B",
-  "#EF4444",
-  "#8B5CF6",
-  "#EC4899",
-  "#06B6D4",
-  "#F97316",
-  "#6366F1",
-];
-
-const COLORS_LIGHT = [
-  "#2dd4bf",
-  "#059669",
-  "#2563EB",
-  "#D97706",
-  "#DC2626",
-  "#7C3AED",
-  "#DB2777",
-  "#0891B2",
-  "#EA580C",
-  "#4F46E5",
-];
 
 const OwnerDashboard = () => {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const [showProfit, setShowProfit] = useState(false);
   const [topItemsMetric, setTopItemsMetric] = useState("revenue");
+  const [activeTab, setActiveTab] = useState("all");
   const [dateRange, setDateRange] = useState({
     start: null,
     end: null,
@@ -220,6 +182,215 @@ const OwnerDashboard = () => {
     return data?.charts?.sales_by_branch?.length > 1;
   }, [data]);
 
+  const topItemsFull = useMemo(() => {
+    return data?.charts?.top_5_items_revenue || [];
+  }, [data]);
+
+  const paymentMethods = useMemo(() => {
+    return data?.charts?.payment_methods || [];
+  }, [data]);
+
+  const staffPerformance = useMemo(() => {
+    return data?.charts?.staff_performance || [];
+  }, [data]);
+
+  const deadStock = useMemo(() => {
+    return data?.charts?.dead_stock || [];
+  }, [data]);
+
+  const remnants = useMemo(() => {
+    return data?.charts?.remnants || [];
+  }, [data]);
+
+  const exportTopItemsCSV = () => {
+    if (!topItemsFull.length) return;
+    const headers = [
+      "Rank",
+      "Item Name",
+      "Pattern / Color",
+      "Fabric Type",
+      "Revenue (KWD)",
+      "Profit (KWD)",
+      "Margin (%)",
+      "Sold Meters (m)",
+      "Remaining Stock (m)",
+      "Est. Days Left",
+    ];
+    const rows = topItemsFull.map((item, idx) => {
+      const rev = parseFloat(item.revenue || 0);
+      const prof = parseFloat(item.profit || 0);
+      const margin =
+        item.profit_margin !== undefined
+          ? parseFloat(item.profit_margin)
+          : rev > 0
+            ? (prof / rev) * 100
+            : 0;
+      return [
+        idx + 1,
+        `"${String(item.name || "").replace(/"/g, '""')}"`,
+        `"${String(item.category || item.pattern || "-").replace(/"/g, '""')}"`,
+        `"${String(item.fabric_type || "-").replace(/"/g, '""')}"`,
+        rev.toFixed(3),
+        prof.toFixed(3),
+        margin.toFixed(1),
+        parseFloat(item.meters || 0).toFixed(2),
+        parseFloat(item.stock_meters || 0).toFixed(2),
+        item.days_until_stockout ?? "-",
+      ].join(",");
+    });
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      `qummash-top-fabrics-${new Date().toISOString().slice(0, 10)}.csv`,
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const renderPlainSummary = () => {
+    if (!data?.kpi) return null;
+    const rev = formatPrice(data.kpi.total_sales || 0);
+    const prof = formatPrice(data.kpi.net_profit || 0);
+    const meters = parseFloat(data.kpi.total_meters || 0).toFixed(2);
+    const tx = parseInt(data.kpi.invoice_count || 0, 10);
+    const revNum = parseFloat(data.kpi.total_sales || 0);
+    const profNum = parseFloat(data.kpi.net_profit || 0);
+    const margin = revNum > 0 ? ((profNum / revNum) * 100).toFixed(1) : "0.0";
+    const bestFabric = data?.charts?.top_fabrics?.[0];
+    const deadCapital = deadStock.reduce(
+      (s, i) => s + parseFloat(i.tied_capital || 0),
+      0,
+    );
+    const lang = i18n.language;
+
+    if (lang === "fa") {
+      return (
+        <ul className="dash-story__list">
+          <li>
+            <strong>خلاصه فروش و سود:</strong> در این بازه زمانی، شما{" "}
+            <strong>{tx} فاکتور</strong> صادر کرده‌اید و{" "}
+            <strong>{meters} متر پارچه</strong> به مبلغ خالص{" "}
+            <strong className="dash-hl-teal">{rev} دینار</strong> فروخته‌اید.{" "}
+            {showProfit && (
+              <>
+                سود خالص شما{" "}
+                <strong className="dash-hl-green">{prof} دینار</strong> است (یعنی
+                از هر ۱۰۰ دینار فروش، <strong>{margin} دینار</strong> سود خالص در
+                جیب شما مانده است).
+              </>
+            )}
+          </li>
+          {bestFabric && parseFloat(bestFabric.revenue || 0) > 0 && (
+            <li>
+              <strong>پرفروش‌ترین جنس پارچه:</strong> بیشترین استقبال از پارچه{" "}
+              <strong className="dash-hl-teal">«{bestFabric.name}»</strong> با فروش{" "}
+              <strong>{bestFabric.meters} متر</strong> (به ارزش{" "}
+              <strong>{formatPrice(bestFabric.revenue)} دینار</strong>) بوده است.
+            </li>
+          )}
+          {(deadStock.length > 0 || remnants.length > 0) && (
+            <li>
+              <strong>وضعیت انبار و خواب سرمایه:</strong>{" "}
+              {deadStock.length > 0 && (
+                <>
+                  <strong className="dash-hl-amber">{deadStock.length} طاقه</strong>{" "}
+                  در این مدت هیچ فروشی نداشته‌اند ({formatPrice(deadCapital)} دینار
+                  سرمایه قفل‌شده)
+                </>
+              )}
+              {deadStock.length > 0 && remnants.length > 0 && " و "}
+              {remnants.length > 0 && (
+                <>
+                  <strong className="dash-hl-amber">
+                    {remnants.length} ته‌طاقه ناقص (زیر ۳.۵ متر)
+                  </strong>{" "}
+                  در انبار دارید که مناسب حراج هستند.
+                </>
+              )}
+            </li>
+          )}
+        </ul>
+      );
+    }
+
+    if (lang === "ar") {
+      return (
+        <ul className="dash-story__list">
+          <li>
+            <strong>ملخص المبيعات والأرباح:</strong> أصدرت{" "}
+            <strong>{tx} فاتورة</strong> وبعت <strong>{meters} متر</strong> من
+            القماش بقيمة صافية <strong className="dash-hl-teal">{rev} د.ك</strong>.{" "}
+            {showProfit && (
+              <>
+                ربحك الصافي هو{" "}
+                <strong className="dash-hl-green">{prof} د.ك</strong> (نسبة الربح{" "}
+                <strong>{margin}%</strong>).
+              </>
+            )}
+          </li>
+          {bestFabric && parseFloat(bestFabric.revenue || 0) > 0 && (
+            <li>
+              <strong>القماش الأكثر طلباً:</strong>{" "}
+              <strong className="dash-hl-teal">«{bestFabric.name}»</strong> بمبيعات{" "}
+              <strong>{bestFabric.meters} متر</strong> ({formatPrice(bestFabric.revenue)}{" "}
+              د.ك).
+            </li>
+          )}
+          {(deadStock.length > 0 || remnants.length > 0) && (
+            <li>
+              <strong>تنبيه المخزن:</strong> يوجد{" "}
+              <strong className="dash-hl-amber">{deadStock.length} رول راكد</strong>{" "}
+              بدون مبيعات ({formatPrice(deadCapital)} د.ك) و{" "}
+              <strong className="dash-hl-amber">
+                {remnants.length} بقايا رولات (أقل من 3.5 متر)
+              </strong>.
+            </li>
+          )}
+        </ul>
+      );
+    }
+
+    return (
+      <ul className="dash-story__list">
+        <li>
+          <strong>Sales & Profit Summary:</strong> You issued{" "}
+          <strong>{tx} invoices</strong> and sold <strong>{meters} meters</strong>{" "}
+          of fabric for <strong className="dash-hl-teal">{rev} KWD</strong>.{" "}
+          {showProfit && (
+            <>
+              Net profit is <strong className="dash-hl-green">{prof} KWD</strong> (
+              <strong>{margin}%</strong> profit margin).
+            </>
+          )}
+        </li>
+        {bestFabric && parseFloat(bestFabric.revenue || 0) > 0 && (
+          <li>
+            <strong>Best-Selling Fabric:</strong>{" "}
+            <strong className="dash-hl-teal">“{bestFabric.name}”</strong> with{" "}
+            <strong>{bestFabric.meters} m</strong> sold (
+            {formatPrice(bestFabric.revenue)} KWD).
+          </li>
+        )}
+        {(deadStock.length > 0 || remnants.length > 0) && (
+          <li>
+            <strong>Inventory Alerts:</strong>{" "}
+            <strong className="dash-hl-amber">{deadStock.length} unsold rolls</strong>{" "}
+            ({formatPrice(deadCapital)} KWD locked) and{" "}
+            <strong className="dash-hl-amber">
+              {remnants.length} remnant rolls (under 3.5m)
+            </strong>.
+          </li>
+        )}
+      </ul>
+    );
+  };
+
   if (loading)
     return (
       <div
@@ -284,6 +455,16 @@ const OwnerDashboard = () => {
         onRangeChange={handleDateRangeChange}
         defaultRange="last_7_days"
       />
+
+      {data?.kpi && (
+        <div className={`dash-story-box dash-story-box--${theme}`}>
+          <div className="dash-story__header">
+            <Sparkles size={20} />
+            <h3>{t("analytics_summary_title") || "خلاصه وضعیت فروشگاه به زبان ساده"}</h3>
+          </div>
+          {renderPlainSummary()}
+        </div>
+      )}
 
       {lowStockCount > 0 && (
         <div className={`low-stock-badge low-stock-badge--${theme}`}>
@@ -551,393 +732,80 @@ const OwnerDashboard = () => {
         </div>
       )}
 
-      <div className="charts-grid">
+      <nav className={`dash-tabs-bar dash-tabs-bar--${theme}`}>
+        <button
+          type="button"
+          className={`dash-tab-btn ${activeTab === "all" ? "active" : ""}`}
+          onClick={() => setActiveTab("all")}
+        >
+          {t("analytics_tab_all") || "نمایش همه گزارش‌ها"}
+        </button>
+        <button
+          type="button"
+          className={`dash-tab-btn ${activeTab === "drawer_staff" ? "active" : ""}`}
+          onClick={() => setActiveTab("drawer_staff")}
+        >
+          <CreditCard size={16} />
+          <span>{t("payment_methods_breakdown") || "صندوق و فروشندگان"}</span>
+        </button>
+        <button
+          type="button"
+          className={`dash-tab-btn ${activeTab === "top_fabrics" ? "active" : ""}`}
+          onClick={() => setActiveTab("top_fabrics")}
+        >
+          <span>{t("analytics_tab_fabrics") || "پرفروش‌ترین پارچه‌ها"}</span>
+        </button>
+        <button
+          type="button"
+          className={`dash-tab-btn dash-tab-btn--warn ${activeTab === "dead_stock" ? "active" : ""}`}
+          onClick={() => setActiveTab("dead_stock")}
+        >
+          <AlertTriangle size={16} />
+          <span>{t("analytics_tab_deadstock") || "طاقه‌های راکد و ته‌طاقه‌ها"}</span>
+          {(deadStock.length > 0 || remnants.length > 0) && (
+            <span className="dash-tab-badge">
+              {deadStock.length + remnants.length}
+            </span>
+          )}
+        </button>
+        <button
+          type="button"
+          className={`dash-tab-btn ${activeTab === "charts" ? "active" : ""}`}
+          onClick={() => setActiveTab("charts")}
+        >
+          <span>{t("analytics_tab_sales") || "نمودارهای فروش"}</span>
+        </button>
+      </nav>
 
-        <div className={`chart-box chart-box--${theme}`}>
-          <h3 className="chart-box__title">
-            {t("sales_trend_7d")}
-          </h3>
-          <div className="chart-box__container">
-            {data?.charts?.sales_trend_7d &&
-            data.charts.sales_trend_7d.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={data.charts.sales_trend_7d}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
-                  />
-                  <XAxis
-                    dataKey="date"
-                    style={{ fontSize: 10 }}
-                    tickFormatter={formatDate}
-                  />
-                  <YAxis style={{ fontSize: 10 }} />
-                  <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Line
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="#2dd4bf"
-                    strokeWidth={3}
-                    dot={{ fill: "#2dd4bf", r: 4 }}
-                    isAnimationActive={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
+      <OwnerTablesSection
+        activeTab={activeTab}
+        theme={theme}
+        t={t}
+        showProfit={showProfit}
+        formatPrice={formatPrice}
+        paymentMethods={paymentMethods}
+        staffPerformance={staffPerformance}
+        topItemsFull={topItemsFull}
+        deadStock={deadStock}
+        remnants={remnants}
+        exportTopItemsCSV={exportTopItemsCSV}
+      />
 
-        <div className={`chart-box chart-box--${theme}`}>
-          <h3 className="chart-box__title">
-            {t("sales_trend_30d")}
-          </h3>
-          <div className="chart-box__container">
-            {data?.charts?.sales_trend_30d &&
-            data.charts.sales_trend_30d.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={data.charts.sales_trend_30d}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
-                  />
-                  <XAxis
-                    dataKey="date"
-                    style={{ fontSize: 10 }}
-                    tickFormatter={formatDate}
-                  />
-                  <YAxis style={{ fontSize: 10 }} />
-                  <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Line
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="#2dd4bf"
-                    strokeWidth={3}
-                    dot={{ fill: "#2dd4bf", r: 4 }}
-                    isAnimationActive={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
-
-        {showBranchComparison && (
-          <div className={`chart-box chart-box--${theme}`}>
-            <h3 className="chart-box__title">{t("sales_by_branch")}</h3>
-            <div className="chart-box__container">
-              {data?.charts?.sales_by_branch &&
-              data.charts.sales_by_branch.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={data.charts.sales_by_branch}
-                      cx="50%"
-                      cy="45%"
-                      innerRadius={70}
-                      outerRadius={100}
-                      fill="#8884d8"
-                      paddingAngle={3}
-                      dataKey="revenue"
-                      label={false}
-                      isAnimationActive={false}
-                    >
-                      {data.charts.sales_by_branch.map((entry, index) => {
-                        const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
-                        return (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={colors[index % colors.length]}
-                            stroke={theme === "dark" ? "#1a1a1a" : "#ffffff"}
-                            strokeWidth={2}
-                    />
-                        );
-                      })}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value) => formatPrice(value)}
-                      contentStyle={{
-                        backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
-                        border: `1px solid ${theme === "dark" ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"}`,
-                        borderRadius: "8px",
-                        color: theme === "dark" ? "#fff" : "#000",
-                      }}
-                    />
-                    <Legend
-                      verticalAlign="bottom"
-                      iconType="circle"
-                      wrapperStyle={{
-                        paddingTop: "20px",
-                        fontSize: "12px",
-                      }}
-                      formatter={(value) => {
-                        const item = data.charts.sales_by_branch.find(d => d.name === value);
-                        return item ? `${value} (${formatPrice(item.revenue)})` : value;
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="chart-box__empty">{t("no_data_available")}</div>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className={`chart-box chart-box--${theme}`}>
-          <h3 className="chart-box__title">
-            {t("sales_by_category_fabric")}
-          </h3>
-          <div className="chart-box__container">
-            {categoryChartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={categoryChartData}
-                    cx="50%"
-                    cy="45%"
-                    innerRadius={70}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    paddingAngle={3}
-                    dataKey="revenue"
-                    label={false}
-                    isAnimationActive={false}
-                  >
-                    {categoryChartData.map((entry, index) => {
-                      const colors = theme === "dark" ? COLORS_DARK : COLORS_LIGHT;
-                      return (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={colors[index % colors.length]}
-                          stroke={theme === "dark" ? "#1a1a1a" : "#ffffff"}
-                          strokeWidth={2}
-                  />
-                      );
-                    })}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value) => formatPrice(value)}
-                    contentStyle={{
-                      backgroundColor: theme === "dark" ? "#1a1a1a" : "#ffffff",
-                      border: `1px solid ${theme === "dark" ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"}`,
-                      borderRadius: "8px",
-                      color: theme === "dark" ? "#fff" : "#000",
-                    }}
-                  />
-                  <Legend
-                    verticalAlign="bottom"
-                    height={80}
-                    iconType="circle"
-                    wrapperStyle={{
-                      paddingTop: "20px",
-                      fontSize: "12px",
-                    }}
-                    formatter={(value) => {
-                      const item = categoryChartData.find(d => d.name === value);
-                      return item ? `${value} (${formatPrice(item.revenue)})` : value;
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
-
-        <div className={`chart-box chart-box--${theme}`}>
-          <h3 className="chart-box__title">
-            {t("sales_by_category_fabric") || "Sales by fabric category"}
-          </h3>
-          <div className="chart-box__container">
-            {data?.charts?.sales_by_category_fabric &&
-            data.charts.sales_by_category_fabric.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={categoryBarData}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
-                  />
-                  <XAxis
-                    dataKey="name"
-                    style={{ fontSize: 10 }}
-                    angle={-30}
-                    textAnchor="end"
-                    height={90}
-                    interval={0}
-                    tickFormatter={(value) => truncateLabel(value, 14)}
-                  />
-                  <YAxis style={{ fontSize: 10 }} />
-                  <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]}
-                    isAnimationActive={false}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
-
-        <div className={`chart-box chart-box--${theme}`}>
-          <h3 className="chart-box__title">
-            {t("sales_by_fabric") || "Sales by fabric type"}
-          </h3>
-          <div className="chart-box__container">
-            {data?.charts?.sales_by_fabric &&
-            data.charts.sales_by_fabric.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={data.charts.sales_by_fabric}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
-                  />
-                  <XAxis dataKey="fabric_type" style={{ fontSize: 10 }} />
-                  <YAxis style={{ fontSize: 10 }} />
-                  <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="revenue" fill="#2dd4bf" radius={[5, 5, 0, 0]}
-                    isAnimationActive={false}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
-
-        <div className={`chart-box chart-box--${theme}`}>
-          <h3 className="chart-box__title">
-            {t("top_fabrics") || "Top fabrics"}
-          </h3>
-          <div className="chart-box__container">
-            {data?.charts?.top_fabrics && data.charts.top_fabrics.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={data.charts.top_fabrics} layout="vertical">
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
-                  />
-                  <XAxis type="number" style={{ fontSize: 10 }} />
-                  <YAxis
-                    dataKey="name"
-                    type="category"
-                    width={170}
-                    style={{ fontSize: 10 }}
-                    tickFormatter={(value) => truncateLabel(value, 16)}
-                  />
-                  <Tooltip formatter={(value) => `${value} m`} />
-                  <Bar dataKey="meters" fill="#3B82F6" radius={[0, 5, 5, 0]}
-                    isAnimationActive={false}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
-
-        <div className={`chart-box chart-box--${theme}`}>
-          <div className="chart-box__header">
-            <h3 className="chart-box__title">
-              {t("top_5_items")}
-            </h3>
-            <div className="chart-box__toggle">
-              <button
-                className={`chart-box__toggle-btn ${topItemsMetric === "revenue" ? "chart-box__toggle-btn--active" : ""}`}
-                onClick={() => setTopItemsMetric("revenue")}
-              >
-                {t("revenue")}
-              </button>
-              <button
-                className={`chart-box__toggle-btn ${topItemsMetric === "quantity" ? "chart-box__toggle-btn--active" : ""}`}
-                onClick={() => setTopItemsMetric("quantity")}
-              >
-                {t("quantity")}
-              </button>
-            </div>
-          </div>
-          <div className="chart-box__container">
-            {topItemsSorted.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={topItemsSorted} layout="vertical">
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
-                  />
-                  <XAxis type="number" style={{ fontSize: 10 }} />
-                  <YAxis
-                    dataKey="name"
-                    type="category"
-                    width={170}
-                    style={{ fontSize: 10 }}
-                    tickFormatter={(value) => truncateLabel(value, 16)}
-                  />
-                  <Tooltip
-                    formatter={(value) =>
-                      topItemsMetric === "revenue" ? formatPrice(value) : value
-                    }
-                  />
-                  <Bar
-                    dataKey={topItemsMetric}
-                    fill="#2dd4bf"
-                    radius={[0, 5, 5, 0]}
-                    isAnimationActive={false}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
-
-        <div className={`chart-box chart-box--${theme}`}>
-          <h3 className="chart-box__title">
-            {t("top_5_customers")}
-          </h3>
-          <div className="chart-box__container">
-            {data?.charts?.top_5_customers &&
-            data.charts.top_5_customers.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={data.charts.top_5_customers} layout="vertical">
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={theme === "dark" ? "#444" : "#ddd"}
-                    opacity={0.3}
-                  />
-                  <XAxis type="number" style={{ fontSize: 10 }} />
-                  <YAxis
-                    dataKey="name"
-                    type="category"
-                    width={170}
-                    style={{ fontSize: 10 }}
-                    tickFormatter={(value) => truncateLabel(value, 16)}
-                  />
-                  <Tooltip formatter={(value) => formatPrice(value)} />
-                  <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]}
-                    isAnimationActive={false}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="chart-box__empty">{t("no_data_available")}</div>
-            )}
-          </div>
-        </div>
-      </div>
+      <OwnerChartsSection
+        theme={theme}
+        t={t}
+        activeTab={activeTab}
+        data={data}
+        showBranchComparison={showBranchComparison}
+        categoryChartData={categoryChartData}
+        categoryBarData={categoryBarData}
+        topItemsMetric={topItemsMetric}
+        setTopItemsMetric={setTopItemsMetric}
+        topItemsSorted={topItemsSorted}
+        formatPrice={formatPrice}
+        formatDate={formatDate}
+        truncateLabel={truncateLabel}
+      />
     </div>
   );
 };

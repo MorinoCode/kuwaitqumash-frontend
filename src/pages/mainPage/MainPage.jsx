@@ -13,10 +13,8 @@ import {
   Package,
   BarChart2,
   Store,
-  Calculator,
   PlusCircle,
   ArrowRight,
-  TrendingUp,
   FileText,
 } from "lucide-react";
 
@@ -29,6 +27,32 @@ const MainPage = () => {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
   const menuItems = [
+    {
+      category: "management",
+      items: [
+        {
+          title: "dashboard",
+          icon: BarChart2,
+          link: "/dashboard",
+          color: "accent",
+          desc: "analytics_kpi",
+        },
+        {
+          title: "invoices",
+          icon: FileText,
+          link: "/invoices",
+          color: "info",
+          desc: "view_invoices",
+        },
+        {
+          title: "manage",
+          icon: Store,
+          link: "/manage",
+          color: "purple",
+          desc: "manage_store_desc",
+        },
+      ],
+    },
     {
       category: "sales_operations",
       items: [
@@ -65,39 +89,6 @@ const MainPage = () => {
           color: "success",
           desc: "new_stock",
           isModal: true,
-        },
-        {
-          title: "invoices",
-          icon: FileText,
-          link: "/invoices",
-          color: "info",
-          desc: "view_invoices",
-        },
-      ],
-    },
-    {
-      category: "management",
-      items: [
-        {
-          title: "dashboard",
-          icon: BarChart2,
-          link: "/dashboard",
-          color: "accent",
-          desc: "analytics_kpi",
-        },
-        {
-          title: "ai_analytics",
-          icon: TrendingUp,
-          link: "/analytics",
-          color: "info",
-          desc: "ai_analytics_desc",
-        },
-        {
-          title: "manage",
-          icon: Store,
-          link: "/manage",
-          color: "purple",
-          desc: "manage_store_desc",
         },
       ],
     },

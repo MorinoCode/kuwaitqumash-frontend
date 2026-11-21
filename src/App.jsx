@@ -21,7 +21,6 @@ const MainPage = lazy(() => import("./pages/mainPage/MainPage"));
 const SignupPage = lazy(() => import("./pages/signupPage/SignupPage"));
 const ALLOW_PUBLIC_SIGNUP = import.meta.env.VITE_ALLOW_PUBLIC_SIGNUP !== "false";
 const DashboardPage = lazy(() => import("./pages/dashboardPage/DashboardPage"));
-const AnalyticsPage = lazy(() => import("./pages/analyticsPage/AnalyticsPage"));
 const InventoryPage = lazy(() => import("./pages/inventoryPage/InventoryPage"));
 const SalesPage = lazy(() => import("./pages/salesPage/SalesPage"));
 const CustomersPage = lazy(() => import("./pages/customersPage/CustomersPage"));
@@ -131,11 +130,7 @@ function App() {
                   />
                   <Route
                     path="/analytics"
-                    element={
-                      <ErrorBoundary>
-                        <AnalyticsPage />
-                      </ErrorBoundary>
-                    }
+                    element={<Navigate to="/dashboard" replace />}
                   />
                   <Route
                     path="/home"

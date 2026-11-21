@@ -7,10 +7,16 @@ import Sidebar from "../../sidebar/Sidebar";
 import { Menu, Sun, Moon, Languages, LogOut, Check, Sparkles, AlertTriangle } from "lucide-react";
 import logoImage from "../../../assets/logo1.png";
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
-import HelpAssistant from "../../helpAssistant/HelpAssistant";
-import { getUiStrings } from "../../../utils/helpAssistant.js";
 import useTenantStore from "../../../store/tenantStore";
 import "./MainLayout.css";
+
+const HelpAssistant = React.lazy(() => import("../../helpAssistant/HelpAssistant"));
+
+const HELP_OPEN_LABEL = {
+  fa: "راهنمای سیستم",
+  ar: "دليل المساعدة",
+  en: "Help Guide",
+};
 
 const LANGUAGES = [
   { code: "fa", label: "فارسی" },
@@ -34,7 +40,8 @@ const MainLayout = () => {
   const closeSidebar = () => setIsSidebarOpen(false);
 
   const handleLogout = logout;
-  const helpUi = getUiStrings(i18n.language || "fa");
+  const currentLang = (i18n.language || "fa").split("-")[0];
+  const helpOpenLabel = HELP_OPEN_LABEL[currentLang] || HELP_OPEN_LABEL.en;
 
   React.useEffect(() => {
     if (!isLangOpen) return undefined;
@@ -123,8 +130,8 @@ const MainLayout = () => {
               onClick={() => setIsHelpOpen((open) => !open)}
               aria-haspopup="dialog"
               aria-expanded={isHelpOpen}
-              aria-label={helpUi.open}
-              title={helpUi.open}
+              aria-label={helpOpenLabel}
+              title={helpOpenLabel}
             >
               <Sparkles size={20} />
             </button>
@@ -243,7 +250,11 @@ const MainLayout = () => {
         </main>
       </div>
 
-      <HelpAssistant isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+      {isHelpOpen && (
+        <React.Suspense fallback={null}>
+          <HelpAssistant isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+        </React.Suspense>
+      )}
     </div>
   );
 };

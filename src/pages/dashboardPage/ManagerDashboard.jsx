@@ -12,12 +12,13 @@ import {
   Cell,
   Legend,
 } from "recharts";
-import { RefreshCw, AlertCircle, DollarSign, TrendingUp, Scale, FileText, BarChart3, Check, Trash2 } from "lucide-react";
+import { RefreshCw, AlertCircle, DollarSign, TrendingUp, Scale, FileText, BarChart3, Check, Trash2, Eye, EyeOff, Sparkles, CreditCard, Scissors } from "lucide-react";
 import { toast } from "react-toastify";
 import api from "../../api/axios";
 import { useTheme } from "../../context/ThemeContext";
 import { useDashboardManager } from "../../hooks/useDashboard";
 import DateRangePicker from "../../components/dashboard/DateRangePicker";
+import ManagerTablesSection from "./ManagerTablesSection";
 import "./DashboardPage.css";
 
 const COLORS_DARK = [
@@ -49,6 +50,8 @@ const COLORS_LIGHT = [
 const ManagerDashboard = () => {
   const { t, i18n } = useTranslation();
   const { theme } = useTheme();
+  const [showProfit, setShowProfit] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
   const [staffPerformanceRange, setStaffPerformanceRange] = useState("today");
   const [dateRange, setDateRange] = useState({
     start: null,
@@ -148,6 +151,110 @@ const ManagerDashboard = () => {
     return data?.alerts?.low_stock_items?.length || 0;
   }, [data]);
 
+  const paymentMethods = useMemo(() => {
+    return data?.charts?.payment_methods || [];
+  }, [data]);
+
+  const staffDetailed = useMemo(() => {
+    return data?.charts?.staff_performance || [];
+  }, [data]);
+
+  const deadStock = useMemo(() => {
+    return data?.charts?.dead_stock || [];
+  }, [data]);
+
+  const remnants = useMemo(() => {
+    return data?.charts?.remnants || [];
+  }, [data]);
+
+  const renderBranchSummary = () => {
+    if (!data?.kpi) return null;
+    const rev = formatPrice(data.kpi.branch_sales || 0);
+    const prof = formatPrice(data.kpi.net_profit || 0);
+    const meters = parseFloat(data.kpi.total_meters || 0).toFixed(2);
+    const tx = parseInt(data.kpi.invoice_count || 0, 10);
+    const lang = i18n.language;
+
+    if (lang === "fa") {
+      return (
+        <ul className="dash-story__list">
+          <li>
+            <strong>وضعیت فروش شعبه:</strong> در این بازه زمانی، شعبه شما{" "}
+            <strong>{tx} فاکتور</strong> صادر کرده و{" "}
+            <strong>{meters} متر پارچه</strong> به مبلغ خالص{" "}
+            <strong className="dash-hl-teal">{rev} دینار</strong> فروخته است.{" "}
+            {showProfit && (
+              <>
+                سود خالص شعبه:{" "}
+                <strong className="dash-hl-green">{prof} دینار</strong>.
+              </>
+            )}
+          </li>
+          {remnants.length > 0 && (
+            <li>
+              <strong>ته‌طاقه‌های شعبه:</strong> شما{" "}
+              <strong className="dash-hl-amber">
+                {remnants.length} ته‌طاقه (زیر ۳.۵ متر)
+              </strong>{" "}
+              در انبار شعبه دارید که پیشنهاد می‌شود در سبد حراجی جلوی مغازه قرار
+              گیرند.
+            </li>
+          )}
+        </ul>
+      );
+    }
+
+    if (lang === "ar") {
+      return (
+        <ul className="dash-story__list">
+          <li>
+            <strong>ملخص الفرع:</strong> أصدر الفرع <strong>{tx} فاتورة</strong>{" "}
+            وباع <strong>{meters} متر</strong> بقيمة صافية{" "}
+            <strong className="dash-hl-teal">{rev} د.ك</strong>.{" "}
+            {showProfit && (
+              <>
+                الربح الصافي: <strong className="dash-hl-green">{prof} د.ك</strong>.
+              </>
+            )}
+          </li>
+          {remnants.length > 0 && (
+            <li>
+              <strong>بقايا الرولات:</strong> يوجد{" "}
+              <strong className="dash-hl-amber">
+                {remnants.length} بقايا رولات (أقل من 3.5 متر)
+              </strong>{" "}
+              في الفرع مناسبة للتصفية.
+            </li>
+          )}
+        </ul>
+      );
+    }
+
+    return (
+      <ul className="dash-story__list">
+        <li>
+          <strong>Branch Summary:</strong> Your branch issued{" "}
+          <strong>{tx} invoices</strong> and sold <strong>{meters} meters</strong>{" "}
+          for <strong className="dash-hl-teal">{rev} KWD</strong>.{" "}
+          {showProfit && (
+            <>
+              Net profit: <strong className="dash-hl-green">{prof} KWD</strong>.
+            </>
+          )}
+        </li>
+        {remnants.length > 0 && (
+          <li>
+            <strong>Branch Remnants:</strong> You have{" "}
+            <strong className="dash-hl-amber">
+              {remnants.length} remnant rolls (under 3.5m)
+            </strong>{" "}
+            ready for clearance.
+          </li>
+        )}
+      </ul>
+    );
+  };
+
   if (loading)
     return (
       <div
@@ -216,6 +323,16 @@ const ManagerDashboard = () => {
         defaultRange="last_7_days"
       />
 
+      {data?.kpi && (
+        <div className={`dash-story-box dash-story-box--${theme}`}>
+          <div className="dash-story__header">
+            <Sparkles size={20} />
+            <h3>{t("analytics_summary_title") || "خلاصه وضعیت شعبه به زبان ساده"}</h3>
+          </div>
+          {renderBranchSummary()}
+        </div>
+      )}
+
       {lowStockCount > 0 && (
         <div className={`low-stock-badge low-stock-badge--${theme}`}>
           <AlertCircle size={20} />
@@ -249,11 +366,27 @@ const ManagerDashboard = () => {
           </div>
           <div className="kpi-card__content">
             <div className="kpi-card__title">{t("netProfit")}</div>
-            <div className="kpi-card__value-wrapper">
-              <span className="kpi-card__value">
-                {formatPrice(data?.kpi?.net_profit)}
-              </span>
-              <span className="kpi-card__unit">{t("kwd")}</span>
+            <div className="kpi-card__action-row">
+              <div className="kpi-card__value-wrapper">
+                {showProfit ? (
+                  <>
+                    <span className="kpi-card__value">
+                      {formatPrice(data?.kpi?.net_profit)}
+                    </span>
+                    <span className="kpi-card__unit">{t("kwd")}</span>
+                  </>
+                ) : (
+                  <span className="kpi-card__value">•••••••</span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowProfit(!showProfit)}
+                className="kpi-card__toggle-btn"
+                title={showProfit ? t("hide") : t("show")}
+              >
+                {showProfit ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </div>
         </div>
@@ -322,6 +455,49 @@ const ManagerDashboard = () => {
           </div>
         </div>
       </div>
+
+      <nav className={`dash-tabs-bar dash-tabs-bar--${theme}`}>
+        <button
+          type="button"
+          className={`dash-tab-btn ${activeTab === "all" ? "active" : ""}`}
+          onClick={() => setActiveTab("all")}
+        >
+          {t("analytics_tab_all") || "نمایش همه گزارش‌ها"}
+        </button>
+        <button
+          type="button"
+          className={`dash-tab-btn ${activeTab === "drawer_staff" ? "active" : ""}`}
+          onClick={() => setActiveTab("drawer_staff")}
+        >
+          <CreditCard size={16} />
+          <span>{t("payment_methods_breakdown") || "تراز صندوق و فروشندگان"}</span>
+        </button>
+        <button
+          type="button"
+          className={`dash-tab-btn dash-tab-btn--warn ${activeTab === "dead_stock" ? "active" : ""}`}
+          onClick={() => setActiveTab("dead_stock")}
+        >
+          <Scissors size={16} />
+          <span>{t("branch_dead_stock_remnants_tab")}</span>
+          {(deadStock.length > 0 || remnants.length > 0) && (
+            <span className="dash-tab-badge">
+              {deadStock.length + remnants.length}
+            </span>
+          )}
+        </button>
+      </nav>
+
+      <ManagerTablesSection
+        theme={theme}
+        t={t}
+        activeTab={activeTab}
+        showProfit={showProfit}
+        formatPrice={formatPrice}
+        paymentMethods={paymentMethods}
+        staffDetailed={staffDetailed}
+        remnants={remnants}
+        deadStock={deadStock}
+      />
 
       <div className="content-grid">
 
@@ -527,8 +703,15 @@ const ManagerDashboard = () => {
               <div className="chart-box__container">
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={data.charts.sales_by_fabric}>
-                    <XAxis dataKey="fabric_type" style={{ fontSize: 10 }} />
-                    <YAxis style={{ fontSize: 10 }} />
+                    <XAxis
+                      dataKey="fabric_type"
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                    />
+                    <YAxis
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                    />
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Bar
                       dataKey="revenue"
@@ -552,12 +735,17 @@ const ManagerDashboard = () => {
                     data={data.charts.top5ItemsRevenue}
                     layout="vertical"
                   >
-                    <XAxis type="number" style={{ fontSize: 10 }} />
+                    <XAxis
+                      type="number"
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                    />
                     <YAxis
                       dataKey="name"
                       type="category"
                       width={120}
-                      style={{ fontSize: 10 }}
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
                     />
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Bar
@@ -582,12 +770,17 @@ const ManagerDashboard = () => {
                     data={data.charts.top5Customers}
                     layout="vertical"
                   >
-                    <XAxis type="number" style={{ fontSize: 10 }} />
+                    <XAxis
+                      type="number"
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
+                    />
                     <YAxis
                       dataKey="name"
                       type="category"
                       width={120}
-                      style={{ fontSize: 10 }}
+                      stroke={theme === "dark" ? "rgba(94, 234, 212, 0.45)" : "#94a3b8"}
+                      tick={{ fill: theme === "dark" ? "#e2e8f0" : "#334155", fontSize: 12, fontWeight: 600 }}
                     />
                     <Tooltip formatter={(value) => formatPrice(value)} />
                     <Bar dataKey="value" fill="#2dd4bf" radius={[0, 5, 5, 0]}

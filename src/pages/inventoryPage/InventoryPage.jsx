@@ -44,6 +44,7 @@ import {
   Edit,
 } from "lucide-react";
 import BranchSelector from "../../components/analytics/BranchSelector";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
 const InventoryPage = () => {
   const { theme } = useTheme();
@@ -60,6 +61,7 @@ const InventoryPage = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
   const [filterPattern, setFilterPattern] = useState("All");
   const [filterMetal, setFilterMetal] = useState("All");
   const [filterCountry, setFilterCountry] = useState("All");
@@ -90,7 +92,7 @@ const InventoryPage = () => {
         ? selectedBranchIds.join(",")
         : undefined,
     branch_id: !isOwner ? activeBranchId : undefined,
-    search: searchTerm || undefined,
+    search: debouncedSearchTerm || undefined,
     fabric_type: filterMetal !== "All" ? filterMetal : undefined,
     pattern: filterPattern !== "All" ? filterPattern : undefined,
     country_of_origin: filterCountry !== "All" ? filterCountry : undefined,

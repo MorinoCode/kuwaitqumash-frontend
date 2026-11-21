@@ -21,7 +21,6 @@ vi.mock("./pages/loginPage/LoginPage", () => stub("login"));
 vi.mock("./pages/mainPage/MainPage", () => stub("main"));
 vi.mock("./pages/signupPage/SignupPage", () => stub("signup"));
 vi.mock("./pages/dashboardPage/DashboardPage", () => stub("dashboard"));
-vi.mock("./pages/analyticsPage/AnalyticsPage", () => stub("analytics"));
 vi.mock("./pages/inventoryPage/InventoryPage", () => stub("inventory"));
 vi.mock("./pages/salesPage/SalesPage", () => stub("sales"));
 vi.mock("./pages/customersPage/CustomersPage", () => stub("customers"));
@@ -44,13 +43,15 @@ beforeEach(() => {
 });
 
 describe("App", () => {
-  it("renders without crashing", () => {
+  it("renders without crashing", async () => {
     const { container } = render(<App />);
+    await screen.findByTestId("welcome");
     expect(container).toBeTruthy();
   });
 
-  it("sets the document direction from the current language", () => {
+  it("sets the document direction from the current language", async () => {
     render(<App />);
+    await screen.findByTestId("welcome");
     expect(document.body.classList.contains("font-persian")).toBe(true);
     expect(document.dir).toBe("rtl");
   });

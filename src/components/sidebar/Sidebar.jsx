@@ -8,7 +8,7 @@ import useBranchStore from "../../store/branchStore";
 import { useBranches } from "../../hooks/useBranches";
 import "./Sidebar.css";
 import {
-  Home, LayoutDashboard, BarChart3, Package, ShoppingCart, Layers, Store, ChevronDown,
+  Home, LayoutDashboard, Package, ShoppingCart, Layers, Store, ChevronDown,
   Users, X, Settings, Check, FileText, RotateCcw
 } from "lucide-react";
 
@@ -205,17 +205,6 @@ const Sidebar = ({ closeSidebar }) => {
         >
           <LayoutDashboard size={20} /> <span>{t('dashboard')}</span>
         </Link>
-        {currentUser?.role !== 'sales_man' && (
-          <Link
-            to="/analytics"
-            className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/analytics")}`}
-            onClick={closeSidebar}
-            aria-label={t('ai_analytics') || 'Analytics'}
-            aria-current={isActive("/analytics") ? 'page' : undefined}
-          >
-            <BarChart3 size={20} /> <span>{t('ai_analytics') || 'Analytics'}</span>
-          </Link>
-        )}
         <Link
           to="/inventory"
           className={`sidebar__nav-item sidebar__nav-item--${theme} ${isActive("/inventory")}`}

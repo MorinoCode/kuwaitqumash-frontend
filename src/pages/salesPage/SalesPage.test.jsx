@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "../../i18n";
 import api from "../../api/axios";
 import SalesPage from "./SalesPage";
 
@@ -37,13 +38,15 @@ beforeEach(() => {
 });
 
 describe("SalesPage", () => {
-  it("renders the new sale header", () => {
+  it("renders the new sale header", async () => {
     const { container } = renderPage();
+    await waitFor(() => expect(api.get).toHaveBeenCalled());
     expect(container.querySelector(".sales-header__title")).toBeInTheDocument();
   });
 
-  it("renders the cart and payment sections", () => {
+  it("renders the cart and payment sections", async () => {
     const { container } = renderPage();
+    await waitFor(() => expect(api.get).toHaveBeenCalled());
     expect(container.querySelector(".sales-cart")).toBeInTheDocument();
     expect(container.querySelector(".sales-payment")).toBeInTheDocument();
   });

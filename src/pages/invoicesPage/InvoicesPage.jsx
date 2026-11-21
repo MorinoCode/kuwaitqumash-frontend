@@ -8,9 +8,11 @@ import { useAuth } from "../../context/AuthContext";
 import useBranchStore from "../../store/branchStore";
 import useTenantStore from "../../store/tenantStore";
 import { useInvoices, useSendInvoiceWhatsApp } from "../../hooks/useInvoices";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useBranches } from "../../hooks/useBranches";
 import BranchSelector from "../../components/analytics/BranchSelector";
 import Pagination from "../../components/pagination/Pagination";
+import { OldInvoicesTab, ExportExcelModal } from "./OldInvoicesSection";
 import { printThermalReceipt } from "../../utils/thermalPrint";
 import "./InvoicesPage.css";
 import {
@@ -122,13 +124,15 @@ const InvoicesPage = () => {
     [selectedBranchIds],
   );
 
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
+
   const invoiceFilters = {
     branch_ids:
       isOwner && selectedBranchIds.length > 0
         ? selectedBranchIds.join(",")
         : undefined,
     branch_id: !isOwner ? activeBranchId : undefined,
-    search: searchTerm || undefined,
+    search: debouncedSearchTerm || undefined,
     start_date: startDate || undefined,
     end_date: endDate || undefined,
     page: pagination.currentPage,
@@ -160,7 +164,7 @@ const InvoicesPage = () => {
   };
 
   const { data: oldInvoicesData, isLoading: oldInvoicesLoading } =
-    useInvoices(oldInvoiceFilters);
+    useInvoices(oldInvoiceFilters, { enabled: activeTab === "old" });
 
   const sendInvoiceWhatsAppMutation = useSendInvoiceWhatsApp();
 
@@ -733,217 +737,43 @@ const InvoicesPage = () => {
           )}
         </>
       ) : (
-        <>
-          <p className="invoices-old-note">
-            {t("old_invoices_note", {
-              days: OLD_INVOICE_DAYS,
-              date: oldInvoicesCutoff,
-            })}
-          </p>
-
-          <div className="invoices-table-container">
-            <div className="invoices-table-wrapper">
-              <table className="invoices-table">
-                <thead className="invoices-table__head">
-                  <tr>
-                    <th>{t("invoice_no")}</th>
-                    <th>{t("date")}</th>
-                    <th>{t("customer")}</th>
-                    <th>{t("total_amount")}</th>
-                    <th>{t("actions")}</th>
-                  </tr>
-                </thead>
-                <tbody className="invoices-table__body">
-                  {(oldInvoicesData?.data || []).map((inv) => (
-                    <tr key={inv.id} className="invoices-row">
-                      <td className="invoices-row__cell invoices-row__no" data-label={t("invoice_no")}>
-                        {inv?.invoice_number || "--"}
-                      </td>
-                      <td className="invoices-row__cell" data-label={t("date")}>
-                        {inv.createdAt ? (
-                          <>
-                            {new Date(inv.createdAt).toLocaleDateString()}
-                            <small className="invoices-row__time">
-                              {new Date(inv.createdAt).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                            </small>
-                          </>
-                        ) : (
-                          "--"
-                        )}
-                      </td>
-                      <td className="invoices-row__cell invoices-row__customer" data-label={t("customer")}>
-                        {inv.customer ? inv.customer.full_name : t("unknown")}
-                      </td>
-                      <td className="invoices-row__cell invoices-row__amount" data-label={t("total_amount")}>
-                        {(parseFloat(inv?.total_amount) || 0).toFixed(3)}{" "}
-                        {t("kwd")}
-                      </td>
-                      <td className="invoices-row__cell" data-label={t("actions")}>
-                        <div className="invoices-actions">
-                          <button
-                            className="invoices-btn invoices-btn--download"
-                            onClick={() => handleDownload(inv)}
-                            disabled={pdfLoadingId === inv.id}
-                            title={t("download_pdf")}
-                          >
-                            {pdfLoadingId === inv.id ? (
-                              <Loader size={16} className="spinner" />
-                            ) : (
-                              <Download size={16} />
-                            )}{" "}
-                            PDF
-                          </button>
-                          <button
-                            type="button"
-                            className="invoices-btn invoices-btn--thermal"
-                            onClick={() => handleThermalPrint(inv)}
-                            disabled={thermalLoadingId === inv.id}
-                            title={t("print_thermal") || "Thermal 80mm"}
-                          >
-                            {thermalLoadingId === inv.id ? (
-                              <Loader size={16} className="spinner" />
-                            ) : (
-                              <Printer size={16} />
-                            )}
-                            <span>80mm</span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {oldInvoicesLoading && (
-                    <tr>
-                      <td colSpan="5" className="invoices-empty">
-                        <Loader size={18} className="spinner" />
-                      </td>
-                    </tr>
-                  )}
-                  {!oldInvoicesLoading &&
-                    (oldInvoicesData?.data || []).length === 0 && (
-                      <tr>
-                        <td colSpan="5" className="invoices-empty">
-                          {t("no_invoices_found")}
-                        </td>
-                      </tr>
-                    )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {oldInvoicesData?.pagination?.totalPages > 1 && (
-            <Pagination
-              currentPage={oldInvoicesData.pagination.currentPage}
-              totalPages={oldInvoicesData.pagination.totalPages}
-              totalItems={oldInvoicesData.pagination.totalItems}
-              itemsPerPage={oldInvoicesData.pagination.itemsPerPage}
-              onPageChange={(page) => {
-                setOldPage(page);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-            />
-          )}
-        </>
+        <OldInvoicesTab
+          t={t}
+          oldInvoiceDays={OLD_INVOICE_DAYS}
+          oldInvoicesCutoff={oldInvoicesCutoff}
+          oldInvoicesData={oldInvoicesData}
+          oldInvoicesLoading={oldInvoicesLoading}
+          pdfLoadingId={pdfLoadingId}
+          thermalLoadingId={thermalLoadingId}
+          onDownload={handleDownload}
+          onThermalPrint={handleThermalPrint}
+          onPageChange={(page) => {
+            setOldPage(page);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
       )}
 
       {showExportModal && (
-        <div
-          className="old-invoices-modal-overlay"
-          onClick={() => !excelLoading && setShowExportModal(false)}
-        >
-          <div
-            className={`old-invoices-modal old-invoices-modal--${theme}`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="old-invoices-modal__header">
-              <h3>{t("export_excel") || "Export to Excel"}</h3>
-              <button
-                className="old-invoices-modal__close"
-                onClick={() => {
-                  if (!excelLoading) {
-                    setShowExportModal(false);
-                    setExportStartDate("");
-                    setExportEndDate("");
-                  }
-                }}
-                disabled={excelLoading}
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <div className="old-invoices-modal__body">
-              <p className="old-invoices-modal__info">
-                {t("select_date_range_export") ||
-                  "Select date range to export invoices. Leave empty to export all invoices."}
-              </p>
-              <div className="old-invoices-modal__form-group">
-                <label>{t("start_date") || "Start Date"}</label>
-                <input
-                  type="date"
-                  value={exportStartDate}
-                  onChange={(e) => setExportStartDate(e.target.value)}
-                  disabled={excelLoading}
-                  max={exportEndDate || undefined}
-                />
-              </div>
-              <div className="old-invoices-modal__form-group">
-                <label>{t("end_date") || "End Date"}</label>
-                <input
-                  type="date"
-                  value={exportEndDate}
-                  onChange={(e) => setExportEndDate(e.target.value)}
-                  disabled={excelLoading}
-                  min={exportStartDate || undefined}
-                />
-              </div>
-              {isOwner && selectedBranchIds.length > 0 && (
-                <div className="old-invoices-modal__branch-note">
-                  <p>
-                    {t("exporting_branches") ||
-                      "Exporting invoices for selected branches"}
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="old-invoices-modal__footer">
-              <button
-                className="old-invoices-modal__cancel"
-                onClick={() => {
-                  setShowExportModal(false);
-                  setExportStartDate("");
-                  setExportEndDate("");
-                }}
-                disabled={excelLoading}
-              >
-                {t("cancel") || "Cancel"}
-              </button>
-              <button
-                className="old-invoices-modal__upload"
-                onClick={handleExportExcel}
-                disabled={excelLoading}
-              >
-                {excelLoading ? (
-                  <>
-                    <Loader
-                      size={16}
-                      className="spinner"
-                      style={{ marginRight: 8 }}
-                    />
-                    {t("exporting") || "Exporting..."}
-                  </>
-                ) : (
-                  <>
-                    <Download size={16} style={{ marginRight: 8 }} />
-                    {t("export") || "Export"}
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
+        <ExportExcelModal
+          t={t}
+          theme={theme}
+          isOwner={isOwner}
+          selectedBranchIds={selectedBranchIds}
+          excelLoading={excelLoading}
+          exportStartDate={exportStartDate}
+          setExportStartDate={setExportStartDate}
+          exportEndDate={exportEndDate}
+          setExportEndDate={setExportEndDate}
+          onClose={(resetDates) => {
+            setShowExportModal(false);
+            if (resetDates) {
+              setExportStartDate("");
+              setExportEndDate("");
+            }
+          }}
+          onExport={handleExportExcel}
+        />
       )}
     </div>
   );

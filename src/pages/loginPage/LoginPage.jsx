@@ -58,9 +58,12 @@ const LoginPage = () => {
 
     setIsSubmitting(true);
     try {
+      const cleanStoreId = credentials.storeId.trim().toLowerCase();
+      setTenant(cleanStoreId, null);
+
       const config = {
         headers: {
-          "x-tenant-id": credentials.storeId.trim().toLowerCase(),
+          "x-tenant-id": cleanStoreId,
         },
       };
 
