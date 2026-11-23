@@ -4,8 +4,20 @@ import { toast } from "react-toastify";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
-import api from "../../api/axios";
+import api, { apiBaseURL } from "../../api/axios";
 import "./LogoUpload.css";
+
+const resolveLogoSrc = (url) => {
+  if (!url || typeof url !== "string") return null;
+  if (url.startsWith("/uploads/")) {
+    const origin =
+      typeof apiBaseURL === "string"
+        ? apiBaseURL.replace(/\/api\/?$/, "")
+        : "";
+    return origin ? `${origin}${url}` : url;
+  }
+  return url;
+};
 
 const LogoUpload = ({
   branchId,
@@ -186,14 +198,15 @@ const LogoUpload = ({
   };
 
   const displayLogoUrl = localLogoUrl || currentLogoUrl;
+  const resolvedLogoSrc = resolveLogoSrc(displayLogoUrl);
 
   return (
     <div className={`logo-upload logo-upload--${theme}`}>
       <div className="logo-upload__preview">
-        {displayLogoUrl ? (
+        {resolvedLogoSrc ? (
           <div className="logo-upload__preview-wrapper">
             <img
-              src={displayLogoUrl}
+              src={resolvedLogoSrc}
               alt="Branch logo"
               className="logo-upload__preview-img"
               onError={(e) => {
@@ -272,13 +285,15 @@ const LogoUpload = ({
                     if (imgRef.current) {
                       const { width, height } = imgRef.current;
                       const size = Math.min(width, height, 300);
-                      setCrop({
+                      const initialCrop = {
                         unit: "px",
                         width: size,
                         height: size,
                         x: (width - size) / 2,
                         y: (height - size) / 2,
-                      });
+                      };
+                      setCrop(initialCrop);
+                      setCompletedCrop(initialCrop);
                     }
                   }}
                 />

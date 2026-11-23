@@ -6,6 +6,7 @@ import LogoUpload from "./LogoUpload";
 import { renderWithProviders } from "../../test/renderWithProviders";
 
 vi.mock("../../api/axios", () => ({
+  apiBaseURL: "http://localhost:5001/api",
   default: { get: vi.fn(), post: vi.fn(), put: vi.fn(), delete: vi.fn() },
 }));
 
@@ -46,6 +47,16 @@ describe("LogoUpload", () => {
     expect(container.querySelector(".logo-upload__preview-img")).toHaveAttribute(
       "src",
       "/logo.webp",
+    );
+  });
+
+  it("prefixes backend origin for local /uploads logos", () => {
+    const { container } = renderWithProviders(
+      <LogoUpload branchId={1} currentLogoUrl="/uploads/store/logo.png" />,
+    );
+    expect(container.querySelector(".logo-upload__preview-img")).toHaveAttribute(
+      "src",
+      "http://localhost:5001/uploads/store/logo.png",
     );
   });
 

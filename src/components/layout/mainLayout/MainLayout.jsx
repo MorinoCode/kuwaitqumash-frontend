@@ -4,13 +4,14 @@ import { useTheme } from "../../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/AuthContext";
 import Sidebar from "../../sidebar/Sidebar";
-import { Menu, Sun, Moon, Languages, LogOut, Check, Sparkles, AlertTriangle } from "lucide-react";
+import { Menu, Sun, Moon, Languages, LogOut, Check, Sparkles, AlertTriangle, KeyRound } from "lucide-react";
 import logoImage from "../../../assets/logo1.png";
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import useTenantStore from "../../../store/tenantStore";
 import "./MainLayout.css";
 
 const HelpAssistant = React.lazy(() => import("../../helpAssistant/HelpAssistant"));
+const ChangePasswordModal = React.lazy(() => import("../../changePasswordModal/ChangePasswordModal"));
 
 const HELP_OPEN_LABEL = {
   fa: "راهنمای سیستم",
@@ -28,6 +29,7 @@ const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const [isLangOpen, setIsLangOpen] = React.useState(false);
   const [isHelpOpen, setIsHelpOpen] = React.useState(false);
+  const [isChangePwdOpen, setIsChangePwdOpen] = React.useState(false);
   const langMenuRef = React.useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -185,6 +187,16 @@ const MainLayout = () => {
             </button>
 
             <button
+              type="button"
+              className={`header-btn header-btn--${theme}`}
+              onClick={() => setIsChangePwdOpen(true)}
+              title={t("change_password") || "Change Password"}
+              aria-label={t("change_password") || "Change Password"}
+            >
+              <KeyRound size={20} />
+            </button>
+
+            <button
               className={`header-btn header-btn--logout header-btn--${theme}`}
               onClick={handleLogout}
               title={t("logout")}
@@ -253,6 +265,15 @@ const MainLayout = () => {
       {isHelpOpen && (
         <React.Suspense fallback={null}>
           <HelpAssistant isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+        </React.Suspense>
+      )}
+
+      {isChangePwdOpen && (
+        <React.Suspense fallback={null}>
+          <ChangePasswordModal
+            isOpen={isChangePwdOpen}
+            onClose={() => setIsChangePwdOpen(false)}
+          />
         </React.Suspense>
       )}
     </div>

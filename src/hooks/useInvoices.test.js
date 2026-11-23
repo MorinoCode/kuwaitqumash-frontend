@@ -58,8 +58,17 @@ describe("useInvoices", () => {
 });
 
 describe("sale mutations", () => {
-  it("prepends the created invoice to cached lists", async () => {
-    api.post.mockResolvedValue({ data: { data: { id: 11, invoice_number: "INV-11" } } });
+  it("prepends the created invoice from nested { data: { invoice } } payload to cached lists", async () => {
+    api.post.mockResolvedValue({
+      data: {
+        success: true,
+        data: {
+          invoice: { id: 11, invoice_number: "INV-11", total_amount: 5 },
+          items: [],
+          pdf_url: null,
+        },
+      },
+    });
     const { result, client } = renderHookWithQuery(() => useCreateSale());
 
     client.setQueryData(["invoices", {}], {
@@ -75,6 +84,7 @@ describe("sale mutations", () => {
     expect(api.post).toHaveBeenCalledWith("/sales/create", { total_amount: 5 });
     const cached = client.getQueryData(["invoices", {}]);
     expect(cached.data.map((i) => i.id)).toEqual([11, 10]);
+    expect(cached.data[0].invoice_number).toBe("INV-11");
     expect(cached.pagination.totalItems).toBe(2);
     expect(toast.success).toHaveBeenCalled();
   });

@@ -696,30 +696,27 @@ Tip: your cart draft is auto-saved per branch so refreshing the page does not lo
 • شماره فاکتور، تاریخ، ساعت و نام فروشنده.
 • نام، تلفن، آدرس و نوع مشتری.
 • جدول اقلام: نوع پارچه، طرح، رنگ، متراژ، قیمت هر متر، تخفیف و جمع هر ردیف.
-• جمع متراژ، جمع کل به دینار کویت (۳ رقم اعشار) و جزئیات روش‌های پرداخت.
-• فرم «الغرض من الشراء»، شرایط و ضوابط پارچه و محل امضای مشتری و فروشنده.
-اگر لوگو روی فاکتور نیست، در «مدیریت ← شعبه ← لوگو» آپلود کن تا از فاکتور بعدی نمایش داده شود.`,
+• جمع متراژ، جمع کل به دینار کویت (۳ رقم اعشار)، جزئیات روش‌های پرداخت و محل امضای مشتری و فروشنده.
+اگر لوگو روی فاکتور نیست، در «مدیریت ← شعبه ← لوگو» آپلود کن تا روی فاکتورها نمایش داده شود.`,
       en: `The official A5 bilingual (Arabic/English) PDF invoice contains:
 • Store header with branch logo, subtle logo watermark, name, address and phone.
 • Invoice number, date, time and salesperson name.
 • Customer name, phone, address and type.
 • Item table: fabric type, pattern, colour, meters, price per meter, discount and line total.
-• Total meters, net amount in KWD (3 decimals) and payment method breakdown.
-• The “Purpose of Purchase” KYC section, fabric terms and signature lines.
-If no logo appears, upload one in Manage → Branch → Logo for upcoming invoices.`,
+• Total meters, net amount in KWD (3 decimals), payment method breakdown and signature lines.
+If no logo appears, upload one in Manage → Branch → Logo.`,
       ar: `تتضمن الفاتورة الرسمية PDF (مقاس A5 ثنائي اللغة عربي/إنجليزي):
 • ترويسة المتجر مع شعار الفرع وعلامة مائية للشعار والاسم والعنوان والهاتف.
 • رقم الفاتورة والتاريخ والوقت واسم البائع.
 • اسم العميل وهاتفه وعنوانه ونوعه.
 • جدول الأصناف: نوع القماش والنقشة واللون والأمتار وسعر المتر والخصم وإجمالي السطر.
-• مجموع الأمتار والصافي بالدينار الكويتي (٣ خانات عشرية) وتفاصيل طرق الدفع.
-• نموذج «الغرض من الشراء» وشروط الأقمشة وتوقيع العميل والبائع.
+• مجموع الأمتار والصافي بالدينار الكويتي (٣ خانات عشرية)، تفاصيل طرق الدفع وتوقيع العميل والبائع.
 إذا لم يظهر الشعار فارفعه من «الإدارة ← الفرع ← الشعار».`,
     },
     keywords: {
-      fa: ["محتوای فاکتور", "لوگو فاکتور", "واترمارک", "سربرگ", "شرایط پارچه", "الغرض من الشراء", "هدف خرید", "سه رقم اعشار", "قطع A5"],
-      en: ["invoice content", "invoice logo", "watermark", "header", "fabric terms", "purchase purpose", "decimals", "a5"],
-      ar: ["محتويات الفاتورة", "شعار الفاتورة", "علامة مائية", "الترويسة", "شروط القماش", "الغرض من الشراء", "خانات عشرية"],
+      fa: ["محتوای فاکتور", "لوگو فاکتور", "واترمارک", "سربرگ", "امضا", "سه رقم اعشار", "قطع A5"],
+      en: ["invoice content", "invoice logo", "watermark", "header", "signature", "decimals", "a5"],
+      ar: ["محتويات الفاتورة", "شعار الفاتورة", "علامة مائية", "الترويسة", "توقيع", "خانات عشرية"],
     },
     related: ["invoices", "branches", "printing-setup"],
   },
