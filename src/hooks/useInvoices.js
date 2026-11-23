@@ -27,7 +27,6 @@ export const useInvoices = (filters = {}, options = {}) => {
     enabled: options.enabled ?? true,
     staleTime: 3 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    refetchOnMount: false,
   });
 };
 
@@ -35,7 +34,7 @@ export const useInvoice = (id) => {
   return useQuery({
     queryKey: queryKeys.invoice(id),
     queryFn: async () => {
-      const res = await api.get(`/sales/invoices/${id}`);
+      const res = await api.get(`/sales/${id}`);
       return res.data.data;
     },
     enabled: !!id,
@@ -53,10 +52,9 @@ export const useCreateSale = () => {
       return res.data;
     },
     onSuccess: (data) => {
+      const newInvoice = data?.data?.invoice || data?.invoice || data?.data;
 
-      const newInvoice = data.data;
-
-      if (newInvoice) {
+      if (newInvoice && newInvoice.id != null) {
         queryClient.setQueriesData(
           { queryKey: queryKeys.invoices() },
           (old) => {
@@ -83,15 +81,12 @@ export const useCreateSale = () => {
 
       queryClient.invalidateQueries({
         queryKey: queryKeys.invoices(),
-        refetchType: "none",
       });
       queryClient.invalidateQueries({
         queryKey: queryKeys.inventory(),
-        refetchType: "none",
       });
       queryClient.invalidateQueries({
         queryKey: queryKeys.dashboard(),
-        refetchType: "none",
       });
 
       toast.success(

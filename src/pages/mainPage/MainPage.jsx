@@ -16,6 +16,7 @@ import {
   PlusCircle,
   ArrowRight,
   FileText,
+  RotateCcw,
 } from "lucide-react";
 
 const MainPage = () => {
@@ -69,6 +70,13 @@ const MainPage = () => {
           link: "/customers",
           color: "secondary",
           desc: "manage_crm",
+        },
+        {
+          title: "refunds",
+          icon: RotateCcw,
+          link: "/refunds",
+          color: "warning",
+          desc: "refunds_subtitle",
         },
       ],
     },

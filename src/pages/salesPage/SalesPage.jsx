@@ -18,6 +18,7 @@ import {
   useCreateCustomer,
 } from "../../hooks/useCustomers";
 import { useInventory } from "../../hooks/useInventory";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import BarcodeScanner from "../../components/barcodeScanner/BarcodeScanner";
 import CustomerSelector from "../../components/sales/CustomerSelector";
 import ItemSelector from "../../components/sales/ItemSelector";
@@ -45,17 +46,21 @@ const SalesPage = () => {
 
   const [customerSearch, setCustomerSearch] = useState("");
   const [itemSearch, setItemSearch] = useState("");
+  const debouncedCustomerSearch = useDebouncedValue(customerSearch, 250);
+  const debouncedItemSearch = useDebouncedValue(itemSearch, 250);
   const [showCustDropdown, setShowCustDropdown] = useState(false);
   const [showItemDropdown, setShowItemDropdown] = useState(false);
 
   const { data: customersData } = useCustomers({
-    search: customerSearch.trim() ? customerSearch.trim() : undefined,
+    search: debouncedCustomerSearch.trim()
+      ? debouncedCustomerSearch.trim()
+      : undefined,
     branch_id: activeBranchId,
   });
   const customersList = customersData?.data || [];
 
   const { data: inventoryData } = useInventory({
-    search: itemSearch.trim() ? itemSearch.trim() : undefined,
+    search: debouncedItemSearch.trim() ? debouncedItemSearch.trim() : undefined,
     branch_id: activeBranchId,
   });
 

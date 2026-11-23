@@ -68,9 +68,20 @@ describe("MainPage", () => {
     expect(container.querySelectorAll(".main-dashboard__section").length).toBe(3);
   });
 
-  it("shows the manage card to the owner", () => {
+  it("shows the manage and refunds cards to the owner", () => {
     const { container } = setup();
-    expect(container.querySelectorAll(".dashboard-card").length).toBe(7);
+    expect(container.querySelectorAll(".dashboard-card").length).toBe(8);
+  });
+
+  it("navigates to /refunds when the refunds card is clicked", () => {
+    const { container } = setup();
+    const cards = [...container.querySelectorAll(".dashboard-card")];
+    const refundsCard = cards.find((card) =>
+      card.className.includes("dashboard-card--warning"),
+    );
+    expect(refundsCard).toBeTruthy();
+    fireEvent.click(refundsCard);
+    expect(screen.getByTestId("path").textContent).toBe("/refunds");
   });
 
   it("renders the sphere backdrop behind the cards in dark mode", () => {

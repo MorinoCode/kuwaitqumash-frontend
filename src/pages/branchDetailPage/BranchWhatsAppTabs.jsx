@@ -157,14 +157,68 @@ const BranchWhatsAppTabs = ({
             </span>
           </p>
           {isConnected ? (
-            <button
-              type="button"
-              className="branch-detail__btn branch-detail__btn--danger"
-              onClick={handleDisconnectWa}
-            >
-              {t("disconnect_change_number") ||
-                "Disconnect / Change number"}
-            </button>
+            <>
+              <button
+                type="button"
+                className="branch-detail__btn branch-detail__btn--danger"
+                onClick={handleDisconnectWa}
+              >
+                {t("disconnect_change_number") ||
+                  "Disconnect / Change number"}
+              </button>
+              <div className="branch-detail__form" style={{ marginTop: "1rem" }}>
+                <label className="branch-detail__toggle">
+                  <input
+                    type="checkbox"
+                    checked={form.whatsapp_invoice_enabled}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        whatsapp_invoice_enabled: e.target.checked,
+                      }))
+                    }
+                  />
+                  <span>{t("send_invoice_whatsapp")}</span>
+                </label>
+                {!form.whatsapp_invoice_enabled && (
+                  <p className="branch-detail__hint branch-detail__hint--warn">
+                    {t("send_invoice_whatsapp_disabled_hint") ||
+                      "Enable this option and save so the WhatsApp invoice send button appears after sales and in invoices."}
+                  </p>
+                )}
+                <div className="branch-detail__form-actions">
+                  <button
+                    type="button"
+                    className="branch-detail__btn branch-detail__btn--primary"
+                    disabled={saving}
+                    onClick={async () => {
+                      setSaving(true);
+                      try {
+                        await updateBranchMutation.mutateAsync({
+                          id,
+                          data: {
+                            whatsapp_invoice_enabled:
+                              form.whatsapp_invoice_enabled,
+                          },
+                        });
+                        refetchBranch();
+                      } catch {
+                        void 0;
+                      } finally {
+                        setSaving(false);
+                      }
+                    }}
+                  >
+                    {saving ? (
+                      <Loader2 size={16} className="spin" />
+                    ) : (
+                      <Save size={16} />
+                    )}{" "}
+                    {t("save")}
+                  </button>
+                </div>
+              </div>
+            </>
           ) : (
             <>
               <button

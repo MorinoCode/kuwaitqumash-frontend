@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { BranchProvider } from "./context/BranchContext";
 import MainLayout from "./components/layout/mainLayout/MainLayout";
@@ -56,6 +56,17 @@ function RouteFallback() {
       <span style={{ marginLeft: 10 }}>Loading...</span>
     </div>
   );
+}
+
+const MANAGEMENT_ROLES = ["store_owner", "branch_manager"];
+
+function RequireRole({ allowedRoles, children }) {
+  const { user, loading } = useAuth();
+  if (loading) return <RouteFallback />;
+  if (user && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/home" replace />;
+  }
+  return children;
 }
 
 function App() {
@@ -173,25 +184,31 @@ function App() {
                   <Route
                     path="/manage"
                     element={
-                      <ErrorBoundary>
-                        <ManagePage />
-                      </ErrorBoundary>
+                      <RequireRole allowedRoles={MANAGEMENT_ROLES}>
+                        <ErrorBoundary>
+                          <ManagePage />
+                        </ErrorBoundary>
+                      </RequireRole>
                     }
                   />
                   <Route
                     path="/manage/branch/:id"
                     element={
-                      <ErrorBoundary>
-                        <BranchDetailPage />
-                      </ErrorBoundary>
+                      <RequireRole allowedRoles={MANAGEMENT_ROLES}>
+                        <ErrorBoundary>
+                          <BranchDetailPage />
+                        </ErrorBoundary>
+                      </RequireRole>
                     }
                   />
                   <Route
                     path="/manage/staff/:id"
                     element={
-                      <ErrorBoundary>
-                        <StaffDetailsPage />
-                      </ErrorBoundary>
+                      <RequireRole allowedRoles={MANAGEMENT_ROLES}>
+                        <ErrorBoundary>
+                          <StaffDetailsPage />
+                        </ErrorBoundary>
+                      </RequireRole>
                     }
                   />
                   <Route

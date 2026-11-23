@@ -907,7 +907,8 @@
     "contact_plan_f2": "Unlimited stock and rolls",
     "contact_plan_f3": "WhatsApp invoices and analytics",
     "contact_plan_f4": "Barcode printing and camera scanning",
-    "contact_plan_cta": "Contact us"
+    "contact_plan_cta": "Contact us",
+    "nav_contact": "Contact"
   },
   "footer": {
     "tagline": "Fabric store management for metered sales, rolls and customer accounts.",
@@ -1141,5 +1142,14 @@
   "my_recent_invoices_title": "My Recent Invoices",
   "my_recent_invoices_guide": "Latest invoices you issued for quick customer follow-up.",
   "salesman_remnants_title": "Branch Remnants Ready to Sell (Under 3.5m)",
-  "salesman_remnants_guide": "These rolls have less than 3.5m remaining — suggest them to customers looking for cut pieces."
+  "salesman_remnants_guide": "These rolls have less than 3.5m remaining — suggest them to customers looking for cut pieces.",
+  "send_invoice_whatsapp_disabled_hint": "Enable this option and save so the WhatsApp invoice send button appears after sales and in invoices.",
+  "bulk_antiban_hint": "Automatic anti-ban pacing (20–45s between messages during Kuwait working hours 09:00–22:00) is enforced by the background worker.",
+  "change_password": "Change Password",
+  "current_password": "Current Password",
+  "new_password": "New Password",
+  "confirm_new_password": "Confirm New Password",
+  "password_updated_success": "Password updated successfully",
+  "password_change_failed": "Failed to change password",
+  "passwords_do_not_match": "New password and confirmation do not match"
 }
