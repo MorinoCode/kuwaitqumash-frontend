@@ -32,9 +32,16 @@ vi.mock("./pages/invoicesPage/InvoicesPage", () => stub("invoices"));
 vi.mock("./pages/refundPage/RefundPage", () => stub("refund"));
 vi.mock("./pages/refundsPage/RefundsPage", () => stub("refunds"));
 vi.mock("./pages/contactPage/ContactPage", () => stub("contact"));
-vi.mock("./components/layout/mainLayout/MainLayout", () => ({
-  default: () => <div data-testid="layout">layout</div>,
-}));
+vi.mock("./components/layout/mainLayout/MainLayout", async () => {
+  const { Outlet } = await import("react-router-dom");
+  return {
+    default: () => (
+      <div data-testid="layout">
+        <Outlet />
+      </div>
+    ),
+  };
+});
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -70,6 +77,22 @@ describe("App", () => {
     window.history.pushState({}, "", "/signup");
     render(<App />);
     await waitFor(() => expect(screen.getByTestId("contact")).toBeInTheDocument());
+    window.history.pushState({}, "", "/");
+  });
+
+  it("redirects sales_man away from /manage to /home", async () => {
+    api.get.mockResolvedValue({ data: { data: { id: 2, username: "rep", role: "sales_man", branch_id: 1 } } });
+    window.history.pushState({}, "", "/manage");
+    render(<App />);
+    await waitFor(() => expect(screen.getByTestId("main")).toBeInTheDocument());
+    window.history.pushState({}, "", "/");
+  });
+
+  it("allows store_owner to open /manage", async () => {
+    api.get.mockResolvedValue({ data: { data: { id: 1, username: "owner", role: "store_owner", branch_id: 1 } } });
+    window.history.pushState({}, "", "/manage");
+    render(<App />);
+    await waitFor(() => expect(screen.getByTestId("manage")).toBeInTheDocument());
     window.history.pushState({}, "", "/");
   });
 });

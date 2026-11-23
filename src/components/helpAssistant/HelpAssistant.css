@@ -319,3 +319,27 @@
   margin-top: 4px;
   padding-top: 8px;
 }
+
+.help-msg__related {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(45, 212, 191, 0.25);
+}
+
+.help-msg__related-title {
+  display: block;
+  font-size: 0.68rem;
+  color: rgba(153, 246, 228, 0.8);
+  margin-bottom: 5px;
+}
+
+.help-msg__related-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.help-chip--inline {
+  padding: 4px 8px;
+  font-size: 0.7rem;
+}

@@ -35,7 +35,7 @@ export const useInvoice = (id) => {
   return useQuery({
     queryKey: queryKeys.invoice(id),
     queryFn: async () => {
-      const res = await api.get(`/sales/invoices/${id}`);
+      const res = await api.get(`/sales/${id}`);
       return res.data.data;
     },
     enabled: !!id,

@@ -99,6 +99,7 @@ const HelpAssistant = ({ isOpen, onClose }) => {
           title: reply.matched ? reply.title : null,
           label: reply.matched ? reply.label : null,
           matched: reply.matched,
+          suggestions: reply.suggestions || [],
         },
       ]);
       setThinking(false);
@@ -181,6 +182,25 @@ const HelpAssistant = ({ isOpen, onClose }) => {
               </span>
             )}
             <p className="help-msg__text">{message.text}</p>
+            {message.suggestions && message.suggestions.length > 0 && (
+              <div className="help-msg__related">
+                <span className="help-msg__related-title">
+                  {message.matched ? ui.relatedTopics : ui.tryAsking}
+                </span>
+                <div className="help-msg__related-chips">
+                  {message.suggestions.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      className="help-chip help-chip--inline"
+                      onClick={() => ask(item)}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
 

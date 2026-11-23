@@ -46,6 +46,15 @@ describe("useInvoices", () => {
     renderHookWithQuery(() => useInvoice(undefined));
     expect(api.get).not.toHaveBeenCalled();
   });
+
+  it("loads a single invoice from /sales/:id", async () => {
+    api.get.mockResolvedValue({ data: { data: { id: 42, invoice_number: "INV-42" } } });
+    const { result } = renderHookWithQuery(() => useInvoice(42));
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(api.get).toHaveBeenCalledWith("/sales/42");
+    expect(result.current.data).toEqual({ id: 42, invoice_number: "INV-42" });
+  });
 });
 
 describe("sale mutations", () => {

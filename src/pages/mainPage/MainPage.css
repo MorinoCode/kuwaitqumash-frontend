@@ -264,6 +264,11 @@
   color: #a855f7;
 }
 
+.dashboard-card--warning .dashboard-card__icon-box {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
 .dashboard-card--default .dashboard-card__icon-box {
   background-color: rgba(128, 128, 128, 0.1);
   color: inherit;
